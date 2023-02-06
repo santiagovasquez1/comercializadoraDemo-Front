@@ -1,0 +1,92 @@
+<div class="container-puntos-medida">
+
+    <div class="container-breadcrumbs">
+        <i class="material-icons-outlined">arrow_back_ios</i>
+        <span>Volver</span>
+    </div>
+
+    <div class="text-header">
+        <span class="title">Puntos de medida</span>
+        <span class="departamento">Antioquia</span>
+    </div>
+
+    <div class="tabla-filters">
+        <div class="filter">
+            <div class="time">
+                <input type="text" class="input-style" placeholder="DD/MM/AÑO">
+                <input type="text" class="input-style" placeholder="Hora">
+                <span>Última vez 14:25</span>
+                <i class="material-icons-outlined">schedule</i>
+            </div>
+            <div class="fields">
+                <div class="field">
+                    <label>ID</label>
+                    <input type="text" class="input-style">
+                </div>
+                <div class="field">
+                    <label>Área</label>
+                    <input type="text" class="input-style">
+                </div>
+                <div class="field">
+                    <label>Municipio</label>
+                    <input type="text" class="input-style">
+                </div>
+                <div class="field">
+                    <label>Dirección</label>
+                    <input type="text" class="input-style">
+                </div>
+                
+            </div>
+        </div>
+    
+        <div class="container-tabla">
+            <div class="table-container mt-20 fadeIn">
+                <mat-table #table [dataSource]="" class="mvm-table">
+                    <ng-container matColumnDef="ID">
+                        <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="celda-170"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="area">
+                        <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="celda-170"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="municipio">
+                        <mat-header-cell *matHeaderCellDef class="celda-90M">Municipio</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="celda-90M"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="direccion">
+                        <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumo">
+                        <mat-header-cell *matHeaderCellDef>Consumo</mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <button matRipple class="mvm-action-button alerta">
+                                <mat-icon>remove_red_eye</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+    
+                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                    <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
+                </mat-table>
+            </div>
+    
+            <div class="table-container mt-10 fadeIn">
+                <mat-paginator class="mvm-paginator" #paginator [pageSizeOptions]="[5,10, 25, 100 ]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+
+    <div class="mapa">
+
+    </div>
+    
+
+    
+    
+</div>
