@@ -7,6 +7,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AsideComponent } from './shared/aside/aside.component';
 import { ToolbarComponent } from './shared/toolbar/toolbar.component';
+import { AngularMaterialModule } from './angular-material.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,10 @@ import { ToolbarComponent } from './shared/toolbar/toolbar.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AngularMaterialModule,
+    
+
   ],
   providers: [],
   bootstrap: [AppComponent]
