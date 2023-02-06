@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
+import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 
 const routes: Routes = [
     // { path: '', component: PagesComponent },
-    // { path: "login", component: LoginComponent },
+    { path: "login", component: LoginComponent },
     // { path: "dashboard", component: DashboardComponent }
     {
         path: '',
@@ -18,6 +19,10 @@ const routes: Routes = [
                 parent:'',
                 title:'Dashboard'
             }
+        },
+        {
+            path:'dashboard/puntos-medida',
+            component:PuntosMedidaComponent,
         }]
     }
 ]

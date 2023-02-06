@@ -6,12 +6,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PagesComponent } from './pages.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     LoginComponent,
-    PagesComponent
+    PagesComponent,
+    PuntosMedidaComponent
   ],
   imports: [
     CommonModule,
