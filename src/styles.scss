@@ -36,7 +36,6 @@ ul {
     background: #FFFFFF;
     border: 1px solid #0C00FF;
     border-radius: 4px;
-    margin-bottom: 24px;
     padding: 8px 12px;
 }
 
@@ -96,6 +95,7 @@ ul {
                 .input-login {
                     width: 285px;
                     height: 35px;
+                    margin-bottom: 24px;
                 }
                 .label-input {
                     font-family: 'Poppins';
@@ -403,6 +403,9 @@ input {
     display: grid;
     grid-template-columns: 60% 40%;
     grid-template-rows: 5% 25% 20% 50%;
+    margin-left: 20px;
+    margin-top: 20px;
+
     .container-breadcrumbs {
         display: flex;
         align-items: center;
@@ -444,6 +447,11 @@ input {
         .filter {
             .fields {
                 display: flex;
+
+                .field{
+                    display: flex;
+                    flex-direction: column;
+                }
             }
         }
     }
@@ -493,9 +501,45 @@ input {
     }
     .tabla-filters {
         .filter {
+
+            .time{
+                background: #FFFFFF;
+                border-bottom: 2px solid #D9D9D9;
+                height: 55px;
+                display: grid;
+                align-items: center;
+                padding: 10px;
+                grid-template-columns: 151px 151px auto 18% 5%;
+
+                .input-time{
+                    width: 145px;
+                    margin-right: 6px;
+                }
+
+                .typetime{
+                    background-position: calc(100% - 10px) center;
+                    background-repeat: no-repeat;
+                    background-image: url(assets/icons/reloj.svg);
+                    padding-right: 30px;
+                }
+
+                .end-time{
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 18px;
+                    align-self: flex-start;
+                    justify-self: flex-end;
+                }
+
+                .icon-time{
+                    justify-self: flex-end;
+                    align-self: flex-start;
+                }
+            }
             .fields {
                 display: flex;
             }
         }
     }
 }
+

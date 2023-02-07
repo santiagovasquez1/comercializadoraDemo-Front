@@ -13,38 +13,45 @@
     <div class="tabla-filters">
         <div class="filter">
             <div class="time">
-                <input type="text" class="input-style" placeholder="DD/MM/AÑO">
-                <input type="text" class="input-style" placeholder="Hora">
-                <span>Última vez 14:25</span>
-                <i class="material-icons-outlined">schedule</i>
+                <input type="date" class="input-style input-time typedate" placeholder="DD/MM/AÑO">
+                <input type="text" class="input-style input-time typetime" placeholder="Hora">
+                <span></span>
+                <span class="end-time">Última vez 14:25</span>
+                <i class="material-icons-outlined icon-time">schedule</i>
             </div>
-            <div class="fields">
+            <form class="fields" [formGroup]="filterForm">
                 <div class="field">
                     <label>ID</label>
                     <input type="text" class="input-style">
                 </div>
                 <div class="field">
                     <label>Área</label>
-                    <input type="text" class="input-style">
+                    <select class="custom-select" formControlName="option" class="input-style">
+                        <option [value]=""></option>
+                        <option *ngFor="let option of options" [value]="option">{{option}}</option>
+                    </select>
                 </div>
                 <div class="field">
                     <label>Municipio</label>
-                    <input type="text" class="input-style">
+                    <select class="custom-select" formControlName="option" class="input-style">
+                        <option [value]=""></option>
+                        <option *ngFor="let option of options" [value]="option">{{option}}</option>
+                    </select>
                 </div>
                 <div class="field">
                     <label>Dirección</label>
                     <input type="text" class="input-style">
                 </div>
                 
-            </div>
+            </form>
         </div>
     
         <div class="container-tabla">
             <div class="table-container mt-20 fadeIn">
-                <mat-table #table [dataSource]="" class="mvm-table">
+                <mat-table #table [dataSource]="dataSource" class="mvm-table">
                     <ng-container matColumnDef="ID">
                         <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170"></mat-cell>
+                        <mat-cell *matCellDef="let element" class="celda-170">{{element.nodes[0].name}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="area">
                         <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
