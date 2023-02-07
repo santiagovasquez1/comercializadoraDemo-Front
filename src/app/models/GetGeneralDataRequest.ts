@@ -1,9 +1,9 @@
 export interface GetGeneralDataRequest {
-    empresaName: string;
+    empresaName?: string;
     areaName?: string;
     localName?: string;
-    fechaConsulta: Date;
-    TypeOfOrganization: ETypesOrganizations
+    fechaConsulta?: Date;
+    TypeOfOrganization?: ETypesOrganizations
 }
 
 export enum ETypesOrganizations {

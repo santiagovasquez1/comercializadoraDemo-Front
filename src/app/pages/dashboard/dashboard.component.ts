@@ -1,3 +1,4 @@
+import { OrganizationDto } from './../../models/OrganizationDto';
 import { ETypesOrganizations, GetGeneralDataRequest } from './../../models/GetGeneralDataRequest';
 import { Observable, forkJoin } from 'rxjs';
 import { OrganizationModel } from './../../models/OrganizationModel';
@@ -14,11 +15,19 @@ import * as moment from 'moment';
 })
 export class DashboardComponent implements OnInit {
 
-  rootOrganizations: OrganizationModel[];
+  rootOrganizations: OrganizationDto;
+  localOrganizations: OrganizationDto[];
+
+  selectedArea: string = '---';
+  selectedLocal: string = '---';
+
   consumoDia: OrganizationModel;
   pronosticoDia: OrganizationModel;
   consumoActualChart: ChartType = 'line';
   consumoActualData: ChartData<'line'>;
+
+  request: GetGeneralDataRequest;
+
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     elements: {
@@ -34,6 +43,11 @@ export class DashboardComponent implements OnInit {
         title: {
           display: true,
           text: 'Hora'
+        },
+        ticks: {
+          autoSkip: true,
+          align: 'start',
+          autoSkipPadding: 15
         }
       },
       y: {
@@ -42,9 +56,6 @@ export class DashboardComponent implements OnInit {
         title: {
           display: true,
           text: 'Consumo kWh'
-        },
-        ticks: {
-          stepSize: 60
         }
       }
     },
@@ -67,35 +78,68 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadOrganizations();
   }
 
-  private loadData() {
+  private loadOrganizations() {
     this.spinner.show();
-    const request: GetGeneralDataRequest = {
-      empresaName: 'Empresa1',
-      areaName: 'Area1',
-      localName: 'Local1',
-      TypeOfOrganization: ETypesOrganizations.Empresa,
-      fechaConsulta: new Date()
-    }
-
-    let obs: Observable<OrganizationModel>[] = [];
-    obs.push(this.infoService.getConsumoDia(request));
-    obs.push(this.infoService.getPronosticoDia(request));
-
-    forkJoin(obs).subscribe({
+    this.infoService.getOrganizations().subscribe({
       next: response => {
-        console.log(response);
-        this.setChartData(response);
+        this.rootOrganizations = response[0];
         this.spinner.hide();
+        this.loadData();
       },
       error: err => {
         console.log(err);
         this.spinner.hide();
         this.toastr.error(err);
       }
-    });
+    })
+  }
+
+  private loadData() {
+    
+    if (this.rootOrganizations !== null) {
+      this.spinner.show();
+      let request: GetGeneralDataRequest = {
+        empresaName: this.rootOrganizations.name,
+        areaName: this.selectedArea != '---' && this.selectedArea !== null && this.selectedArea !== '' ? this.selectedArea : null,
+        localName: this.selectedLocal != '---' && this.selectedLocal !== null && this.selectedLocal !== '' ? this.selectedLocal : null,
+        fechaConsulta: new Date()
+      }
+      request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
+
+      let obs: Observable<OrganizationModel>[] = [];
+      obs.push(this.infoService.getConsumoDia(request));
+      obs.push(this.infoService.getPronosticoDia(request));
+
+      forkJoin(obs).subscribe({
+        next: response => {
+          console.log(response);
+          this.setChartData(response);
+          this.spinner.hide();
+        },
+        error: err => {
+          console.log(err);
+          this.spinner.hide();
+          this.toastr.error(err);
+        }
+      });
+    }
+  }
+
+  onAreaChange() {
+    if (this.selectedArea !== '---') {
+      this.localOrganizations = this.rootOrganizations.nodes.find(n => n.name == this.selectedArea).nodes;
+      this.selectedLocal = '---';
+    } else {
+      this.localOrganizations = null
+    }
+    this.loadData();
+  }
+
+  onLocalChange() {    
+    this.loadData();
   }
 
   private setChartData(data: OrganizationModel[]) {
@@ -124,4 +168,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {
+    if (request.empresaName !== null && request.areaName !== null && request.localName !== null) {
+      return ETypesOrganizations.Local;
+    } else if (request.empresaName !== null && request.areaName !== null) {
+      return ETypesOrganizations.Area;
+    } else {
+      return ETypesOrganizations.Empresa;
+    }
+  }
 }
