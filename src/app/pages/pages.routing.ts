@@ -6,9 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 
 const routes: Routes = [
-    // { path: '', component: PagesComponent },
+
     { path: "login", component: LoginComponent },
-    // { path: "dashboard", component: DashboardComponent }
     {
         path: '',
         component:PagesComponent,

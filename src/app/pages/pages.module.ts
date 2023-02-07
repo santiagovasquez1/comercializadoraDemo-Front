@@ -9,6 +9,7 @@ import { PagesComponent } from './pages.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     CommonModule,
     SharedModule,
     AngularMaterialModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgChartsModule
   ],
   exports: [
     DashboardComponent,

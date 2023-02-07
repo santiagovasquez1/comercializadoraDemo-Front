@@ -1,19 +1,22 @@
-<div class="container-content">
-    <div class="notificaciones">
-        <div class="content">
-
+<div class="custom-container">
+    <div class="dashboard-container">
+        <div class="card">
+            <div class="title">
+                <h3>Notificaciones</h3>
+            </div>
         </div>
-    </div>
-
-    <div class="grafica-lineal">
-        <div class="content">
-
+        <div class="card">
+            <div class="title">
+                <h3>Estado del consumo actual</h3>
+            </div>
+            <div class="consumo-actual-canvas">
+                <canvas baseChart [data]="consumoActualData" [options]="lineChartOptions" [type]="consumoActualChart"></canvas>
+            </div>
         </div>
-    </div>
-
-    <div class="grafica-medidores">
-        <div class="content">
-            <button mat-raised-button color="accent">Accent</button>
+        <div class="card two-column-span">
+            <div class="title">
+                <h3>Estado actual de los medidores</h3>
+            </div>
         </div>
     </div>
 </div>

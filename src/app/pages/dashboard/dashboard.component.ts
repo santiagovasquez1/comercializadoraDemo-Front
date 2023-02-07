@@ -5,6 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { KillerAppService } from './../../services/killer-app.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +17,49 @@ export class DashboardComponent implements OnInit {
   rootOrganizations: OrganizationModel[];
   consumoDia: OrganizationModel;
   pronosticoDia: OrganizationModel;
+  consumoActualChart: ChartType = 'line';
+  consumoActualData: ChartData<'line'>;
+  lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    elements: {
+      line: {
+        tension: 0.5
+      },
+      point: {
+        pointStyle: false
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Hora'
+        }
+      },
+      y: {
+        beginAtZero: true,
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Consumo kWh'
+        },
+        ticks: {
+          stepSize: 60
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 16,
+            family: 'Poppins'
+          }
+        }
+      }
+    }
+  }
 
   constructor(private infoService: KillerAppService,
     private spinner: NgxSpinnerService,
@@ -42,6 +87,7 @@ export class DashboardComponent implements OnInit {
     forkJoin(obs).subscribe({
       next: response => {
         console.log(response);
+        this.setChartData(response);
         this.spinner.hide();
       },
       error: err => {
@@ -50,6 +96,32 @@ export class DashboardComponent implements OnInit {
         this.toastr.error(err);
       }
     });
+  }
+
+  private setChartData(data: OrganizationModel[]) {
+    const consumoActualData: number[] = data[0].information.map(i => i.potencia);
+    const consumoPromedioData: number[] = data[1].information.map(i => i.potencia);
+    const labels = data[0].information.map(i => {
+      const tempDate = moment(i.fecha).format('HH:mm')
+      return tempDate;
+    });
+
+    this.consumoActualData = {
+      datasets: [
+        {
+          data: consumoActualData,
+          fill: false,
+          borderColor: '#FF0909',
+          label: 'Tiempo real'
+        }, {
+          data: consumoPromedioData,
+          fill: false,
+          borderColor: '#0C00FF',
+          label: 'Pronóstico'
+        }
+      ],
+      labels: labels
+    }
   }
 
 }
