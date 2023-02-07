@@ -9,6 +9,23 @@
             <div class="title">
                 <h3>Estado del consumo actual</h3>
             </div>
+            <div class="chartFilters" *ngIf="rootOrganizations">
+                <div class="organization-container">
+                    <label>Area</label>
+                    <select [(ngModel)]="selectedArea" (change)="onAreaChange()">
+                        <option [value]="'---'">---</option>
+                        <option *ngFor="let node of rootOrganizations.nodes" [value]="node.name">{{node.name}}</option>
+                    </select>
+
+                </div>
+                <div class="organization-container">
+                    <label for="">Medidor</label>
+                    <select [(ngModel)]="selectedLocal" [disabled]="!localOrganizations" (change)="onLocalChange()">
+                        <option [value]="'---'">---</option>
+                        <option *ngFor="let node of localOrganizations" [value]="node.name">{{node.name}}</option>
+                    </select>
+                </div>
+            </div>
             <div class="consumo-actual-canvas">
                 <canvas baseChart [data]="consumoActualData" [options]="lineChartOptions" [type]="consumoActualChart"></canvas>
             </div>
