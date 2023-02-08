@@ -53,6 +53,32 @@
         <div class="card">
             <div class="title">
                 <h3>Estado actual de los medidores</h3>
+                <div class="status-meters">
+                    <div class="meter-container">
+                        <div class="meter alto-consumo">
+                            {{statusMonitor.altoConsumo}}%
+                        </div>
+                        <p>
+                            Alto Consumo
+                        </p>
+                    </div>
+                    <div class="meter-container">
+                        <div class="meter normal-consumo">
+                            {{statusMonitor.consumoNormal}}%
+                        </div>
+                        <p>
+                            Consumo dentro del margen
+                        </p>
+                    </div>
+                    <div class="meter-container">
+                        <div class="meter bajo-consumo">
+                            {{statusMonitor.bajoConsumo}}%
+                        </div>
+                        <p>
+                            Bajo consumo
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
