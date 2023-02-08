@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   rootOrganizations: OrganizationDto;
   statusMonitor: StatusMonitor;
   localOrganizations: OrganizationDto[];
+  fechaConsulta: Date;
 
   selectedArea: string = '---';
   selectedLocal: string = '---';
@@ -27,8 +28,6 @@ export class DashboardComponent implements OnInit {
   pronosticoDia: OrganizationModel;
   consumoActualChart: ChartType = 'line';
   consumoActualData: ChartData<'line'>;
-
-  request: GetGeneralDataRequest;
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -78,7 +77,10 @@ export class DashboardComponent implements OnInit {
   constructor(private infoService: KillerAppService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService
-  ) { }
+  ) {
+    const now = new Date();
+    this.fechaConsulta = new Date(2023, 1, 24,now.getHours() - 5,now.getMinutes(),0);
+  }
 
   ngOnInit(): void {
     this.loadOrganizations();
@@ -109,7 +111,7 @@ export class DashboardComponent implements OnInit {
         empresaName: this.rootOrganizations.name,
         areaName: this.selectedArea != '---' && this.selectedArea !== null && this.selectedArea !== '' ? this.selectedArea : null,
         localName: this.selectedLocal != '---' && this.selectedLocal !== null && this.selectedLocal !== '' ? this.selectedLocal : null,
-        fechaConsulta: new Date()
+        fechaConsulta: this.fechaConsulta
       }
       request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
 
@@ -137,7 +139,7 @@ export class DashboardComponent implements OnInit {
       const request: GetGeneralDataRequest = {
         empresaName: this.rootOrganizations.name,
         TypeOfOrganization: ETypesOrganizations.Empresa,
-        fechaConsulta: new Date()
+        fechaConsulta: this.fechaConsulta
       }
       this.infoService.monitoreoByTimeStamp(request).subscribe({
         next: data => {
