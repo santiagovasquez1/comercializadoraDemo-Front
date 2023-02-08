@@ -42,4 +42,9 @@ export class KillerAppService {
       })
     );
   }
+
+  public getloadInfo(): Observable<any> {
+    const url = `${this.killerAppUrl}/LoadInfo`;
+    return this.http.get(url);
+  }
 }
