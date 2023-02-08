@@ -12,76 +12,84 @@
 
     <div class="tabla-filters">
         <div class="filter">
-            <div class="time">
-                <input type="date" class="input-style input-time typedate" placeholder="DD/MM/AÑO">
-                <input type="text" class="input-style input-time typetime" placeholder="Hora">
-                <span></span>
-                <span class="end-time">Última vez 14:25</span>
-                <i class="material-icons-outlined icon-time">schedule</i>
-            </div>
             <form class="fields" [formGroup]="filterForm">
+
                 <div class="field">
                     <label>ID</label>
-                    <input type="text" class="input-style">
+                    <input type="text" class="">
                 </div>
+
+                <div class="field">
+                    <label>Fecha</label>
+                    <input type="date" class="" placeholder="DD/MM/AÑO">
+                </div>
+                
+                <div class="field">
+                    <label>Hora</label>
+                    <input type="text" class="" placeholder="Hora">
+                </div>
+
                 <div class="field">
                     <label>Área</label>
-                    <select class="custom-select" formControlName="option" class="input-style">
+                    <select class="" formControlName="option">
                         <option [value]=""></option>
                         <option *ngFor="let option of options" [value]="option">{{option}}</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Municipio</label>
-                    <select class="custom-select" formControlName="option" class="input-style">
+                    <select class="" formControlName="option">
                         <option [value]=""></option>
                         <option *ngFor="let option of options" [value]="option">{{option}}</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Dirección</label>
-                    <input type="text" class="input-style">
+                    <input type="text" class="">
                 </div>
+
+                <button class="black-button">Buscar</button>
                 
             </form>
         </div>
     
         <div class="container-tabla">
-            <div class="table-container mt-20 fadeIn">
-                <mat-table #table [dataSource]="dataSource" class="mvm-table">
-                    <ng-container matColumnDef="ID">
-                        <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170">{{element.nodes[0].name}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="area">
-                        <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170"></mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="municipio">
-                        <mat-header-cell *matHeaderCellDef class="celda-90M">Municipio</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-90M"></mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="direccion">
-                        <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
-                        <mat-cell *matCellDef="let element"></mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="consumo">
-                        <mat-header-cell *matHeaderCellDef>Consumo</mat-header-cell>
-                        <mat-cell *matCellDef="let element"></mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="acciones">
-                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <button matRipple class="mvm-action-button alerta">
-                                <mat-icon>remove_red_eye</mat-icon>
-                            </button>
-                        </mat-cell>
-                    </ng-container>
-    
-                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-                    <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
-                </mat-table>
-            </div>
+            <mat-table #table [dataSource]="dataSource" class="mvm-table">
+                <ng-container matColumnDef="ID">
+                    <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="celda-170">{{element.nameNodo}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="area">
+                    <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="celda-170">{{element.nameArea}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="municipio">
+                    <mat-header-cell *matHeaderCellDef class="celda-90M">Municipio</mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="celda-90M">{{element.municipioNodo}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="direccion">
+                    <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dirNodo}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="consumo">
+                    <mat-header-cell *matHeaderCellDef>Consumo</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= 20" class="icon-state">
+                        <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= 28" class="icon-state">
+                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo >20 && element.consumo <28" class="icon-state">
+                        {{element.consumo}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="acciones">
+                    <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-icon class="icon-eye">remove_red_eye</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
+            </mat-table>
     
             <div class="table-container mt-10 fadeIn">
                 <mat-paginator class="mvm-paginator" #paginator [pageSizeOptions]="[5,10, 25, 100 ]" showFirstLastButtons></mat-paginator>
