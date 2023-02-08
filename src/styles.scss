@@ -4,6 +4,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+//Variables
+$azul_principal:#0C00FF;
+$azul_secundario:#07009C;
+$gris_disable:#D9D9D9;
 * {
     margin: 0;
     padding: 0;
@@ -34,7 +38,7 @@ ul {
 
 .input-style {
     background: #FFFFFF;
-    border: 1px solid #0C00FF;
+    border: 1px solid $azul_principal;
     border-radius: 4px;
     margin-bottom: 24px;
     padding: 8px 12px;
@@ -121,13 +125,13 @@ ul {
                 .remember-pass input.checkbox {
                     -webkit-appearance: none;
                     appearance: none;
-                    border: 1px solid #0C00FF;
+                    border: 1px solid $azul_principal;
                     height: 16px;
                     width: 16px;
                 }
                 .remember-pass input.checkbox:checked {
-                    background-color: #0C00FF;
-                    border: 1px solid #0C00FF;
+                    background-color: $azul_principal;
+                    border: 1px solid $azul_principal;
                 }
                 .remember-pass input.checkbox:checked:after {
                     content: "✔";
@@ -139,7 +143,7 @@ ul {
                 }
                 .register {
                     margin-top: 37px;
-                    color: #0C00FF;
+                    color: $azul_principal;
                     cursor: pointer;
                 }
                 .register:hover {
@@ -162,7 +166,7 @@ ul {
 }
 
 .checkbox {
-    border: 2px solid #0C00FF;
+    border: 2px solid $azul_principal;
     border-radius: 4px;
 }
 
@@ -229,7 +233,7 @@ ul {
         width: 100%;
         height: 45px;
         h3 {
-            color: #07009C;
+            color: $azul_secundario;
             font-size: 24px;
             line-height: 36px;
             font-weight: 700;
@@ -267,7 +271,6 @@ ul {
         align-items: center;
         width: 100%;
         margin-bottom: 3.87vh;
-        .icon {}
     }
 }
 
@@ -333,7 +336,7 @@ ul {
                 background-color: #E7E6FF;
             }
             &:active {
-                background-color: #0C00FF;
+                background-color: $azul_principal;
                 color: white;
                 .icon {
                     color: white;
@@ -348,7 +351,7 @@ ul {
 }
 
 .icon {
-    color: #0C00FF;
+    color: $azul_principal;
     margin-right: 8px;
 }
 
@@ -377,7 +380,7 @@ ul {
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background-color: #0C00FF;
+        background-color: $azul_principal;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -415,7 +418,7 @@ select {
 
 input,
 select {
-    border: 1px solid #0C00FF;
+    border: 1px solid $azul_principal;
     border-radius: 4px;
     background-color: #FFFFFF;
     height: 35px;
@@ -430,12 +433,13 @@ select {
         background-color: #E7E6FF;
     }
     &:focus {
-        border: 1px solid #0C00FF !important;
+        border: 1px solid $azul_principal !important;
         outline: none;
     }
     &:disabled {
-        border: 1px solid gray;
-        background-color: #cccc;
+        color: $gris_disable;
+        border: 1px solid $gris_disable;
+        background-color: #FFFFFF;
     }
 }
 
@@ -443,6 +447,9 @@ select {
     background-image: url(assets/icons/Abajo.svg);
     background-position: calc(100% - 10px) center;
     background-repeat: no-repeat;
+    &:disabled {
+        background-image: url(assets/icons/AbajoDisable.svg);
+    }
 }
 
 .container-puntos-medida {
@@ -477,14 +484,14 @@ select {
             font-weight: 300;
             font-size: 48px;
             line-height: 72px;
-            color: #07009C;
+            color: $azul_secundario;
         }
         .departamento {
             font-style: normal;
             font-weight: 300;
             font-size: 32px;
             line-height: 48px;
-            color: #07009C;
+            color: $azul_secundario;
         }
     }
     .tabla-filters {
@@ -528,14 +535,14 @@ select {
             font-weight: 300;
             font-size: 48px;
             line-height: 72px;
-            color: #07009C;
+            color: $azul_secundario;
         }
         .departamento {
             font-style: normal;
             font-weight: 300;
             font-size: 32px;
             line-height: 48px;
-            color: #07009C;
+            color: $azul_secundario;
         }
     }
     .tabla-filters {
