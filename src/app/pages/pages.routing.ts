@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 
 const routes: Routes = [
-
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: "login", component: LoginComponent },
     {
         path: '',
@@ -20,8 +20,12 @@ const routes: Routes = [
             }
         },
         {
-            path:'dashboard/puntos-medida',
+            path:'puntos-medida',
             component:PuntosMedidaComponent,
+            data:{
+                parent:'',
+                title:'Puntos de medida'
+            }
         }]
     }
 ]
