@@ -297,13 +297,14 @@ ul {
     margin-top: 6.58vh;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
     .meter-container {
-        display: block;
+        display: flex;
+        flex-direction: column;
         width: 120px;
-        margin-right: 3.27vw;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        align-items: center;
         p {
             font-size: 14px;
             line-height: 21px;
