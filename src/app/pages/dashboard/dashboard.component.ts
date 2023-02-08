@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
     elements: {
       line: {
         tension: 0.5
@@ -98,7 +99,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadData() {
-    
+
     if (this.rootOrganizations !== null) {
       this.spinner.show();
       let request: GetGeneralDataRequest = {
@@ -138,7 +139,7 @@ export class DashboardComponent implements OnInit {
     this.loadData();
   }
 
-  onLocalChange() {    
+  onLocalChange() {
     this.loadData();
   }
 
