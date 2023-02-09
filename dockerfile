@@ -1,0 +1,11 @@
+#Stage 0, basado en node.js
+FROM node:16.16.0-alpine as node
+WORKDIR /app
+COPY ./ /app/
+RUN npm install --save --legacy-peer-deps
+RUN npm run build
+
+#Stage 1, basado en nginx
+FROM nginx:alpine as nginx
+COPY --from=node /app/dist/comercializadora-demo /usr/share/nginx/html
+COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf

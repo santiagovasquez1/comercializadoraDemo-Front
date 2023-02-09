@@ -1,11 +1,11 @@
 import { StatusMonitor } from './../../models/StatusMonitor';
 import { OrganizationDto } from './../../models/OrganizationDto';
 import { ETypesOrganizations, GetGeneralDataRequest } from './../../models/GetGeneralDataRequest';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, Subscription, forkJoin, timer } from 'rxjs';
 import { OrganizationModel } from './../../models/OrganizationModel';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { KillerAppService } from './../../services/killer-app.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import * as moment from 'moment';
@@ -14,7 +14,7 @@ import * as moment from 'moment';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit,OnDestroy {
 
   rootOrganizations: OrganizationDto;
   statusMonitor: StatusMonitor;
@@ -28,6 +28,9 @@ export class DashboardComponent implements OnInit {
   pronosticoDia: OrganizationModel;
   consumoActualChart: ChartType = 'line';
   consumoActualData: ChartData<'line'>;
+
+  timer$: Observable<any>;
+  timerSubscription: Subscription;
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -80,6 +83,13 @@ export class DashboardComponent implements OnInit {
   ) {
     const now = new Date();
     this.fechaConsulta = new Date(2023, 1, 24,now.getHours() - 5,now.getMinutes(),0);
+    this.timer$ = timer(0,900000)
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
@@ -94,6 +104,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
         this.loadData();
         this.monitoreoByTimeStamp();
+        this.timerSubscription = this.timer$.subscribe(()=>this.monitoreoByTimeStamp());
       },
       error: err => {
         console.log(err);
