@@ -6,8 +6,8 @@
     </div>
 
     <div class="text-header">
-        <span class="title">Puntos de medida</span>
-        <span class="departamento">Antioquia</span>
+        <span class="title">Medidores</span>
+        <span class="departamento">{{departamento}}</span>
     </div>
 
     <div class="tabla-filters">
@@ -16,39 +16,39 @@
 
                 <div class="field">
                     <label>ID</label>
-                    <input type="text" class="">
+                    <input type="text" class="" formControlName="ID">
                 </div>
 
                 <div class="field">
                     <label>Fecha</label>
-                    <input type="date" class="" placeholder="DD/MM/AÑO">
+                    <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
                 </div>
                 
                 <div class="field">
                     <label>Hora</label>
-                    <input type="text" class="" placeholder="Hora">
+                    <input type="time" class="" placeholder="Hora" formControlName="Hora">
                 </div>
 
                 <div class="field">
                     <label>Área</label>
-                    <select class="" formControlName="option">
-                        <option [value]=""></option>
-                        <option *ngFor="let option of options" [value]="option">{{option}}</option>
+                    <select class="" formControlName="Area">
+                        <option [value]="'todas'">Todas</option>
+                        <option *ngFor="let area of areasFilter" [value]="area">{{area}}</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Municipio</label>
-                    <select class="" formControlName="option">
-                        <option [value]=""></option>
-                        <option *ngFor="let option of options" [value]="option">{{option}}</option>
+                    <select class="" formControlName="Municipio">
+                        <option [value]="'todos'">Todos</option>
+                        <option *ngFor="let municipio of municipioFilter" [value]="municipio">{{municipio}}</option>
                     </select>
                 </div>
                 <div class="field">
                     <label>Dirección</label>
-                    <input type="text" class="">
+                    <input type="text" class="" formControlName="Direccion">
                 </div>
 
-                <button class="black-button">Buscar</button>
+                <button class="black-button" (click)="onFilter()">Buscar</button>
                 
             </form>
         </div>
@@ -57,7 +57,7 @@
             <mat-table #table [dataSource]="dataSource" class="mvm-table">
                 <ng-container matColumnDef="ID">
                     <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170">{{element.nameNodo}}</mat-cell>
+                        <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="area">
                     <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
@@ -65,18 +65,18 @@
                 </ng-container>
                 <ng-container matColumnDef="municipio">
                     <mat-header-cell *matHeaderCellDef class="celda-90M">Municipio</mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="celda-90M">{{element.municipioNodo}}</mat-cell>
+                    <mat-cell *matCellDef="let element" class="celda-90M">{{element.nameMunicipio}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="direccion">
                     <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.dirNodo}}</mat-cell>
+                    <mat-cell *matCellDef="let element">{{element.dirLocal}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="consumo">
                     <mat-header-cell *matHeaderCellDef>Consumo</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= 20" class="icon-state">
-                        <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= 28" class="icon-state">
-                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo >20 && element.consumo <28" class="icon-state">
+                        <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= varianzaMinima" class="icon-state">
+                        <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= varianzaMaxima" class="icon-state">
+                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo >varianzaMinima && element.consumo <varianzaMaxima" class="icon-state">
                         {{element.consumo}}
                     </mat-cell>
                 </ng-container>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="mapa">
-
+        <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
     </div>
     
 

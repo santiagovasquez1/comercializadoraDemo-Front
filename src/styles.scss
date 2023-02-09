@@ -204,6 +204,7 @@ ul {
 }
 
 .dashboard-container {
+    background-color: #F6F6FF;
     width: 100%;
     height: 100%;
     padding-top: 5.69vh;
@@ -458,12 +459,13 @@ select {
 
 
 .container-puntos-medida {
-    height: calc(100vh - 116px);
+    height: calc(100vh - 76px);
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 70% 30%;
     grid-template-rows: 5% 150px 20% 50%;
-    margin-left: 20px;
-    margin-top: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    background-color: #F6F6FF;
 
     .container-breadcrumbs {
         display: flex;
@@ -557,6 +559,11 @@ select {
                 }
             }
         }
+    }
+
+    .mapa{
+        grid-row: 3/5;
+        grid-column: 2/3;
     }
 }
 
