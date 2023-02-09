@@ -1,3 +1,4 @@
+import { StatusMonitor } from './../../models/StatusMonitor';
 import { OrganizationDto } from './../../models/OrganizationDto';
 import { ETypesOrganizations, GetGeneralDataRequest } from './../../models/GetGeneralDataRequest';
 import { Observable, forkJoin } from 'rxjs';
@@ -16,7 +17,9 @@ import * as moment from 'moment';
 export class DashboardComponent implements OnInit {
 
   rootOrganizations: OrganizationDto;
+  statusMonitor: StatusMonitor;
   localOrganizations: OrganizationDto[];
+  fechaConsulta: Date;
 
   selectedArea: string = '---';
   selectedLocal: string = '---';
@@ -25,8 +28,6 @@ export class DashboardComponent implements OnInit {
   pronosticoDia: OrganizationModel;
   consumoActualChart: ChartType = 'line';
   consumoActualData: ChartData<'line'>;
-
-  request: GetGeneralDataRequest;
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -76,7 +77,10 @@ export class DashboardComponent implements OnInit {
   constructor(private infoService: KillerAppService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService
-  ) { }
+  ) {
+    const now = new Date();
+    this.fechaConsulta = new Date(2023, 1, 24,now.getHours() - 5,now.getMinutes(),0);
+  }
 
   ngOnInit(): void {
     this.loadOrganizations();
@@ -89,6 +93,7 @@ export class DashboardComponent implements OnInit {
         this.rootOrganizations = response[0];
         this.spinner.hide();
         this.loadData();
+        this.monitoreoByTimeStamp();
       },
       error: err => {
         console.log(err);
@@ -106,7 +111,7 @@ export class DashboardComponent implements OnInit {
         empresaName: this.rootOrganizations.name,
         areaName: this.selectedArea != '---' && this.selectedArea !== null && this.selectedArea !== '' ? this.selectedArea : null,
         localName: this.selectedLocal != '---' && this.selectedLocal !== null && this.selectedLocal !== '' ? this.selectedLocal : null,
-        fechaConsulta: new Date()
+        fechaConsulta: this.fechaConsulta
       }
       request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
 
@@ -116,7 +121,6 @@ export class DashboardComponent implements OnInit {
 
       forkJoin(obs).subscribe({
         next: response => {
-          console.log(response);
           this.setChartData(response);
           this.spinner.hide();
         },
@@ -126,6 +130,29 @@ export class DashboardComponent implements OnInit {
           this.toastr.error(err);
         }
       });
+    }
+  }
+
+  private monitoreoByTimeStamp() {
+    if (this.rootOrganizations) {
+      this.spinner.show();
+      const request: GetGeneralDataRequest = {
+        empresaName: this.rootOrganizations.name,
+        TypeOfOrganization: ETypesOrganizations.Empresa,
+        fechaConsulta: this.fechaConsulta
+      }
+      this.infoService.monitoreoByTimeStamp(request).subscribe({
+        next: data => {
+          this.statusMonitor = data;
+          this.spinner.hide();
+          console.log(this.statusMonitor);
+        },
+        error: err => {
+          console.log(err);
+          this.spinner.hide();
+          this.toastr.error(err);
+        }
+      })
     }
   }
 

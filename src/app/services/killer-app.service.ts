@@ -1,3 +1,5 @@
+import { StatusMonitorResponse } from './../models/StatusMonitorResponse';
+import { StatusMonitor } from './../models/StatusMonitor';
 import { OrganizationDto } from './../models/OrganizationDto';
 import { OrganizationModel } from './../models/OrganizationModel';
 import { GetGeneralDataRequest } from './../models/GetGeneralDataRequest';
@@ -46,5 +48,14 @@ export class KillerAppService {
   public getloadInfo(): Observable<any> {
     const url = `${this.killerAppUrl}/LoadInfo`;
     return this.http.get(url);
+  }
+
+  public monitoreoByTimeStamp(request: GetGeneralDataRequest): Observable<StatusMonitor> {
+    const url = `${this.killerAppUrl}/MonitoreoByTimeStamp`;
+    return this.http.post<StatusMonitorResponse>(url, request).pipe(
+      map(response => {
+        return response.statusMonitor
+      })
+    );
   }
 }
