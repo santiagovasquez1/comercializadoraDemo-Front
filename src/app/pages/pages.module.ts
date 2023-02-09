@@ -11,13 +11,15 @@ import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.c
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/mapa-colombia.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     LoginComponent,
     PagesComponent,
-    PuntosMedidaComponent
+    PuntosMedidaComponent,
+    MapaColombiaComponent
   ],
   imports: [
     CommonModule,
