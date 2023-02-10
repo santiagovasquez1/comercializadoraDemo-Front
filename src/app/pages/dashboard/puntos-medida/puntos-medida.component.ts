@@ -5,12 +5,23 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { KillerAppService } from 'src/app/services/killer-app.service';
 import { TableService } from 'src/app/services/shared/table-service.service';
+import { OrganizationDto } from 'src/app/models/OrganizationDto';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGeneralDataRequest';
+import { ToastrService } from 'ngx-toastr';
+import { TablaMedidores } from 'src/app/models/TablaMedidores';
+import * as moment from 'moment';
+
+
 
 @Component({
   selector: 'app-puntos-medida',
   templateUrl: './puntos-medida.component.html'
 })
 export class PuntosMedidaComponent {
+  rootOrganizations: OrganizationDto;
+  fechaHora: Date;
+
   selectedOption: string;
   options = [ 'Option 1', 'Option 2', 'Option 3' ];
   filterForm: FormGroup;
@@ -18,25 +29,34 @@ export class PuntosMedidaComponent {
 
   departamento: string = 'Colombia';
 
+  organizaciones: OrganizationDto[] =[];
+
   stateBlue: boolean;
   stateRed: boolean;
   stateGreen: boolean;
 
-  varianzaMinima: number = 20.0;
-  varianzaMaxima: number = 28.0;
+  varianzaMinima: number = 80.0;
+  varianzaMaxima: number = 90.0;
 
   areasFilter: string[] = [];
   municipioFilter: string[] = [];
 
   isFilterMap: boolean =false;
 
+  isFilterDate: boolean = false;
+  isFilterHour: boolean = false;
+
   //filtros
   area: string = '';
   municipio: string = '';
   localId: string = '';
   fecha: Date;
-  hora: Time;
+  hora: string;
   dirLocal: string = '';
+
+
+
+  time = '';
 
   @ViewChild('paginator', { static: true }) paginator: MatPaginator;
   @ViewChild('table', { static: true }) table: MatTable<any>;
@@ -45,15 +65,37 @@ export class PuntosMedidaComponent {
 
   constructor(private fb: FormBuilder,
               private killerAppService: KillerAppService,
-              private tableService: TableService,){
+              private tableService: TableService,
+              private spinner: NgxSpinnerService,
+              private toastr: ToastrService){
     this.dataSource = new MatTableDataSource();
+    const now = new Date();
+    this.fechaHora = new Date(2023, 1, 24,now.getHours() - 5,now.getMinutes(),0);
   }
 
 
   ngOnInit() {
-    this.tableService.setPaginatorTable(this.paginator);
+
+    this.loadOrganizations();
     this.initFilterForm();
-    this.getloadInfo();
+
+  }
+
+  private loadOrganizations() {
+    this.spinner.show();
+    this.killerAppService.getOrganizations().subscribe({
+      next: response => {
+        this.rootOrganizations = response[0];
+        this.getloadInfo();
+        this.spinner.hide();
+
+      },
+      error: err => {
+        console.log(err);
+        this.spinner.hide();
+        this.toastr.error(err);
+      }
+    })
   }
 
   initFilterForm() {
@@ -71,33 +113,61 @@ export class PuntosMedidaComponent {
 
   getloadInfo(){
 
-    this.killerAppService.getloadInfo().subscribe({
-      next: (data) => {
-        let dataArray = [];
-        let arrayMap = [];
-  
-        dataArray = data.empresas[0].nodes;
+    this.area = this.filterForm.get('Area').value;
+    this.municipio = this.filterForm.get('Municipio').value;
+    this.localId = this.filterForm.get('ID').value;
+    this.fecha = new Date(this.filterForm.get('Fecha').value);
+    this.dirLocal = this.filterForm.get('Direccion').value;
 
-        dataArray.map(obj => {
+    this.hora = this.filterForm.get('Hora').value;
+    const hours = parseInt( this.hora .split(":")[0]);
+    const minutes = parseInt(this.hora .split(":")[1]);
+
+    if(!this.isFilterMap){
+      this.isFilterDate = this.fecha.toString() == 'Invalid Date' ? false: true;
+      this.isFilterHour = this.hora.toString() == '' ? false: true;
+    }
+    else{
+      this.isFilterDate = false;
+      this.isFilterHour = false;
+    }
+
+    this.fechaHora = this.isFilterDate == true ? this.fecha : this.fechaHora;
+
+    if(this.isFilterHour){
+
+      this.fechaHora.setHours(hours + 19,minutes);
+    }
+
+    let request: GetGeneralDataRequest = {
+      empresaName: this.rootOrganizations.name,
+      areaName: null,
+      localName: null,
+      fechaConsulta: this.fechaHora
+    }
+    request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
+
+    this.killerAppService.GetConsumoByTimeStamp(request).subscribe({
+      next: (data) => {
+        const iteratorArray = Object.values(data);
+        let arrayMap: TablaMedidores[] = [];
+
+        iteratorArray.map(obj => {
           obj.nodes.map(nodo => {
-            arrayMap.push({nameArea: obj.name, localId: nodo.name, dirLocal:nodo.direccion, nameMunicipio: nodo.municipio,nameDpto:nodo.departamento, consumo:nodo.information[nodo.information.length-1].potencia});
+            arrayMap.push({nameArea: obj.name, localId: nodo.name, dirLocal:nodo.direccion, nameMunicipio: nodo.municipio,nameDpto:nodo.departamento, consumo: nodo.information[0].potencia});
           });
         });
 
-        this.area = this.filterForm.get('Area').value;
-        this.municipio = this.filterForm.get('Municipio').value;
-        this.localId = this.filterForm.get('ID').value;
-        this.fecha = this.filterForm.get('Fecha').value;
-        this.hora = this.filterForm.get('Hora').value;
-        this.dirLocal = this.filterForm.get('Direccion').value;
+        
     
         let resultArray = arrayMap;
         
         if(this.isFilterMap){
           resultArray = this.filterTable('nameDpto',this.departamento,resultArray,true);
+          
           this.filterForm.reset();
           this.initFilterForm()
-          
+
         }
         else{
 
@@ -117,14 +187,9 @@ export class PuntosMedidaComponent {
 
         this.getInfoFiltros();
 
-        
-  
-      }, error: (error) => {
-        console.log("Error! ",error.message)
       }
+
     })
-
-
 
   }
 
@@ -167,9 +232,22 @@ export class PuntosMedidaComponent {
   changeDpto(newItem: string){
     this.departamento = newItem;
     this.isFilterMap = true;
+
+
+
     this.getloadInfo();
 
     
+  }
+
+  private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {
+    if (request.empresaName !== null && request.areaName !== null && request.localName !== null) {
+      return ETypesOrganizations.Local;
+    } else if (request.empresaName !== null && request.areaName !== null) {
+      return ETypesOrganizations.Area;
+    } else {
+      return ETypesOrganizations.Empresa;
+    }
   }
 
 
