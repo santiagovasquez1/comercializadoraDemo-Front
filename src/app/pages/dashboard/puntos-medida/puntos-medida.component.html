@@ -23,7 +23,7 @@
                     <label>Fecha</label>
                     <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
                 </div>
-                
+
                 <div class="field">
                     <label>Hora</label>
                     <input type="time" class="" placeholder="Hora" formControlName="Hora">
@@ -48,16 +48,16 @@
                     <input type="text" class="" formControlName="Direccion">
                 </div>
 
-                <button class="black-button" (click)="onFilter()">Buscar</button>
-                
+                <button matRipple class="black-button" (click)="onFilter()">Buscar</button>
+
             </form>
         </div>
-    
+
         <div class="container-tabla">
             <mat-table #table [dataSource]="dataSource" class="mvm-table">
                 <ng-container matColumnDef="ID">
                     <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
+                    <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="area">
                     <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
@@ -76,8 +76,7 @@
                     <mat-cell *matCellDef="let element">
                         <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= varianzaMinima" class="icon-state">
                         <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= varianzaMaxima" class="icon-state">
-                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo >varianzaMinima && element.consumo <varianzaMaxima" class="icon-state">
-                        {{element.consumo}}
+                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo >varianzaMinima && element.consumo <varianzaMaxima" class="icon-state"> {{element.consumo}}
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
@@ -90,7 +89,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                 <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
             </mat-table>
-    
+
             <div class="table-container mt-10 fadeIn">
                 <mat-paginator class="mvm-paginator" #paginator [pageSizeOptions]="[5,10, 25, 100 ]" showFirstLastButtons></mat-paginator>
             </div>
@@ -100,8 +99,8 @@
     <div class="mapa">
         <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
     </div>
-    
 
-    
-    
+
+
+
 </div>

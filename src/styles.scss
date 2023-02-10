@@ -4,6 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('./animations.scss');
 //Variables
 $azul_principal:#0C00FF;
 $azul_secundario:#07009C;
@@ -50,15 +51,30 @@ ul {
     padding: 8px 12px;
 }
 
-.black-button {
-    padding: 5px 22px;
-    gap: 10px;
-    width: 93px;
-    height: 31px;
-    background: #000000;
-    border: 1px solid #000000;
+button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     border-radius: 20px;
+    gap: 10px;
+    padding: 5px 22px 5px 22px;
+    font-size: 14px;
+    line-height: 21px;
+    border: 1px solid black;
+    color: black;
+    background-color: #FFFFFF;
+    height: fit-content;
+    transition: 200ms all;
+}
+
+.black-button {
+    background: #000000;
     color: white;
+    &:hover {
+        background-color: $azul_secundario;
+        border-color: $azul_secundario;
+    }
 }
 
 .login-container {
@@ -401,16 +417,13 @@ ul {
             &:hover {
                 background-color: #E7E6FF;
             }
-            &:active {
+            &:active,
+            &:focus {
                 background-color: $azul_principal;
                 color: white;
                 .icon {
                     color: white;
                 }
-            }
-            &:focus {
-                background-color: #E7E6FF;
-                border: 1px solid #726BFF;
             }
         }
     }
@@ -526,7 +539,6 @@ select {
     padding-left: 20px;
     padding-top: 20px;
     background-color: #F6F6FF;
-
     .container-breadcrumbs {
         display: flex;
         align-items: center;
@@ -613,8 +625,7 @@ select {
             }
         }
     }
-
-    .mapa{
+    .mapa {
         grid-row: 3/5;
         grid-column: 2/3;
     }
