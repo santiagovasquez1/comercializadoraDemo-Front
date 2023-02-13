@@ -483,7 +483,7 @@ select {
 }
 
 input,
-select {
+select,.select {
     border: 1px solid $azul_principal;
     border-radius: 4px;
     background-color: #FFFFFF;
@@ -522,9 +522,8 @@ select {
     height: calc(100vh - 76px);
     display: grid;
     grid-template-columns: 70% 30%;
-    grid-template-rows: 5% 150px 20% 50%;
+    grid-template-rows: 30px 5% 150px 20% 50%;
     padding-left: 20px;
-    padding-top: 20px;
     background-color: #F6F6FF;
 
     .container-breadcrumbs {
@@ -555,6 +554,7 @@ select {
         display: flex;
         flex-direction: column;
         grid-column: 1/3;
+        width: 70%;
         .title {
             font-style: normal;
             font-weight: 300;
@@ -568,6 +568,20 @@ select {
             font-size: 32px;
             line-height: 48px;
             color: $azul_secundario;
+        }
+        .ultima-vez{
+            display: flex;
+            align-items: center;
+            align-self: end;
+
+            span{
+                margin-right: 5px;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 21px;
+                color: #848484;
+            }
+
         }
     }
     .tabla-filters {
@@ -606,10 +620,38 @@ select {
                         align-self: flex-start;
                         justify-self: flex-end;
                     }
+
                     .icon-time {
                         justify-self: flex-end;
                         align-self: flex-start;
                     }
+
+                    div{
+                        display: flex;
+                        border: 1px solid #0C00FF;
+                        align-items: center;
+                        background-position: calc(100% - 10px) center;
+                        background-repeat: no-repeat;
+                        background-image: url(assets/icons/reloj.svg);
+                        padding-right: 30px;
+                        .custom-time{
+                            border: none;
+                            background-image: none !important;
+                            text-align: center;
+                            cursor: pointer;
+                        }
+
+                        .custom-time:focus{
+                            border: none !important;
+                        }
+                        .custom-time:hover{
+                            background-color: #E7E6FF;
+                        }
+                        .custom-time option:hover{
+                            background-color: none !important;
+                        }
+                    }
+                    
                 }
                 button {
                     grid-column: 3/4;
@@ -621,17 +663,64 @@ select {
     }
 
     .mapa{
-        grid-row: 3/5;
+        grid-row: 4/6;
         grid-column: 2/3;
     }
 }
 
 .container-tabla {
     .icon-eye {
-        color: #0C00FF;
         cursor: pointer;
     }
+
+    .icon-medidor{
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
     .icon-state {
         margin-right: 6px;
+    }
+}
+
+
+.container-elegir-hora{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 100%;
+    height: 142px;
+    border: 1px solid red;
+    position: absolute;
+    width: 184px;
+    margin-top: 5px;
+    overflow: hidden;
+
+    .horas{
+        height: 100%;
+        overflow-y: scroll;
+        ::-webkit-scrollbar {
+            width: 0.2em;
+            background-color: #15bb36;
+        }
+     
+        ::-webkit-scrollbar-thumb {
+             background-color: #4b18c2;
+        }
+     
+        ::-webkit-scrollbar-thumb:hover {
+             background-color: #ff0f0f;
+        }
+    }
+}
+
+.reloj{
+    display: flex;
+    justify-content: end;
+    padding-right: 30px;
+    padding-top: 5px;
+    grid-column: 1/3;
+
+    span{
+        margin-right: 10px;
     }
 }

@@ -1,4 +1,8 @@
 <div class="container-puntos-medida">
+    <div class="reloj">
+        <span>{{currentTime}}</span>
+        <img src="../../../../assets/icons/hora.svg" alt="">
+    </div>
 
     <div class="container-breadcrumbs" >
         <div class="volver" [routerLink]="['/dashboard']">
@@ -10,6 +14,11 @@
     <div class="text-header">
         <span class="title">Medidores</span>
         <span class="departamento">{{departamento}}</span>
+        <div class="ultima-vez">
+            <span>Hora de última actualización de datos : <b>{{horaUltimaDatos}}</b> </span>
+            <img src="../../../../assets/icons/historico.svg" alt="">
+        </div>
+        
     </div>
 
     <div class="tabla-filters">
@@ -25,10 +34,12 @@
                     <label>Fecha</label>
                     <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
                 </div>
+
+                <!-- <app-input-time></app-input-time> -->
                 
                 <div class="field">
-                    <label>Hora</label>
-                    <input type="time" class="" placeholder="Hora" formControlName="Hora">
+                    <label>Hora</label> 
+                     <input type="time" class="" placeholder="Hora" formControlName="Hora"> 
                 </div>
 
                 <div class="field">
@@ -76,16 +87,17 @@
                 <ng-container matColumnDef="consumo">
                     <mat-header-cell *matHeaderCellDef>Consumo</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= varianzaMinima" class="icon-state">
-                        <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= varianzaMaxima" class="icon-state">
-                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo >varianzaMinima && element.consumo <varianzaMaxima" class="icon-state">
+                        <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= element.statusMonitor.bajoConsumo" class="icon-state">
+                        <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= element.statusMonitor.altoConsumo" class="icon-state">
+                        <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo > element.statusMonitor.bajoConsumo && element.consumo < element.statusMonitor.altoConsumo" class="icon-state">
                         {{element.consumo}}
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="acciones">
                     <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <mat-icon class="icon-eye">remove_red_eye</mat-icon>
+                        <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="">
+                        <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="">
                     </mat-cell>
                 </ng-container>
 

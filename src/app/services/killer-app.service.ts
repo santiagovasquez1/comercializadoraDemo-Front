@@ -45,6 +45,15 @@ export class KillerAppService {
     );
   }
 
+  public GetPromedioConsumoByTimeStamp(request: GetGeneralDataRequest): Observable<OrganizationDto[]> {
+    const url = `${this.killerAppUrl}/GetPromedioConsumoByTimeStamp`;
+    return this.http.post(url, request).pipe(
+      map((response: GetOrganizationsResponse) => {
+        return response.organizations
+      })
+    );
+  }
+
   public getPronosticoDia(request: GetGeneralDataRequest): Observable<OrganizationModel> {
     const url = `${this.killerAppUrl}/GetPronosticoDia`;
     return this.http.post(url, request).pipe(

@@ -1,17 +1,15 @@
-import { Time } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { KillerAppService } from 'src/app/services/killer-app.service';
-import { TableService } from 'src/app/services/shared/table-service.service';
 import { OrganizationDto } from 'src/app/models/OrganizationDto';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGeneralDataRequest';
 import { ToastrService } from 'ngx-toastr';
 import { TablaMedidores } from 'src/app/models/TablaMedidores';
+import { forkJoin, Observable } from 'rxjs';
 import * as moment from 'moment';
-
 
 
 @Component({
@@ -21,6 +19,9 @@ import * as moment from 'moment';
 export class PuntosMedidaComponent {
   rootOrganizations: OrganizationDto;
   fechaHora: Date;
+
+  horaUltimaDatos: string;
+  currentTime: string;
 
   selectedOption: string;
   options = [ 'Option 1', 'Option 2', 'Option 3' ];
@@ -35,6 +36,7 @@ export class PuntosMedidaComponent {
   stateRed: boolean;
   stateGreen: boolean;
 
+  desviacionPorcentaje: number = 0.1;
   varianzaMinima: number = 80.0;
   varianzaMaxima: number = 90.0;
 
@@ -55,17 +57,16 @@ export class PuntosMedidaComponent {
   dirLocal: string = '';
 
 
-
   time = '';
 
   @ViewChild('paginator', { static: true }) paginator: MatPaginator;
   @ViewChild('table', { static: true }) table: MatTable<any>;
+  @ViewChild('selectHora') mySelect: ElementRef;
 
   displayedColumns: string[] = ['ID', 'area', 'municipio', 'direccion', 'consumo', 'acciones']
 
   constructor(private fb: FormBuilder,
               private killerAppService: KillerAppService,
-              private tableService: TableService,
               private spinner: NgxSpinnerService,
               private toastr: ToastrService){
     this.dataSource = new MatTableDataSource();
@@ -79,6 +80,15 @@ export class PuntosMedidaComponent {
     this.loadOrganizations();
     this.initFilterForm();
 
+    this.updateTime();
+    setInterval(() => this.updateTime(), 1000);
+
+
+  }
+
+  updateTime() {
+    const Time = new Date();
+    this.currentTime = Time.toLocaleString();
   }
 
   private loadOrganizations() {
@@ -109,9 +119,9 @@ export class PuntosMedidaComponent {
     });
   }
 
-
-
   getloadInfo(){
+
+    this.spinner.show();
 
     this.area = this.filterForm.get('Area').value;
     this.municipio = this.filterForm.get('Municipio').value;
@@ -147,19 +157,53 @@ export class PuntosMedidaComponent {
     }
     request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
 
-    this.killerAppService.GetConsumoByTimeStamp(request).subscribe({
-      next: (data) => {
-        const iteratorArray = Object.values(data);
+    let obs: Observable<OrganizationDto[]>[] = [];
+    obs.push(this.killerAppService.GetConsumoByTimeStamp(request));
+    obs.push(this.killerAppService.GetPromedioConsumoByTimeStamp(request));
+    
+
+    forkJoin(obs).subscribe({
+      next: response => {
+
+        console.log("response: ",response)
+        
+
+        const iteratorConsumos = Object.values(response[0]);
+        const iteratoPromedios = Object.values(response[1]);
+
+        const format = 'h:mm a';
+        const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
+
+        this.horaUltimaDatos = moment(dateString).format(format);
+
+
         let arrayMap: TablaMedidores[] = [];
 
-        iteratorArray.map(obj => {
-          obj.nodes.map(nodo => {
-            arrayMap.push({nameArea: obj.name, localId: nodo.name, dirLocal:nodo.direccion, nameMunicipio: nodo.municipio,nameDpto:nodo.departamento, consumo: nodo.information[0].potencia});
+        iteratorConsumos.forEach(obj => {
+          obj.nodes.forEach(nodo => {
+            
+            const nodo2 = iteratoPromedios.find(obj2 => obj2.name === obj.name && obj2.nodes.some(n => n.name === nodo.name))?.nodes.find(n => n.name === nodo.name)
+            const existingObj = arrayMap.find(
+              item => item.nameArea === obj.name && item.localId === nodo.name
+            );
+            if (!existingObj && nodo2) {
+              arrayMap.push({
+                nameArea: obj.name,
+                localId: nodo.name,
+                dirLocal: nodo.direccion,
+                nameMunicipio: nodo.municipio,
+                nameDpto: nodo.departamento,
+                consumo: nodo.information[0].potencia,
+                statusMonitor: {
+                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * this.desviacionPorcentaje,
+                  consumoNormal: nodo2.information[0].potencia,
+                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * this.desviacionPorcentaje
+                }
+              });
+            }
           });
         });
-
         
-    
         let resultArray = arrayMap;
         
         if(this.isFilterMap){
@@ -187,10 +231,14 @@ export class PuntosMedidaComponent {
 
         this.getInfoFiltros();
 
+        this.spinner.hide();
+      },
+      error: err => {
+        console.log(err);
+        this.spinner.hide();
+        this.toastr.error(err);
       }
-
-    })
-
+    });
   }
 
   onFilter(){
@@ -233,11 +281,7 @@ export class PuntosMedidaComponent {
     this.departamento = newItem;
     this.isFilterMap = true;
 
-
-
     this.getloadInfo();
-
-    
   }
 
   private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {
@@ -249,6 +293,4 @@ export class PuntosMedidaComponent {
       return ETypesOrganizations.Empresa;
     }
   }
-
-
 }
