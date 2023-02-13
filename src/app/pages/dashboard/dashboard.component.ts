@@ -8,13 +8,13 @@ import { KillerAppService } from './../../services/killer-app.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit,OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   rootOrganizations: OrganizationDto;
   statusMonitor: StatusMonitor;
@@ -82,8 +82,8 @@ export class DashboardComponent implements OnInit,OnDestroy {
     private toastr: ToastrService
   ) {
     const now = new Date();
-    this.fechaConsulta = new Date(2023, 1, 24,now.getHours() - 5,now.getMinutes(),0);
-    this.timer$ = timer(0,900000)
+    this.fechaConsulta = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
+    this.timer$ = timer(0, 900000)
   }
 
   ngOnDestroy(): void {
@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
         this.spinner.hide();
         this.loadData();
         this.monitoreoByTimeStamp();
-        this.timerSubscription = this.timer$.subscribe(()=>this.monitoreoByTimeStamp());
+        this.timerSubscription = this.timer$.subscribe(() => this.monitoreoByTimeStamp());
       },
       error: err => {
         console.log(err);
