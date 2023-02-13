@@ -519,12 +519,10 @@ select {
 }
 
 .container-puntos-medida {
-    height: calc(100vh - 76px);
     display: grid;
-    grid-template-columns: 70% 30%;
-    grid-template-rows: 30px 5% 150px 20% 50%;
+    grid-template-columns: minmax(0,1400px) 35%;
+    grid-template-rows: 30px 5% 150px auto;
     padding-left: 20px;
-    background-color: #F6F6FF;
 
     .container-breadcrumbs {
         display: flex;
@@ -554,7 +552,8 @@ select {
         display: flex;
         flex-direction: column;
         grid-column: 1/3;
-        width: 70%;
+        width: 65%;
+        max-width: 1400px;
         .title {
             font-style: normal;
             font-weight: 300;
@@ -723,4 +722,10 @@ select {
     span{
         margin-right: 10px;
     }
+}
+
+.full-container{
+    // height: calc(100% + 86px);
+    height: calc(100% - 76px);
+    background-color: #F6F6FF;
 }
