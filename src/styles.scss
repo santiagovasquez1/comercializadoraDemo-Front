@@ -4,7 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@import url('./animations.scss');
 //Variables
 $azul_principal:#0C00FF;
 $azul_secundario:#07009C;
@@ -543,12 +542,10 @@ select {
         display: flex;
         align-items: center;
         grid-column: 1/3;
-
-        .volver{
+        .volver {
             width: 80px;
             cursor: pointer;
         }
-
         i {
             color: $azul_principal;
             cursor: pointer;
