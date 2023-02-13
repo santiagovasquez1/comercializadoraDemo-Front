@@ -5,14 +5,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { KillerAppService } from 'src/app/services/killer-app.service';
-import { TableService } from 'src/app/services/shared/table-service.service';
 import { OrganizationDto } from 'src/app/models/OrganizationDto';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGeneralDataRequest';
 import { ToastrService } from 'ngx-toastr';
 import { TablaMedidores } from 'src/app/models/TablaMedidores';
+import { forkJoin, map, Observable } from 'rxjs';
 import * as moment from 'moment';
-
+import { StatusMonitor } from 'src/app/models/StatusMonitor';
 
 
 @Component({
@@ -21,7 +21,11 @@ import * as moment from 'moment';
 })
 export class PuntosMedidaComponent {
   rootOrganizations: OrganizationDto;
+  statusMonitor: StatusMonitor;
   fechaHora: Date;
+
+  horaUltimaDatos: string;
+  currentTime: string;
 
   selectedOption: string;
   options = ['Option 1', 'Option 2', 'Option 3'];
@@ -36,6 +40,7 @@ export class PuntosMedidaComponent {
   stateRed: boolean;
   stateGreen: boolean;
 
+  desviacionPorcentaje: number = 0.1;
   varianzaMinima: number = 80.0;
   varianzaMaxima: number = 90.0;
 
@@ -56,11 +61,11 @@ export class PuntosMedidaComponent {
   dirLocal: string = '';
 
 
-
   time = '';
 
   @ViewChild('paginator', { static: true }) paginator: MatPaginator;
   @ViewChild('table', { static: true }) table: MatTable<any>;
+  @ViewChild('selectHora') mySelect: ElementRef;
 
   displayedColumns: string[] = ['ID', 'area', 'municipio', 'direccion', 'consumo', 'acciones']
 
@@ -81,6 +86,15 @@ export class PuntosMedidaComponent {
     this.loadOrganizations();
     this.initFilterForm();
 
+    this.updateTime();
+    setInterval(() => this.updateTime(), 1000);
+
+
+  }
+
+  updateTime() {
+    const Time = new Date();
+    this.currentTime = Time.toLocaleString();
   }
 
   private loadOrganizations() {
@@ -100,6 +114,7 @@ export class PuntosMedidaComponent {
     })
   }
 
+
   initFilterForm() {
     this.filterForm = this.fb.group({
       ID: [''],
@@ -111,9 +126,9 @@ export class PuntosMedidaComponent {
     });
   }
 
+  getloadInfo(){
 
-
-  getloadInfo() {
+    this.spinner.show();
 
     this.area = this.filterForm.get('Area').value;
     this.municipio = this.filterForm.get('Municipio').value;
@@ -141,6 +156,8 @@ export class PuntosMedidaComponent {
       this.fechaHora.setHours(hours + 19, minutes);
     }
 
+    console.log("this.fechaHora: ",this.fechaHora)
+
     let request: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
       areaName: null,
@@ -149,19 +166,54 @@ export class PuntosMedidaComponent {
     }
     request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
 
-    this.killerAppService.GetConsumoByTimeStamp(request).subscribe({
-      next: (data) => {
-        const iteratorArray = Object.values(data);
+    let obs: Observable<any>[] = [];
+    obs.push(this.killerAppService.GetConsumoByTimeStamp(request).pipe(map(response => <OrganizationDto[]>response)));
+    obs.push(this.killerAppService.GetPromedioConsumoByTimeStamp(request).pipe(map(response => <OrganizationDto[]>response)));
+    obs.push(this.killerAppService.monitoreoByTimeStamp(request).pipe(map(response => <StatusMonitor>response)));
+    
+    
+    
+
+    forkJoin(obs).subscribe({
+      next: response => {
+
+        const iteratorConsumos = response[0];
+        const iteratoPromedios = response[1];
+        const monitoreoTime = response[2];
+
+        const format = 'h:mm a';
+        const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
+
+        this.horaUltimaDatos = moment(dateString).format(format);
+
+
         let arrayMap: TablaMedidores[] = [];
 
-        iteratorArray.map(obj => {
-          obj.nodes.map(nodo => {
-            arrayMap.push({ nameArea: obj.name, localId: nodo.name, dirLocal: nodo.direccion, nameMunicipio: nodo.municipio, nameDpto: nodo.departamento, consumo: nodo.information[0].potencia });
+        iteratorConsumos.forEach(obj => {
+          obj.nodes.forEach(nodo => {
+            
+            const nodo2 = iteratoPromedios.find(obj2 => obj2.name === obj.name && obj2.nodes.some(n => n.name === nodo.name))?.nodes.find(n => n.name === nodo.name)
+            const existingObj = arrayMap.find(
+              item => item.nameArea === obj.name && item.localId === nodo.name
+            );
+            if (!existingObj && nodo2) {
+              arrayMap.push({
+                nameArea: obj.name,
+                localId: nodo.name,
+                dirLocal: nodo.direccion,
+                nameMunicipio: nodo.municipio,
+                nameDpto: nodo.departamento,
+                consumo: nodo.information[0].potencia,
+                statusMonitor: {
+                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * (monitoreoTime.altoConsumo/100),
+                  consumoNormal: nodo2.information[0].potencia,
+                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * (monitoreoTime.bajoConsumo/100)
+                }
+              });
+            }
           });
         });
-
-
-
+        
         let resultArray = arrayMap;
 
         if (this.isFilterMap) {
@@ -189,10 +241,14 @@ export class PuntosMedidaComponent {
 
         this.getInfoFiltros();
 
+        this.spinner.hide();
+      },
+      error: err => {
+        console.log(err);
+        this.spinner.hide();
+        this.toastr.error(err);
       }
-
-    })
-
+    });
   }
 
   onFilter() {
@@ -235,11 +291,7 @@ export class PuntosMedidaComponent {
     this.departamento = newItem;
     this.isFilterMap = true;
 
-
-
     this.getloadInfo();
-
-
   }
 
   private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {
