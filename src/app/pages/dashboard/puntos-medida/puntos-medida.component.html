@@ -4,7 +4,7 @@
         <img src="../../../../assets/icons/hora.svg" alt="">
     </div>
 
-    <div class="container-breadcrumbs" >
+    <div class="container-breadcrumbs">
         <div class="volver" [routerLink]="['/dashboard']">
             <i class="material-icons-outlined">arrow_back_ios</i>
             <span>Volver</span>
@@ -35,8 +35,6 @@
                     <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
                 </div>
 
-                <!-- <app-input-time></app-input-time> -->
-                
                 <div class="field">
                     <label>Hora</label> 
                      <input type="time" class="" placeholder="Hora" formControlName="Hora"> 
@@ -61,16 +59,16 @@
                     <input type="text" class="" formControlName="Direccion">
                 </div>
 
-                <button class="black-button" (click)="onFilter()">Buscar</button>
-                
+                <button matRipple class="black-button" (click)="onFilter()">Buscar</button>
+
             </form>
         </div>
-    
+
         <div class="container-tabla">
             <mat-table #table [dataSource]="dataSource" class="mvm-table">
                 <ng-container matColumnDef="ID">
                     <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
+                    <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="area">
                     <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
@@ -97,14 +95,14 @@
                     <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="">
-                        <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="">
+                        <mat-icon mat-ripple class="icon-eye" (click)="OnVerDetalle(element)">remove_red_eye</mat-icon>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                 <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
             </mat-table>
-    
+
             <div class="table-container mt-10 fadeIn">
                 <mat-paginator class="mvm-paginator" #paginator [pageSizeOptions]="[5,10, 25, 100 ]" showFirstLastButtons></mat-paginator>
             </div>
@@ -114,8 +112,4 @@
     <div class="mapa">
         <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
     </div>
-    
-
-    
-    
 </div>

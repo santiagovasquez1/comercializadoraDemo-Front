@@ -12,6 +12,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/mapa-colombia.component';
+import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-organizacion.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/m
     LoginComponent,
     PagesComponent,
     PuntosMedidaComponent,
-    MapaColombiaComponent
+    MapaColombiaComponent,
+    DetalleOrganizacionComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,9 @@ import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/m
     DashboardComponent,
     LoginComponent,
     PagesComponent,
-    PuntosMedidaComponent
+    PuntosMedidaComponent,
+    MapaColombiaComponent,
+    DetalleOrganizacionComponent
   ],
   providers: [
     {

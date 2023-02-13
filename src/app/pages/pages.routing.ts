@@ -1,3 +1,4 @@
+import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-organizacion.component';
 import { PagesComponent } from './pages.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -6,16 +7,16 @@ import { LoginComponent } from './login/login.component';
 import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
     { path: "login", component: LoginComponent },
     {
-        path: '',
+        path: 'main',
         component:PagesComponent,
         children:[{
             path:'dashboard',
             component:DashboardComponent,
             data:{
-                parent:'',
+                parent:'main',
                 title:'Dashboard'
             }
         },
@@ -23,8 +24,15 @@ const routes: Routes = [
             path:'puntos-medida',
             component:PuntosMedidaComponent,
             data:{
-                parent:'',
+                parent:'main',
                 title:'Puntos de medida'
+            }
+        },{
+            path:'puntos-medida/detalle-organizacion/:GeneralData',
+            component:DetalleOrganizacionComponent,
+            data:{
+                parent:'puntos-medida',
+                title:'Detalle Organizacion'
             }
         }]
     }
