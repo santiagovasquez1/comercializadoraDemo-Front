@@ -1,6 +1,6 @@
 <div class="container-puntos-medida">
 
-    <div class="container-breadcrumbs" >
+    <div class="container-breadcrumbs">
         <div class="volver" [routerLink]="['/dashboard']">
             <i class="material-icons-outlined">arrow_back_ios</i>
             <span>Volver</span>
@@ -84,7 +84,7 @@
                 <ng-container matColumnDef="acciones">
                     <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <mat-icon class="icon-eye">remove_red_eye</mat-icon>
+                        <mat-icon mat-ripple class="icon-eye" (click)="OnVerDetalle(element)">remove_red_eye</mat-icon>
                     </mat-cell>
                 </ng-container>
 
@@ -101,8 +101,4 @@
     <div class="mapa">
         <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
     </div>
-
-
-
-
 </div>
