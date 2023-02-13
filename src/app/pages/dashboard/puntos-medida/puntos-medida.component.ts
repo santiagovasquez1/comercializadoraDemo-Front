@@ -8,8 +8,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGeneralDataRequest';
 import { ToastrService } from 'ngx-toastr';
 import { TablaMedidores } from 'src/app/models/TablaMedidores';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
 import * as moment from 'moment';
+import { StatusMonitor } from 'src/app/models/StatusMonitor';
 
 
 @Component({
@@ -18,6 +19,7 @@ import * as moment from 'moment';
 })
 export class PuntosMedidaComponent {
   rootOrganizations: OrganizationDto;
+  statusMonitor: StatusMonitor;
   fechaHora: Date;
 
   horaUltimaDatos: string;
@@ -108,6 +110,7 @@ export class PuntosMedidaComponent {
     })
   }
 
+
   initFilterForm() {
     this.filterForm = this.fb.group({
       ID: [''],
@@ -149,6 +152,8 @@ export class PuntosMedidaComponent {
       this.fechaHora.setHours(hours + 19,minutes);
     }
 
+    console.log("this.fechaHora: ",this.fechaHora)
+
     let request: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
       areaName: null,
@@ -157,19 +162,20 @@ export class PuntosMedidaComponent {
     }
     request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
 
-    let obs: Observable<OrganizationDto[]>[] = [];
-    obs.push(this.killerAppService.GetConsumoByTimeStamp(request));
-    obs.push(this.killerAppService.GetPromedioConsumoByTimeStamp(request));
+    let obs: Observable<any>[] = [];
+    obs.push(this.killerAppService.GetConsumoByTimeStamp(request).pipe(map(response => <OrganizationDto[]>response)));
+    obs.push(this.killerAppService.GetPromedioConsumoByTimeStamp(request).pipe(map(response => <OrganizationDto[]>response)));
+    obs.push(this.killerAppService.monitoreoByTimeStamp(request).pipe(map(response => <StatusMonitor>response)));
+    
+    
     
 
     forkJoin(obs).subscribe({
       next: response => {
 
-        console.log("response: ",response)
-        
-
-        const iteratorConsumos = Object.values(response[0]);
-        const iteratoPromedios = Object.values(response[1]);
+        const iteratorConsumos = response[0];
+        const iteratoPromedios = response[1];
+        const monitoreoTime = response[2];
 
         const format = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
@@ -195,9 +201,9 @@ export class PuntosMedidaComponent {
                 nameDpto: nodo.departamento,
                 consumo: nodo.information[0].potencia,
                 statusMonitor: {
-                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * this.desviacionPorcentaje,
+                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * (monitoreoTime.altoConsumo/100),
                   consumoNormal: nodo2.information[0].potencia,
-                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * this.desviacionPorcentaje
+                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * (monitoreoTime.bajoConsumo/100)
                 }
               });
             }
