@@ -4,11 +4,13 @@ import { AsideComponent } from './aside/aside.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { InputTimeComponent } from './input-time/input-time.component';
 
 @NgModule({
   declarations: [
     AsideComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    InputTimeComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { RouterModule } from '@angular/router';
   ],
   exports:[
     AsideComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    InputTimeComponent
   ]
 })
 export class SharedModule { }

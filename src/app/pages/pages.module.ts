@@ -13,6 +13,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/mapa-colombia.component';
 
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -33,7 +34,8 @@ import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/m
   exports: [
     DashboardComponent,
     LoginComponent,
-    PagesComponent
+    PagesComponent,
+    PuntosMedidaComponent
   ],
   providers: [
     {
