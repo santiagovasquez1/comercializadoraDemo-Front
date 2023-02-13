@@ -1,6 +1,5 @@
 import { Router } from '@angular/router';
-import { Time } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -11,8 +10,9 @@ import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGe
 import { ToastrService } from 'ngx-toastr';
 import { TablaMedidores } from 'src/app/models/TablaMedidores';
 import { forkJoin, map, Observable } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { StatusMonitor } from 'src/app/models/StatusMonitor';
+import { TableService } from 'src/app/services/shared/table-service.service';
 
 
 @Component({
