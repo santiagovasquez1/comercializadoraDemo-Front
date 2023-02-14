@@ -576,14 +576,12 @@ select {
 
 .container-puntos-medida {
     display: grid;
-    grid-template-columns: minmax(0,1400px) 35%;
+    grid-template-columns: minmax(0, 1400px) 35%;
     grid-template-rows: 30px 5% 150px auto;
     padding-left: 20px;
-
-    app-reloj{
+    app-reloj {
         grid-column: 1/3;
     }
-    
     .container-breadcrumbs {
         display: flex;
         align-items: center;
@@ -616,18 +614,20 @@ select {
             line-height: 48px;
             color: $azul_secundario;
         }
-        .ultima-vez{
+        .ultima-vez {
             display: flex;
             align-items: center;
             align-self: end;
-
-            span{
+            span {
                 margin-right: 5px;
                 font-weight: 400;
                 font-size: 14px;
                 line-height: 21px;
                 color: #848484;
             }
+        }
+    }
+}
 
 .tabla-filters {
     .filter {
@@ -750,19 +750,18 @@ select {
     display: flex;
     justify-content: end;
     padding-right: 30px;
-    padding-top: 5px;   
-    span{
+    padding-top: 5px;
+    span {
         margin-right: 10px;
     }
 }
 
-.full-container{
+.full-container {
     height: calc(100% - 76px);
     background-color: #F6F6FF;
 }
 
-
-.container-pagination{
+.container-pagination {
     display: grid;
     grid-template-columns: 60px auto 40px 40px 150px 40px 40px;
     justify-content: end;
@@ -771,43 +770,32 @@ select {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     padding-right: 10px;
-
-    span{
+    span {
         font-size: 11px;
     }
-
-    .select-pagination{
+    .select-pagination {
         margin-right: 40px;
         width: 70px;
     }
-
-    .arrow{
+    .arrow {
         display: flex;
         justify-content: center;
         align-items: center;
-        // img{
-        //     cursor: pointer;
-        // }
-
-        .join-right{
+        .join-right {
             position: relative;
             right: -10px;
         }
-
-        .join-left{
+        .join-left {
             position: relative;
             left: -10px;
         }
-        
     }
-
-    .pages{
+    .pages {
         display: flex;
         justify-content: center;
-        align-items: center;    
+        align-items: center;
         flex-wrap: wrap;
-
-        .page{
+        .page {
             width: 30px;
             height: 30px;
             background: #0C00FF;
@@ -818,8 +806,7 @@ select {
             margin: 0 5px;
             color: white;
         }
-
-        .page-noselected{
+        .page-noselected {
             width: 30px;
             height: 30px;
             background: white;
@@ -833,11 +820,11 @@ select {
     }
 }
 
-.disabledArrow{
+.disabledArrow {
     cursor: default;
 }
 
-.enabledArrow{
+.enabledArrow {
     cursor: pointer;
 }
 
