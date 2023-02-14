@@ -1,3 +1,4 @@
+import { MedidorModel } from './../../models/MedidorModel';
 import { InformationModel } from './../../models/InformationModel';
 import { OrganizationModel } from './../../models/OrganizationModel';
 import { ToastrService } from 'ngx-toastr';
@@ -5,7 +6,7 @@ import { KillerAppService } from 'src/app/services/killer-app.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGeneralDataRequest';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, Observable, forkJoin } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
@@ -18,6 +19,7 @@ import moment from 'moment';
   ]
 })
 export class DetalleOrganizacionComponent implements OnInit {
+  title: string = '';
   request: GetGeneralDataRequest;
   organizationConsumoTimeStamp: OrganizationModel;
   organizationConsumoHistorico: OrganizationModel;
@@ -26,7 +28,7 @@ export class DetalleOrganizacionComponent implements OnInit {
   columnsTableConsumo: string[] = ['coste', 'consumoEnergia', 'valorDia', 'valorMes'];
   columnsTableInfo: string[] = ['referencia', 'tipo', 'marca', 'icon'];
   dataTableConsumo: MatTableDataSource<InformationModel>;
-  dataTableInformation: MatTableDataSource<OrganizationModel>;
+  dataTableInformation: MatTableDataSource<MedidorModel>;
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -143,11 +145,12 @@ export class DetalleOrganizacionComponent implements OnInit {
   }
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private spinner: NgxSpinnerService,
     private loadInformationService: KillerAppService,
     private toastr: ToastrService) {
     this.dataTableConsumo = new MatTableDataSource();
-    this.dataTableConsumo = new MatTableDataSource();
+    this.dataTableInformation = new MatTableDataSource();
   }
 
   ngOnInit(): void {
@@ -172,11 +175,26 @@ export class DetalleOrganizacionComponent implements OnInit {
       })
     ).subscribe({
       next: data => {
+
+        switch (this.request.TypeOfOrganization) {
+          case ETypesOrganizations.Local:
+            this.title = 'Detalle medidor';
+            break;
+          case ETypesOrganizations.Area:
+            this.title = 'Detalle área';
+            break;
+        }
+
         this.consumoDia = data[0];
         this.pronosticoDia = data[1];
         this.organizationConsumoHistorico = data[2];
         this.organizationConsumoTimeStamp = data[3];
         this.dataTableConsumo.data = [this.organizationConsumoTimeStamp.information[0]];
+
+        if (this.organizationConsumoTimeStamp.medidorModel) {
+          this.dataTableInformation.data = [this.organizationConsumoTimeStamp.medidorModel];
+        }
+
         this.setChartData([this.consumoDia, this.pronosticoDia])
         this.setConsumoMesChartData(this.organizationConsumoHistorico);
         this.setPorcentajesData(this.organizationConsumoTimeStamp, data[4]);
@@ -246,5 +264,9 @@ export class DetalleOrganizacionComponent implements OnInit {
       }],
       labels: ['Medidor actual', 'Resto de los medidores']
     }
+  }
+
+  onVolver() {
+    this.router.navigate(['/main/puntos-medida']);
   }
 }

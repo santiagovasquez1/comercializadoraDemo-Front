@@ -1,3 +1,4 @@
+import { MedidorModel } from './MedidorModel';
 import { InformationModel } from "./InformationModel";
 
 export interface OrganizationModel {
@@ -8,4 +9,5 @@ export interface OrganizationModel {
     municipio: string;
     direccion: string;
     information: Array<InformationModel>
+    medidorModel: MedidorModel;
 }

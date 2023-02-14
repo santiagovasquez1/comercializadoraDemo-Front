@@ -1,12 +1,13 @@
 <div class="custom-container">
+    <app-reloj></app-reloj>
     <div class="container-breadcrumbs">
-        <div class="volver" [routerLink]="['/dashboard']">
+        <div class="volver" (click)="onVolver()">
             <i class="material-icons-outlined">arrow_back_ios</i>
             <span>Volver</span>
         </div>
     </div>
     <div class="text-header">
-        <span class="title">Detalle medidor</span>
+        <span class="title">{{title}}</span>
     </div>
     <div class="organization-detalle-container">
         <div class="card">
@@ -32,19 +33,19 @@
                 <mat-row class="fadeIn" *matRowDef="let row; columns:columnsTableConsumo"></mat-row>
             </mat-table>
         </div>
-        <div class="card">
-            <mat-table #tableInformation class="mvm-table" [dataSource]="dataTableConsumo">
+        <div class="card" *ngIf="request.TypeOfOrganization == 2">
+            <mat-table #tableInformation class="mvm-table" [dataSource]="dataTableInformation">
                 <ng-container matColumnDef="referencia">
                     <mat-header-cell *matHeaderCellDef>Referencia</mat-header-cell>
-                    <mat-cell *matCellDef="let element"></mat-cell>
+                    <mat-cell *matCellDef="let element">{{element.referencia}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="tipo">
                     <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
-                    <mat-cell *matCellDef="let element"></mat-cell>
+                    <mat-cell *matCellDef="let element">{{element.tipo}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="marca">
                     <mat-header-cell *matHeaderCellDef>Marca</mat-header-cell>
-                    <mat-cell *matCellDef="let element"></mat-cell>
+                    <mat-cell *matCellDef="let element">{{element.marca}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="icon">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
