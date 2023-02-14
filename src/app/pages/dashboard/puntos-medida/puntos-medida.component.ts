@@ -312,51 +312,51 @@ export class PuntosMedidaComponent {
     }
   }
 
-  OnVerDetalle(element: TablaMedidores) {
+  OnVerDetalle(element: TablaMedidores, type: ETypesOrganizations) {
     const req: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
       areaName: element.nameArea,
       localName: element.localId,
-      TypeOfOrganization: ETypesOrganizations.Local,
+      TypeOfOrganization: type,
       fechaConsulta: isNaN(this.fecha.getTime()) ? this.fechaHora : this.fecha
     };
     const generalData = btoa(JSON.stringify(req));
     this.router.navigate(['/main/puntos-medida/detalle-organizacion', generalData])
   }
 
-  previousPage(){
+  previousPage() {
     this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
 
-    if(this.pageCount > 0 ){
+    if (this.pageCount > 0) {
       this.pageCount -= 1;
       this.setDataTable(this.fullData);
     }
   }
 
-  nextPage(){
+  nextPage() {
     this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
 
-    if(this.pageCount < this.maxPageNumber-1 ){
+    if (this.pageCount < this.maxPageNumber - 1) {
       this.pageCount += 1;
       this.setDataTable(this.fullData);
     }
   }
 
-  setPageSize(event: any){
-    
+  setPageSize(event: any) {
+
     this.pageSize = parseInt(event.target.value, 10);
     this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
     this.pageCount = 0;
 
     this.setDataTable(this.fullData);
-    
+
 
   }
 
 
-  setDataTable(data: any[]){
-    
-    const result = data.slice(this.pageCount*this.pageSize, this.pageSize+(this.pageCount*this.pageSize));
+  setDataTable(data: any[]) {
+
+    const result = data.slice(this.pageCount * this.pageSize, this.pageSize + (this.pageCount * this.pageSize));
 
     this.dataSource.data = result;
 
@@ -369,13 +369,13 @@ export class PuntosMedidaComponent {
 
   }
 
-  firstPage(){
+  firstPage() {
     this.pageCount = 0;
     this.setDataTable(this.fullData);
   }
 
-  endPage(){
-    this.pageCount = this.maxPageNumber-1;
+  endPage() {
+    this.pageCount = this.maxPageNumber - 1;
     this.setDataTable(this.fullData);
   }
 

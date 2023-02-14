@@ -94,8 +94,8 @@
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="">
-                            <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="" (click)="OnVerDetalle(element)">
+                            <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="" (click)="OnVerDetalle(element,1)">
+                            <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="" (click)="OnVerDetalle(element,2)">
                         </mat-cell>
                     </ng-container>
 
@@ -103,9 +103,6 @@
                     <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
                 </mat-table>
 
-                <!-- <div class="table-container mt-10 fadeIn">
-                    <mat-paginator class="mvm-paginator" #paginator [pageSizeOptions]="[5,10, 25, 100 ]" showFirstLastButtons></mat-paginator>
-                </div> -->
                 <div class="container-pagination">
                     <span>Items por página.</span>
                     <select (change)="setPageSize($event)" class="select-pagination">
