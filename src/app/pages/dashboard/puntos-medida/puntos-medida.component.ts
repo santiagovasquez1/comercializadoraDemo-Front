@@ -69,12 +69,10 @@ export class PuntosMedidaComponent {
 
   fullData: any[] = [];
 
-  // dataMunicipiosSelect: selectCustom = {
-  //   defaultValue: '',
-  //   stringOptions: []
-  // };
+  dataMunicipiosSelect: selectCustom = {};
+  dataAreaSelect: selectCustom = {};
 
-    dataMunicipiosSelect: selectCustom = {};
+    
 
 
   time = '';
@@ -138,7 +136,7 @@ export class PuntosMedidaComponent {
 
     this.spinner.show();
 
-    this.area = this.filterForm.get('Area').value;
+    // this.area = this.filterForm.get('Area').value;
     // this.municipio = this.filterForm.get('Municipio').value;
     this.localId = this.filterForm.get('ID').value;
     this.fecha = new Date(this.filterForm.get('Fecha').value);
@@ -163,8 +161,6 @@ export class PuntosMedidaComponent {
 
       this.fechaHora.setHours(hours + 19, minutes);
     }
-
-    console.log("this.fechaHora: ", this.fechaHora)
 
     let request: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
@@ -274,10 +270,10 @@ export class PuntosMedidaComponent {
     let arrayFiltered = [];
 
     if (useLowerCase) {
-      arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
+      arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'Todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
     }
     else {
-      arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
+      arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'Todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
 
     }
 
@@ -302,11 +298,20 @@ export class PuntosMedidaComponent {
     if(!this.isFilterMap){
 
       let municipio: selectCustom = {
+        title: 'Municipios',
         defaultValue: 'Todos',
         stringOptions: this.municipioFilter,
         currentValue: this.municipio
       }
       this.dataMunicipiosSelect = municipio;
+
+      let areas: selectCustom = {
+        title: 'Area',
+        defaultValue: 'Todas',
+        stringOptions: this.areasFilter,
+        currentValue: this.area
+      }
+      this.dataAreaSelect = areas;
 
     }
 
@@ -315,11 +320,22 @@ export class PuntosMedidaComponent {
   changeDpto(newItem: string) {
 
     let municipio: selectCustom = {
+      title: 'Municipios',
       defaultValue: 'Todos',
       stringOptions: this.municipioFilter,
       currentValue: ''
     }
+    this.municipio = '';
     this.dataMunicipiosSelect = municipio;
+
+    let area: selectCustom = {
+      title: 'Areas',
+      defaultValue: 'Todas',
+      stringOptions: this.areasFilter,
+      currentValue: ''
+    }
+    this.area = '';
+    this.dataAreaSelect = area;
 
 
     this.departamento = newItem;
@@ -410,7 +426,10 @@ export class PuntosMedidaComponent {
 
   onMunicipioSelected(data: string){
     this.municipio = data;
-    console.log("this.municipio: ",this.municipio);
+  }
+
+  onAreaSelected(data: string){
+    this.area = data;
   }
 
 }
