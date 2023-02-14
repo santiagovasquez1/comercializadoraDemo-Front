@@ -221,12 +221,56 @@ button {
     }
 }
 
+.text-header {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1/3;
+    width: 70%;
+    .title {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 48px;
+        line-height: 72px;
+        color: $azul_secundario;
+    }
+}
+
+.container-breadcrumbs {
+    display: flex;
+    align-items: center;
+    grid-column: 1/3;
+    .volver {
+        width: 80px;
+        cursor: pointer;
+    }
+    i {
+        color: $azul_principal;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    span {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 21px;
+        color: $azul_principal;
+        margin-left: 11px;
+    }
+}
+
 .custom-container {
     width: calc(100vw - 330px - 1px);
     height: calc(100vh - 76px - 1px);
     display: block;
+    padding-bottom: 100px;
     overflow-x: auto;
     overflow-y: auto;
+    .text-header {
+        width: 100%;
+        padding-left: 26px;
+        margin-top: 5px;
+        margin-bottom: 9px;
+    }
 }
 
 .dashboard-container {
@@ -254,7 +298,6 @@ button {
 
 .card {
     width: 100%;
-    height: 100%;
     border-radius: 8px;
     background-color: #FFFFFF;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08), 0px 6px 6px rgba(0, 0, 0, 0.07);
@@ -288,10 +331,11 @@ button {
     margin-top: 10px;
     width: 100%;
     height: calc($height-row-one-dashboard + $height-row-two-dashboard + 2.07vh - 45px - 70px - 2*2.33vh);
-    canvas {
-        width: 100%;
-        height: 100%;
-    }
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
 }
 
 .notificaciones {
@@ -494,7 +538,8 @@ select {
 }
 
 input,
-select,.select {
+select,
+.select {
     border: 1px solid $azul_principal;
     border-radius: 4px;
     background-color: #FFFFFF;
@@ -536,141 +581,100 @@ select {
     grid-template-rows: 30px 5% 150px 20% 50%;
     padding-left: 20px;
     background-color: #F6F6FF;
-    .container-breadcrumbs {
+    .departamento {
+        font-style: normal;
+        font-weight: 300;
+        font-size: 32px;
+        line-height: 48px;
+        color: $azul_secundario;
+    }
+    .ultima-vez {
         display: flex;
         align-items: center;
-        grid-column: 1/3;
-        .volver {
-            width: 80px;
-            cursor: pointer;
-        }
-        i {
-            color: $azul_principal;
-            cursor: pointer;
-            font-size: 12px;
-        }
+        align-self: end;
         span {
-            font-style: normal;
-            font-weight: 300;
+            margin-right: 5px;
+            font-weight: 400;
             font-size: 14px;
             line-height: 21px;
-            color: $azul_principal;
-            margin-left: 11px;
+            color: #848484;
         }
     }
-    .text-header {
-        display: flex;
-        flex-direction: column;
-        grid-column: 1/3;
-        width: 70%;
-        .title {
-            font-style: normal;
-            font-weight: 300;
-            font-size: 48px;
-            line-height: 72px;
-            color: $azul_secundario;
-        }
-        .departamento {
-            font-style: normal;
-            font-weight: 300;
-            font-size: 32px;
-            line-height: 48px;
-            color: $azul_secundario;
-        }
-        .ultima-vez{
-            display: flex;
-            align-items: center;
-            align-self: end;
+}
 
-            span{
-                margin-right: 5px;
-                font-weight: 400;
-                font-size: 14px;
-                line-height: 21px;
-                color: #848484;
-            }
-
-        }
-    }
-    .tabla-filters {
-        .filter {
-            background: #FFFFFF;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 8px;
-            margin-bottom: 19px;
-            height: 200px;
-            .fields {
-                display: grid;
-                grid-template-columns: auto auto auto;
-                grid-template-rows: auto auto auto;
-                row-gap: 15%;
-                column-gap: 6%;
-                margin-left: 10%;
-                margin-right: 10%;
-                margin-top: 10px;
-                .field {
+.tabla-filters {
+    .filter {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 8px;
+        margin-bottom: 19px;
+        height: 200px;
+        .fields {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-template-rows: auto auto auto;
+            row-gap: 15%;
+            column-gap: 6%;
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-top: 10px;
+            .field {
+                display: flex;
+                flex-direction: column;
+                .input-time {
+                    width: 145px;
+                    margin-right: 6px;
+                }
+                .typetime {
+                    background-position: calc(100% - 10px) center;
+                    background-repeat: no-repeat;
+                    background-image: url(assets/icons/reloj.svg);
+                    padding-right: 30px;
+                }
+                .end-time {
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 18px;
+                    align-self: flex-start;
+                    justify-self: flex-end;
+                }
+                .icon-time {
+                    justify-self: flex-end;
+                    align-self: flex-start;
+                }
+                div {
                     display: flex;
-                    flex-direction: column;
-                    .input-time {
-                        width: 145px;
-                        margin-right: 6px;
+                    border: 1px solid #0C00FF;
+                    align-items: center;
+                    background-position: calc(100% - 10px) center;
+                    background-repeat: no-repeat;
+                    background-image: url(assets/icons/reloj.svg);
+                    padding-right: 30px;
+                    .custom-time {
+                        border: none;
+                        background-image: none !important;
+                        text-align: center;
+                        cursor: pointer;
                     }
-                    .typetime {
-                        background-position: calc(100% - 10px) center;
-                        background-repeat: no-repeat;
-                        background-image: url(assets/icons/reloj.svg);
-                        padding-right: 30px;
+                    .custom-time:focus {
+                        border: none !important;
                     }
-                    .end-time {
-                        font-weight: 400;
-                        font-size: 12px;
-                        line-height: 18px;
-                        align-self: flex-start;
-                        justify-self: flex-end;
+                    .custom-time:hover {
+                        background-color: #E7E6FF;
                     }
-
-                    .icon-time {
-                        justify-self: flex-end;
-                        align-self: flex-start;
+                    .custom-time option:hover {
+                        background-color: none !important;
                     }
-
-                    div{
-                        display: flex;
-                        border: 1px solid #0C00FF;
-                        align-items: center;
-                        background-position: calc(100% - 10px) center;
-                        background-repeat: no-repeat;
-                        background-image: url(assets/icons/reloj.svg);
-                        padding-right: 30px;
-                        .custom-time{
-                            border: none;
-                            background-image: none !important;
-                            text-align: center;
-                            cursor: pointer;
-                        }
-
-                        .custom-time:focus{
-                            border: none !important;
-                        }
-                        .custom-time:hover{
-                            background-color: #E7E6FF;
-                        }
-                        .custom-time option:hover{
-                            background-color: none !important;
-                        }
-                    }
-                    
                 }
-                button {
-                    grid-column: 3/4;
-                    justify-self: end;
-                    cursor: pointer;
-                }
+            }
+            button {
+                grid-column: 3/4;
+                justify-self: end;
+                cursor: pointer;
             }
         }
     }
-
-    .mapa{
+    .mapa {
         grid-row: 4/6;
         grid-column: 2/3;
     }
@@ -680,19 +684,16 @@ select {
     .icon-eye {
         cursor: pointer;
     }
-
-    .icon-medidor{
+    .icon-medidor {
         cursor: pointer;
         margin-right: 10px;
     }
-
     .icon-state {
         margin-right: 6px;
     }
 }
 
-
-.container-elegir-hora{
+.container-elegir-hora {
     display: grid;
     grid-template-columns: 33% 33% 33%;
     grid-template-rows: 100%;
@@ -702,33 +703,86 @@ select {
     width: 184px;
     margin-top: 5px;
     overflow: hidden;
-
-    .horas{
+    .horas {
         height: 100%;
         overflow-y: scroll;
-        ::-webkit-scrollbar {
+         ::-webkit-scrollbar {
             width: 0.2em;
             background-color: #15bb36;
         }
-     
-        ::-webkit-scrollbar-thumb {
-             background-color: #4b18c2;
+         ::-webkit-scrollbar-thumb {
+            background-color: #4b18c2;
         }
-     
-        ::-webkit-scrollbar-thumb:hover {
-             background-color: #ff0f0f;
+         ::-webkit-scrollbar-thumb:hover {
+            background-color: #ff0f0f;
         }
     }
 }
 
-.reloj{
+.reloj {
     display: flex;
     justify-content: end;
     padding-right: 30px;
     padding-top: 5px;
     grid-column: 1/3;
-
-    span{
+    span {
         margin-right: 10px;
+    }
+}
+
+.organization-detalle-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    column-gap: 15px;
+    padding-left: 20px;
+    padding-right: 23px;
+    padding-top: 9px;
+    padding-bottom: 10px;
+}
+
+.graficas-card-detalle-container {
+    width: 100%;
+    height: 532px;
+    max-height: 532px;
+    padding-left: 20px;
+    padding-right: 23px;
+    .pronosticos-charts-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        .canvas-container {
+            display: grid;
+            width: 100%;
+            grid-template-columns: 1fr calc(30px + 39.38vw + 15px);
+            .grafica-porcentaje-consumo-container {
+                grid-column: 1/2;
+            }
+            .grafica-consumo-dia-container {
+                grid-column: 2/3;
+            }
+            .grafica-consumo-mes-container {
+                grid-column: 1/3;
+            }
+            .grafica-consumo-dia-canvas,
+            .grafica-consumo-mes-canvas,
+            .grafica-porcentaje-canvas {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+                width: 100%;
+            }
+            .grafica-consumo-dia-canvas,
+            .grafica-porcentaje-canvas {
+                height: 241px;
+            }
+            .grafica-consumo-mes-canvas {
+                height: 200px;
+            }
+        }
     }
 }
