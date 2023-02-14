@@ -15,6 +15,7 @@ import { StatusMonitor } from 'src/app/models/StatusMonitor';
 import { TableService } from 'src/app/services/shared/table-service.service';
 
 
+
 @Component({
   selector: 'app-puntos-medida',
   templateUrl: './puntos-medida.component.html'
@@ -25,7 +26,7 @@ export class PuntosMedidaComponent {
   fechaHora: Date;
 
   horaUltimaDatos: string;
-  currentTime: string;
+  // currentTime: string;
 
   selectedOption: string;
   options = ['Option 1', 'Option 2', 'Option 3'];
@@ -52,6 +53,10 @@ export class PuntosMedidaComponent {
   isFilterDate: boolean = false;
   isFilterHour: boolean = false;
 
+  pageSize = 2;
+  pageCount = 0;
+  maxPageNumber = 0;
+
   //filtros
   area: string = '';
   municipio: string = '';
@@ -59,6 +64,8 @@ export class PuntosMedidaComponent {
   fecha: Date;
   hora: string;
   dirLocal: string = '';
+
+  fullData: any[] = []
 
 
   time = '';
@@ -85,17 +92,9 @@ export class PuntosMedidaComponent {
 
     this.loadOrganizations();
     this.initFilterForm();
-
-    this.updateTime();
-    setInterval(() => this.updateTime(), 1000);
-
-
   }
 
-  updateTime() {
-    const Time = new Date();
-    this.currentTime = Time.toLocaleString();
-  }
+
 
   private loadOrganizations() {
     this.spinner.show();
@@ -233,10 +232,19 @@ export class PuntosMedidaComponent {
           resultArray = this.filterTable('nameMunicipio', this.municipio, resultArray, false);
           resultArray = this.filterTable('dirLocal', this.dirLocal, resultArray, false);
           resultArray = this.filterTable('localId', this.localId, resultArray, false);
+
         }
 
-        this.dataSource.data = resultArray;
-        this.dataSource.paginator = this.paginator;
+        this.setDataTable(resultArray);
+        // this.dataSource.data = resultArray;
+
+
+        this.fullData = resultArray;
+        this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+        this.pageCount = 0;
+        this.setDataTable(this.fullData);
+
+        // this.dataSource.paginator = this.paginator;
         this.table.renderRows();
 
         this.getInfoFiltros();
@@ -291,6 +299,9 @@ export class PuntosMedidaComponent {
     this.departamento = newItem;
     this.isFilterMap = true;
 
+    this.pageCount = 0;
+    this.setDataTable(this.fullData);
+
     this.getloadInfo();
   }
 
@@ -316,4 +327,60 @@ export class PuntosMedidaComponent {
     const generalData = btoa(JSON.stringify(req));
     this.router.navigate(['/main/puntos-medida/detalle-organizacion', generalData])
   }
+
+  previousPage(){
+    this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+
+    if(this.pageCount > 0 ){
+      this.pageCount -= 1;
+      this.setDataTable(this.fullData);
+    }
+  }
+
+  nextPage(){
+    this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+
+    if(this.pageCount < this.maxPageNumber-1 ){
+      this.pageCount += 1;
+      this.setDataTable(this.fullData);
+    }
+  }
+
+  setPageSize(event: any){
+    
+    this.pageSize = parseInt(event.target.value, 10);
+    this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+    this.pageCount = 0;
+
+    this.setDataTable(this.fullData);
+    
+
+  }
+
+
+  setDataTable(data: any[]){
+    
+    const result = data.slice(this.pageCount*this.pageSize, this.pageSize+(this.pageCount*this.pageSize));
+
+    this.dataSource.data = result;
+
+    this.table.renderRows();
+
+  }
+
+  getPages(): number[] {
+    return Array(this.maxPageNumber).fill(0).map((_, i) => i + 1);
+
+  }
+
+  firstPage(){
+    this.pageCount = 0;
+    this.setDataTable(this.fullData);
+  }
+
+  endPage(){
+    this.pageCount = this.maxPageNumber-1;
+    this.setDataTable(this.fullData);
+  }
+
 }
