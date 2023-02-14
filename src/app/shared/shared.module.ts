@@ -5,12 +5,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { InputTimeComponent } from './input-time/input-time.component';
+import { RelojComponent } from './reloj/reloj.component';
+
 
 @NgModule({
   declarations: [
     AsideComponent,
     ToolbarComponent,
-    InputTimeComponent
+    InputTimeComponent,
+    RelojComponent,
   ],
   imports: [
     CommonModule,
@@ -20,7 +23,8 @@ import { InputTimeComponent } from './input-time/input-time.component';
   exports:[
     AsideComponent,
     ToolbarComponent,
-    InputTimeComponent
+    InputTimeComponent,
+    RelojComponent
   ]
 })
 export class SharedModule { }

@@ -14,7 +14,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/mapa-colombia.component';
 import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-organizacion.component';
 
-
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -22,7 +21,8 @@ import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-org
     PagesComponent,
     PuntosMedidaComponent,
     MapaColombiaComponent,
-    DetalleOrganizacionComponent
+    DetalleOrganizacionComponent,
+    
   ],
   imports: [
     CommonModule,
