@@ -2,14 +2,14 @@
     <div class="container-puntos-medida">
 
         <app-reloj></app-reloj>
-    
-        <div class="container-breadcrumbs" >
+
+        <div class="container-breadcrumbs">
             <div class="volver" [routerLink]="['/main/dashboard']">
                 <i class="material-icons-outlined">arrow_back_ios</i>
                 <span>Volver</span>
             </div>
         </div>
-    
+
         <div class="text-header">
             <span class="title">Medidores</span>
             <span class="departamento">{{departamento}}</span>
@@ -17,30 +17,30 @@
                 <span>Hora de última actualización de datos : <b>{{horaUltimaDatos}}</b> </span>
                 <img src="../../../../assets/icons/historico.svg" alt="">
             </div>
-            
+
         </div>
-    
+
         <div class="tabla-filters">
             <div class="filter">
                 <form class="fields" [formGroup]="filterForm">
-    
+
                     <div class="field">
                         <label>ID</label>
                         <input type="text" class="" formControlName="ID">
                     </div>
-    
+
                     <div class="field">
                         <label>Fecha</label>
                         <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
                     </div>
-    
+
                     <!-- <app-input-time></app-input-time> -->
-                    
+
                     <div class="field">
-                        <label>Hora</label> 
-                         <input type="time" class="" placeholder="Hora" formControlName="Hora"> 
+                        <label>Hora</label>
+                        <input type="time" class="" placeholder="Hora" formControlName="Hora">
                     </div>
-    
+
                     <div class="field">
                         <label>Área</label>
                         <select class="" formControlName="Area">
@@ -59,17 +59,17 @@
                         <label>Dirección</label>
                         <input type="text" class="" formControlName="Direccion">
                     </div>
-    
+
                     <button class="black-button" (click)="onFilter()">Buscar</button>
-                    
+
                 </form>
             </div>
-        
+
             <div class="container-tabla">
                 <mat-table #table [dataSource]="dataSource" class="mvm-table">
                     <ng-container matColumnDef="ID">
                         <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
+                        <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="area">
                         <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
@@ -88,22 +88,21 @@
                         <mat-cell *matCellDef="let element">
                             <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= element.statusMonitor.bajoConsumo" class="icon-state">
                             <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= element.statusMonitor.altoConsumo" class="icon-state">
-                            <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo > element.statusMonitor.bajoConsumo && element.consumo < element.statusMonitor.altoConsumo" class="icon-state">
-                            {{element.consumo}}
+                            <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo > element.statusMonitor.bajoConsumo && element.consumo < element.statusMonitor.altoConsumo" class="icon-state"> {{element.consumo}}
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="">
-                            <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="">
+                            <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="" (click)="OnVerDetalle(element)">
                         </mat-cell>
                     </ng-container>
-    
+
                     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                     <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
                 </mat-table>
-        
+
                 <!-- <div class="table-container mt-10 fadeIn">
                     <mat-paginator class="mvm-paginator" #paginator [pageSizeOptions]="[5,10, 25, 100 ]" showFirstLastButtons></mat-paginator>
                 </div> -->
@@ -116,11 +115,11 @@
                     <option value="25">25</option>
                     <option value="100">100</option>
                     </select>
-                    
-                    
-                    <div (click)="firstPage()" class="arrow" >
+
+
+                    <div (click)="firstPage()" class="arrow">
                         <img src="../../../../assets/icons/Izquierda.svg" alt="" *ngIf="!(this.pageCount <= 0)" [ngClass]="{'disabledArrow':(this.pageCount <= 0), 'enabledArrow':!(this.pageCount <= 0)}">
-                        <img src="../../../../assets/icons/Izquierda.svg" alt="" *ngIf="!(this.pageCount <= 0)"[ngClass]="{'disabledArrow':(this.pageCount <= 0), 'enabledArrow':!(this.pageCount <= 0)}" class="join-left">
+                        <img src="../../../../assets/icons/Izquierda.svg" alt="" *ngIf="!(this.pageCount <= 0)" [ngClass]="{'disabledArrow':(this.pageCount <= 0), 'enabledArrow':!(this.pageCount <= 0)}" class="join-left">
                         <img src="../../../../assets/icons/IzquierdaDisabled.png" alt="" *ngIf="(this.pageCount <= 0)" [ngClass]="{'disabledArrow':(this.pageCount <= 0), 'enabledArrow':!(this.pageCount <= 0)}">
                         <img src="../../../../assets/icons/IzquierdaDisabled.png" alt="" *ngIf="(this.pageCount <= 0)" [ngClass]="{'disabledArrow':(this.pageCount <= 0), 'enabledArrow':!(this.pageCount <= 0)}" class="join-left">
                     </div>
@@ -131,8 +130,8 @@
                     </div>
 
                     <div class="pages">
-                        
-                        <div  *ngFor="let pageNumber of getPages().slice(0,2)" [ngClass]="{'page': pageNumber === this.pageCount+1,'page-noselected':pageNumber !== this.pageCount+1 }">
+
+                        <div *ngFor="let pageNumber of getPages().slice(0,2)" [ngClass]="{'page': pageNumber === this.pageCount+1,'page-noselected':pageNumber !== this.pageCount+1 }">
                             {{pageNumber}}
                         </div>
 
@@ -141,7 +140,7 @@
                             {{getPages()[getPages().length-1]}}
                         </div>
                     </div>
-                    
+
                     <div (click)="nextPage()" class="arrow">
                         <img src="../../../../assets/icons/Derecha.svg" alt="" *ngIf="(this.pageCount < this.maxPageNumber-1)" [ngClass]="{'disabledArrow':!(this.pageCount <= this.maxPageNumber-1), 'enabledArrow':(this.pageCount <= this.maxPageNumber-1)}">
                         <img src="../../../../assets/icons/DerechaDisabled.png" alt="" *ngIf="!(this.pageCount < this.maxPageNumber-1)" [ngClass]="{'disabledArrow':(this.pageCount <= this.maxPageNumber-1), 'enabledArrow':!(this.pageCount <= this.maxPageNumber-1)}">
@@ -156,10 +155,10 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="mapa">
             <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
         </div>
-        
+
     </div>
 </div>
