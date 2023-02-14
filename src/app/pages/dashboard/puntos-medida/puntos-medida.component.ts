@@ -241,13 +241,17 @@ export class PuntosMedidaComponent {
           resultArray = this.filterTable('nameMunicipio', this.municipio, resultArray, false);
           resultArray = this.filterTable('dirLocal', this.dirLocal, resultArray, false);
           resultArray = this.filterTable('localId', this.localId, resultArray, false);
+
         }
 
         this.setDataTable(resultArray);
         // this.dataSource.data = resultArray;
 
+
         this.fullData = resultArray;
         this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+        this.pageCount = 0;
+        this.setDataTable(this.fullData);
 
         // this.dataSource.paginator = this.paginator;
         this.table.renderRows();
@@ -303,6 +307,9 @@ export class PuntosMedidaComponent {
   changeDpto(newItem: string) {
     this.departamento = newItem;
     this.isFilterMap = true;
+
+    this.pageCount = 0;
+    this.setDataTable(this.fullData);
 
     this.getloadInfo();
   }
