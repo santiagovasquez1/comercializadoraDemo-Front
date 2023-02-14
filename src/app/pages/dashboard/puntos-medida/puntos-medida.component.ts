@@ -13,6 +13,8 @@ import { forkJoin, map, Observable } from 'rxjs';
 import moment from 'moment';
 import { StatusMonitor } from 'src/app/models/StatusMonitor';
 import { TableService } from 'src/app/services/shared/table-service.service';
+import { PaginatorPipe } from 'src/app/shared/pipes/paginator.pipe';
+
 
 
 @Component({
@@ -52,6 +54,10 @@ export class PuntosMedidaComponent {
   isFilterDate: boolean = false;
   isFilterHour: boolean = false;
 
+  pageSize = 2;
+  pageCount = 0;
+  maxPageNumber = 0;
+
   //filtros
   area: string = '';
   municipio: string = '';
@@ -59,6 +65,8 @@ export class PuntosMedidaComponent {
   fecha: Date;
   hora: string;
   dirLocal: string = '';
+
+  fullData: any[] = []
 
 
   time = '';
@@ -235,8 +243,13 @@ export class PuntosMedidaComponent {
           resultArray = this.filterTable('localId', this.localId, resultArray, false);
         }
 
-        this.dataSource.data = resultArray;
-        this.dataSource.paginator = this.paginator;
+        this.setDataTable(resultArray);
+        // this.dataSource.data = resultArray;
+
+        this.fullData = resultArray;
+        this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+
+        // this.dataSource.paginator = this.paginator;
         this.table.renderRows();
 
         this.getInfoFiltros();
@@ -316,4 +329,60 @@ export class PuntosMedidaComponent {
     const generalData = btoa(JSON.stringify(req));
     this.router.navigate(['/main/puntos-medida/detalle-organizacion', generalData])
   }
+
+  previousPage(){
+    this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+
+    if(this.pageCount > 0 ){
+      this.pageCount -= 1;
+      this.setDataTable(this.fullData);
+    }
+  }
+
+  nextPage(){
+    this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+
+    if(this.pageCount < this.maxPageNumber-1 ){
+      this.pageCount += 1;
+      this.setDataTable(this.fullData);
+    }
+  }
+
+  setPageSize(event: any){
+    
+    this.pageSize = parseInt(event.target.value, 10);
+    this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
+    this.pageCount = 0;
+
+    this.setDataTable(this.fullData);
+    
+
+  }
+
+
+  setDataTable(data: any[]){
+    
+    const result = data.slice(this.pageCount*this.pageSize, this.pageSize+(this.pageCount*this.pageSize));
+
+    this.dataSource.data = result;
+
+    this.table.renderRows();
+
+  }
+
+  getPages(): number[] {
+    return Array(this.maxPageNumber).fill(0).map((_, i) => i + 1);
+
+  }
+
+  firstPage(){
+    this.pageCount = 0;
+    this.setDataTable(this.fullData);
+  }
+
+  endPage(){
+    this.pageCount = this.maxPageNumber-1;
+    this.setDataTable(this.fullData);
+  }
+
 }

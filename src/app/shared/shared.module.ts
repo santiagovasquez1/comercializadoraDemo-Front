@@ -5,12 +5,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { InputTimeComponent } from './input-time/input-time.component';
+import { PaginatorPipe } from './pipes/paginator.pipe';
 
 @NgModule({
   declarations: [
     AsideComponent,
     ToolbarComponent,
-    InputTimeComponent
+    InputTimeComponent,
+    PaginatorPipe
   ],
   imports: [
     CommonModule,
