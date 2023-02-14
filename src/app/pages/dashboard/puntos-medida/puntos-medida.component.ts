@@ -1,3 +1,4 @@
+import { OrganizationModel } from './../../../models/OrganizationModel';
 import { Router } from '@angular/router';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -133,7 +134,7 @@ export class PuntosMedidaComponent {
     });
   }
 
-  getloadInfo(){
+  getloadInfo() {
 
     this.spinner.show();
 
@@ -163,7 +164,7 @@ export class PuntosMedidaComponent {
       this.fechaHora.setHours(hours + 19, minutes);
     }
 
-    console.log("this.fechaHora: ",this.fechaHora)
+    console.log("this.fechaHora: ", this.fechaHora)
 
     let request: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
@@ -174,19 +175,15 @@ export class PuntosMedidaComponent {
     request.TypeOfOrganization = this.setTypeOrganizationForQuery(request);
 
     let obs: Observable<any>[] = [];
-    obs.push(this.killerAppService.GetConsumoByTimeStamp(request).pipe(map(response => <OrganizationDto[]>response)));
-    obs.push(this.killerAppService.GetPromedioConsumoByTimeStamp(request).pipe(map(response => <OrganizationDto[]>response)));
+    obs.push(this.killerAppService.GetConsumoByTimeStamp(request));
+    obs.push(this.killerAppService.GetPromedioConsumoByTimeStamp(request));
     obs.push(this.killerAppService.monitoreoByTimeStamp(request).pipe(map(response => <StatusMonitor>response)));
-    
-    
-    
 
     forkJoin(obs).subscribe({
       next: response => {
-
-        const iteratorConsumos = response[0];
-        const iteratoPromedios = response[1];
-        const monitoreoTime = response[2];
+        const iteratorConsumos = (response[0] as OrganizationModel).nodes;
+        const iteratoPromedios = (response[1] as OrganizationModel).nodes;
+        const monitoreoTime = response[2] as StatusMonitor;
 
         const format = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
@@ -198,7 +195,7 @@ export class PuntosMedidaComponent {
 
         iteratorConsumos.forEach(obj => {
           obj.nodes.forEach(nodo => {
-            
+
             const nodo2 = iteratoPromedios.find(obj2 => obj2.name === obj.name && obj2.nodes.some(n => n.name === nodo.name))?.nodes.find(n => n.name === nodo.name)
             const existingObj = arrayMap.find(
               item => item.nameArea === obj.name && item.localId === nodo.name
@@ -212,15 +209,15 @@ export class PuntosMedidaComponent {
                 nameDpto: nodo.departamento,
                 consumo: nodo.information[0].potencia,
                 statusMonitor: {
-                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * (monitoreoTime.altoConsumo/100),
+                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * (monitoreoTime.altoConsumo / 100),
                   consumoNormal: nodo2.information[0].potencia,
-                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * (monitoreoTime.bajoConsumo/100)
+                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * (monitoreoTime.bajoConsumo / 100)
                 }
               });
             }
           });
         });
-        
+
         let resultArray = arrayMap;
 
         if (this.isFilterMap) {
@@ -344,52 +341,51 @@ export class PuntosMedidaComponent {
     }
   }
 
-  OnVerDetalle(element: TablaMedidores) {
-    console.log(element);
+  OnVerDetalle(element: TablaMedidores, type: ETypesOrganizations) {
     const req: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
       areaName: element.nameArea,
       localName: element.localId,
-      TypeOfOrganization: ETypesOrganizations.Local,
+      TypeOfOrganization: type,
       fechaConsulta: isNaN(this.fecha.getTime()) ? this.fechaHora : this.fecha
     };
     const generalData = btoa(JSON.stringify(req));
     this.router.navigate(['/main/puntos-medida/detalle-organizacion', generalData])
   }
 
-  previousPage(){
+  previousPage() {
     this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
 
-    if(this.pageCount > 0 ){
+    if (this.pageCount > 0) {
       this.pageCount -= 1;
       this.setDataTable(this.fullData);
     }
   }
 
-  nextPage(){
+  nextPage() {
     this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
 
-    if(this.pageCount < this.maxPageNumber-1 ){
+    if (this.pageCount < this.maxPageNumber - 1) {
       this.pageCount += 1;
       this.setDataTable(this.fullData);
     }
   }
 
-  setPageSize(event: any){
-    
+  setPageSize(event: any) {
+
     this.pageSize = parseInt(event.target.value, 10);
     this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
     this.pageCount = 0;
 
     this.setDataTable(this.fullData);
-    
+
 
   }
 
 
-  setDataTable(data: any[]){
-    
-    const result = data.slice(this.pageCount*this.pageSize, this.pageSize+(this.pageCount*this.pageSize));
+  setDataTable(data: any[]) {
+
+    const result = data.slice(this.pageCount * this.pageSize, this.pageSize + (this.pageCount * this.pageSize));
 
     this.dataSource.data = result;
 
@@ -402,13 +398,13 @@ export class PuntosMedidaComponent {
 
   }
 
-  firstPage(){
+  firstPage() {
     this.pageCount = 0;
     this.setDataTable(this.fullData);
   }
 
-  endPage(){
-    this.pageCount = this.maxPageNumber-1;
+  endPage() {
+    this.pageCount = this.maxPageNumber - 1;
     this.setDataTable(this.fullData);
   }
 
