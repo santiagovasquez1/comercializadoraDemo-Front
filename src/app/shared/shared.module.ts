@@ -5,14 +5,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { InputTimeComponent } from './input-time/input-time.component';
-import { PaginatorPipe } from './pipes/paginator.pipe';
+import { RelojComponent } from './reloj/reloj.component';
+
 
 @NgModule({
   declarations: [
     AsideComponent,
     ToolbarComponent,
     InputTimeComponent,
-    PaginatorPipe
+    RelojComponent,
   ],
   imports: [
     CommonModule,
@@ -22,7 +23,8 @@ import { PaginatorPipe } from './pipes/paginator.pipe';
   exports:[
     AsideComponent,
     ToolbarComponent,
-    InputTimeComponent
+    InputTimeComponent,
+    RelojComponent
   ]
 })
 export class SharedModule { }

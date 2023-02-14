@@ -13,7 +13,6 @@ import { forkJoin, map, Observable } from 'rxjs';
 import moment from 'moment';
 import { StatusMonitor } from 'src/app/models/StatusMonitor';
 import { TableService } from 'src/app/services/shared/table-service.service';
-import { PaginatorPipe } from 'src/app/shared/pipes/paginator.pipe';
 
 
 
@@ -27,7 +26,7 @@ export class PuntosMedidaComponent {
   fechaHora: Date;
 
   horaUltimaDatos: string;
-  currentTime: string;
+  // currentTime: string;
 
   selectedOption: string;
   options = ['Option 1', 'Option 2', 'Option 3'];
@@ -93,17 +92,9 @@ export class PuntosMedidaComponent {
 
     this.loadOrganizations();
     this.initFilterForm();
-
-    this.updateTime();
-    setInterval(() => this.updateTime(), 1000);
-
-
   }
 
-  updateTime() {
-    const Time = new Date();
-    this.currentTime = Time.toLocaleString();
-  }
+
 
   private loadOrganizations() {
     this.spinner.show();
