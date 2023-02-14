@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { InputTimeComponent } from './input-time/input-time.component';
 import { RelojComponent } from './reloj/reloj.component';
+import { SelectCustomComponent } from './select-custom/select-custom.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { RelojComponent } from './reloj/reloj.component';
     ToolbarComponent,
     InputTimeComponent,
     RelojComponent,
+    SelectCustomComponent,
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { RelojComponent } from './reloj/reloj.component';
     AsideComponent,
     ToolbarComponent,
     InputTimeComponent,
-    RelojComponent
+    RelojComponent,
+    SelectCustomComponent
   ]
 })
 export class SharedModule { }

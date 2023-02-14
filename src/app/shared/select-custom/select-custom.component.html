@@ -1,0 +1,11 @@
+<div class="container-select">
+    <label>Municipios</label>
+    <div class="select" (click)="toggleOptions()">
+        <span>{{options.currentValue == '' ? defaultValue : options.currentValue}}</span>
+        <img src="../../../assets/icons/Abajo.svg" alt="">
+    </div>
+    <div class="options" [ngClass]="{'options-hide':hideOptions,'options-show':!hideOptions}">
+        <div class="option" (click)="selectOption($event)">{{options.defaultValue}}</div>
+        <div class="option" *ngFor="let option of options.stringOptions" (click)="selectOption($event)">{{ option }}</div>
+    </div>
+</div>

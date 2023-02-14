@@ -13,6 +13,7 @@ import { forkJoin, map, Observable } from 'rxjs';
 import moment from 'moment';
 import { StatusMonitor } from 'src/app/models/StatusMonitor';
 import { TableService } from 'src/app/services/shared/table-service.service';
+import { selectCustom } from 'src/app/models/select-custom';
 
 
 
@@ -65,7 +66,14 @@ export class PuntosMedidaComponent {
   hora: string;
   dirLocal: string = '';
 
-  fullData: any[] = []
+  fullData: any[] = [];
+
+  // dataMunicipiosSelect: selectCustom = {
+  //   defaultValue: '',
+  //   stringOptions: []
+  // };
+
+    dataMunicipiosSelect: selectCustom = {};
 
 
   time = '';
@@ -130,7 +138,7 @@ export class PuntosMedidaComponent {
     this.spinner.show();
 
     this.area = this.filterForm.get('Area').value;
-    this.municipio = this.filterForm.get('Municipio').value;
+    // this.municipio = this.filterForm.get('Municipio').value;
     this.localId = this.filterForm.get('ID').value;
     this.fecha = new Date(this.filterForm.get('Fecha').value);
     this.dirLocal = this.filterForm.get('Direccion').value;
@@ -269,10 +277,10 @@ export class PuntosMedidaComponent {
     let arrayFiltered = [];
 
     if (useLowerCase) {
-      arrayFiltered = valueFilter !== '' && valueFilter !== 'todos' && valueFilter !== 'todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
+      arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
     }
     else {
-      arrayFiltered = valueFilter !== '' && valueFilter !== 'todos' && valueFilter !== 'todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
+      arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
 
     }
 
@@ -281,21 +289,42 @@ export class PuntosMedidaComponent {
 
   getInfoFiltros() {
 
-    this.dataSource.data.map(obj => {
+    this.fullData.map(obj => {
       if (!this.areasFilter.includes(obj.nameArea)) {
         this.areasFilter.push(obj.nameArea);
       }
     });
 
-    this.dataSource.data.map(obj => {
+    this.fullData.map(obj => {
       if (!this.municipioFilter.includes(obj.nameMunicipio)) {
         this.municipioFilter.push(obj.nameMunicipio);
       }
     });
 
+
+    if(!this.isFilterMap){
+
+      let municipio: selectCustom = {
+        defaultValue: 'Todos',
+        stringOptions: this.municipioFilter,
+        currentValue: this.municipio
+      }
+      this.dataMunicipiosSelect = municipio;
+
+    }
+
   }
 
   changeDpto(newItem: string) {
+
+    let municipio: selectCustom = {
+      defaultValue: 'Todos',
+      stringOptions: this.municipioFilter,
+      currentValue: ''
+    }
+    this.dataMunicipiosSelect = municipio;
+
+
     this.departamento = newItem;
     this.isFilterMap = true;
 
@@ -381,6 +410,11 @@ export class PuntosMedidaComponent {
   endPage(){
     this.pageCount = this.maxPageNumber-1;
     this.setDataTable(this.fullData);
+  }
+
+  onMunicipioSelected(data: string){
+    this.municipio = data;
+    console.log("this.municipio: ",this.municipio);
   }
 
 }
