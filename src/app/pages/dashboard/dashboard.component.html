@@ -32,19 +32,22 @@
             </div>
             <div class="chartFilters" *ngIf="rootOrganizations">
                 <div class="organization-container">
-                    <label>Area</label>
+                    <!-- <label>Area</label>
                     <select [(ngModel)]="selectedArea" (change)="onAreaChange()">
                         <option [value]="'---'">---</option>
                         <option *ngFor="let node of rootOrganizations.nodes" [value]="node.name">{{node.name}}</option>
-                    </select>
-
+                    </select> -->
+                    <app-select-custom [options]="dataAreaSelect" (selected)="onAreaSelected($event)"></app-select-custom>
                 </div>
                 <div class="organization-container">
-                    <label for="">Medidor</label>
+
+                    <!-- <label for="">Medidor</label>
                     <select [(ngModel)]="selectedLocal" [disabled]="!localOrganizations" (change)="onLocalChange()">
                         <option [value]="'---'">---</option>
                         <option *ngFor="let node of localOrganizations" [value]="node.name">{{node.name}}</option>
-                    </select>
+                    </select> -->
+
+                    <app-select-custom [options]="dataMedidorSelect" (selected)="onMedidorSelected($event)"></app-select-custom>
                 </div>
             </div>
             <div class="consumo-actual-canvas">

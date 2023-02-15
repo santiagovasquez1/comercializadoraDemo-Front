@@ -41,20 +41,26 @@
                         <input type="time" class="" placeholder="Hora" formControlName="Hora">
                     </div>
 
-                    <div class="field">
+                    <!-- <div class="field">
                         <label>Área</label>
                         <select class="" formControlName="Area">
                             <option [value]="'todas'">Todas</option>
                             <option *ngFor="let area of areasFilter" [value]="area">{{area}}</option>
                         </select>
-                    </div>
-                    <div class="field">
+                    </div> -->
+
+                    <app-select-custom [options]="dataAreaSelect" (selected)="onAreaSelected($event)"></app-select-custom>
+
+                    <!-- <div class="field">
                         <label>Municipio</label>
                         <select class="" formControlName="Municipio">
                             <option [value]="'todos'">Todos</option>
                             <option *ngFor="let municipio of municipioFilter" [value]="municipio">{{municipio}}</option>
                         </select>
-                    </div>
+                    </div> -->
+
+                    <app-select-custom [options]="dataMunicipiosSelect" (selected)="onMunicipioSelected($event)"></app-select-custom>
+
                     <div class="field">
                         <label>Dirección</label>
                         <input type="text" class="" formControlName="Direccion">
