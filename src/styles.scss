@@ -853,6 +853,9 @@ select {
         flex-direction: row;
         flex-wrap: wrap;
         width: 100%;
+        .date-filter-container {
+            width: 145px;
+        }
         .canvas-container {
             display: grid;
             width: 100%;
