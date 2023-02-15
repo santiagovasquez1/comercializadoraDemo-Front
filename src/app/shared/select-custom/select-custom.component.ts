@@ -18,6 +18,9 @@ export class SelectCustomComponent implements OnChanges {
     if(!this.options.disabled){
       this.defaultValue = this.options.defaultValue;
     }
+    else{
+      this.hideOptions = true;
+    }
     
   }
 

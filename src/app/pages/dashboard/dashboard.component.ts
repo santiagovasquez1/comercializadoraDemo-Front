@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import moment from 'moment';
 import { selectCustom } from 'src/app/models/select-custom';
+import { disableDebugTools } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -106,34 +107,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: response => {
         this.rootOrganizations = response[0];
 
-        let areas: selectCustom = {
-          title: 'Area',
-          defaultValue: '---',
-          stringOptions: this.rootOrganizations.nodes.map(node => node.name),
-          currentValue:this.selectedArea
-        }
-        this.dataAreaSelect = areas;
+        this.setSelectAreas('---', this.rootOrganizations.nodes.map(node => node.name), this.selectedArea, false);
 
         if(this.localOrganizations){
-          let medidores: selectCustom = {
-            title: 'Medidores',
-            defaultValue: '---',
-            stringOptions: this.localOrganizations.map(node => node.name),
-            currentValue:this.selectedLocal,
-          }
-          
-          this.dataMedidorSelect = medidores;
+
+          this.setSelectMedidores('---',this.localOrganizations.map(node => node.name),this.selectedLocal,false);
+
         }
         else{
-          let medidores: selectCustom = {
-            title: 'Medidores',
-            defaultValue: '---',
-            stringOptions: null,
-            currentValue:this.selectedLocal,
-            disabled: true
-          }
-          
-          this.dataMedidorSelect = medidores;
+
+          this.setSelectMedidores('---',null,this.selectedLocal,true)
+
         }
 
 
@@ -250,35 +234,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.localOrganizations = this.rootOrganizations.nodes.find(n => n.name == this.selectedArea).nodes;
       this.selectedLocal = '---';
 
-      let medidores: selectCustom = {
-        title: 'Medidores',
-        defaultValue: '---',
-        stringOptions: this.localOrganizations.map(node => node.name),
-        currentValue:this.selectedLocal
-      }
-  
-      this.dataMedidorSelect = medidores;
+      this.setSelectMedidores('---',this.localOrganizations.map(node => node.name),this.selectedLocal,false);
+
     } else {
 
-      let medidores: selectCustom = {
-        title: 'Medidores',
-        defaultValue: '---',
-        stringOptions: null,
-        currentValue:'---',
-        disabled: true
-      }
-      this.dataMedidorSelect = medidores;
+      this.setSelectMedidores('---',null,'---',true)
 
       this.localOrganizations = null
     }
-    
-    let areas: selectCustom = {
-      title: 'Area',
-      defaultValue: '---',
-      stringOptions: this.rootOrganizations.nodes.map(node => node.name),
-      currentValue:this.selectedArea
-    }
-    this.dataAreaSelect = areas;
+
+    this.setSelectAreas('---', this.rootOrganizations.nodes.map(node => node.name), this.selectedArea, false);
 
     
 
@@ -288,16 +253,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onMedidorSelected(data: string){
     this.selectedLocal = data;
 
+    this.setSelectMedidores('---',this.localOrganizations.map(node => node.name),this.selectedLocal,false)
+
+    this.loadData();
+    
+  }
+
+  setSelectMedidores(_defaultValue: string, _stringOptions: any[], _currentValue: string, _disabled){
+
     let medidores: selectCustom = {
       title: 'Medidores',
-      defaultValue: '---',
-      stringOptions: this.localOrganizations.map(node => node.name),
-      currentValue:this.selectedLocal
+      defaultValue: _defaultValue,
+      stringOptions: _stringOptions,
+      currentValue: _currentValue,
+      disabled: _disabled
     }
 
     this.dataMedidorSelect = medidores;
-    this.loadData();
-    
+
+  }
+
+  setSelectAreas(_defaultValue: string, _stringOptions: any[], _currentValue: string, _disabled){
+
+    let areas: selectCustom = {
+      title: 'Area',
+      defaultValue: _defaultValue,
+      stringOptions: _stringOptions,
+      currentValue: _currentValue,
+      disabled: _disabled
+    }
+
+    this.dataAreaSelect = areas;
 
   }
 
