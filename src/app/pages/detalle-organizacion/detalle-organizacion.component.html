@@ -82,7 +82,10 @@
                             <h3>Consumo del mes</h3>
                         </div>
                         <div class="chartFilters">
-
+                            <div class="date-filter-container">
+                                <label>Desde</label>
+                                <input type="date" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()">
+                            </div>
                         </div>
                         <div class="grafica-consumo-mes-canvas">
                             <canvas baseChart [data]="consumoMesData" [options]="consumoMesChartOptions" [type]="consumoMesChart"></canvas>

@@ -29,6 +29,8 @@ export class DetalleOrganizacionComponent implements OnInit {
   columnsTableInfo: string[] = ['referencia', 'tipo', 'marca', 'icon'];
   dataTableConsumo: MatTableDataSource<InformationModel>;
   dataTableInformation: MatTableDataSource<MedidorModel>;
+  datePicker: string;
+  fechaFiltro: Date;
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -151,6 +153,8 @@ export class DetalleOrganizacionComponent implements OnInit {
     private toastr: ToastrService) {
     this.dataTableConsumo = new MatTableDataSource();
     this.dataTableInformation = new MatTableDataSource();
+    const now = new Date();
+    this.fechaFiltro = new Date(2023, 1, 1, now.getHours() - 5, now.getMinutes(), 0);
   }
 
   ngOnInit(): void {
@@ -234,6 +238,38 @@ export class DetalleOrganizacionComponent implements OnInit {
     }
   }
 
+  onDatePickerChange() {
+    const now = new Date();
+    this.fechaFiltro = new Date(this.datePicker);
+    this.fechaFiltro.setHours(now.getHours() - 5, now.getMinutes(), 0);
+
+    const tempInformation = this.organizationConsumoHistorico.information.filter(x => {
+      const tempFecha = moment(x.fecha);
+      const fechaFiltro = moment(this.fechaFiltro);
+      if (tempFecha.isSameOrAfter(fechaFiltro)) {
+        return true;
+      }
+      return false
+    });
+
+    const tempOrganization: OrganizationModel = {
+      name: this.organizationConsumoHistorico.name,
+      information: tempInformation,
+      departamento: this.organizationConsumoHistorico.departamento,
+      direccion: this.organizationConsumoHistorico.direccion,
+      medidorModel: this.organizationConsumoHistorico.medidorModel,
+      municipio: this.organizationConsumoHistorico.municipio,
+      nodes: this.organizationConsumoHistorico.nodes,
+      parent: this.organizationConsumoHistorico.parent
+    }
+
+    if (tempInformation.length > 0) {
+      this.setConsumoMesChartData(tempOrganization);
+    } else {
+      this.setConsumoMesChartData(this.organizationConsumoHistorico)
+    }
+  }
+
   private setConsumoMesChartData(data: OrganizationModel) {
     const consumoMesData: number[] = data.information.map(i => i.potencia);
     const labels = data.information.map(i => {
@@ -247,7 +283,7 @@ export class DetalleOrganizacionComponent implements OnInit {
           data: consumoMesData,
           fill: true,
           borderColor: '#726BFF',
-          backgroundColor: '#726BFF',
+          backgroundColor: 'rgba(114, 107, 255, 0.5)',
           pointBackgroundColor: '#726BFF'
         }
       ],
@@ -269,4 +305,6 @@ export class DetalleOrganizacionComponent implements OnInit {
   onVolver() {
     this.router.navigate(['/main/puntos-medida']);
   }
+
+
 }
