@@ -82,7 +82,7 @@ export class DetalleOrganizacionComponent implements OnInit {
     maintainAspectRatio: false,
     elements: {
       line: {
-        tension: 0.5
+        tension: 0.05
       },
       point: {
         pointStyle: 'circle',

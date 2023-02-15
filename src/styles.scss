@@ -262,7 +262,8 @@ button {
     width: calc(100vw - 330px - 1px);
     height: calc(100vh - 76px - 1px);
     display: block;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
+    box-sizing: border-box;
     overflow-x: auto;
     overflow-y: auto;
     .text-header {
