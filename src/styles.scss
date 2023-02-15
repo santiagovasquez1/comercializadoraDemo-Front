@@ -262,7 +262,8 @@ button {
     width: calc(100vw - 330px - 1px);
     height: calc(100vh - 76px - 1px);
     display: block;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
+    box-sizing: border-box;
     overflow-x: auto;
     overflow-y: auto;
     .text-header {
@@ -830,12 +831,10 @@ select {
     cursor: pointer;
 }
 
-
-.container-select{
+.container-select {
     position: relative;
     z-index: 999;
-
-    .select{
+    .select {
         border: 1px solid $azul_principal;
         border-radius: 4px;
         background-color: #FFFFFF;
@@ -847,28 +846,21 @@ select {
         padding-right: 10px;
         width: 100%;
         transition: 200ms all;
-
         display: flex;
         justify-content: flex-end;
         align-items: center;
         cursor: pointer;
-
-        span{
+        span {
             width: 100%;
         }
-
-        img{
-            
-        }
+        img {}
     }
-
-    .select-disabled{
+    .select-disabled {
         background-color: #9595951a !important;
         border: 1px solid black !important;
         cursor: default !important;
     }
-
-    .options{
+    .options {
         background-color: white;
         position: absolute;
         top: 100%;
@@ -880,32 +872,29 @@ select {
         border: 1px solid #E9E9E9;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 4px;
-
-        .option{
+        .option {
             font-weight: 400;
             font-size: 16px;
             line-height: 18px;
             color: #000000;
             margin-bottom: 20px;
             cursor: pointer;
-            
         }
-
-        .option:hover{
+        .option:hover {
             color: $azul_principal;
         }
     }
 }
 
-.options-hide{
+.options-hide {
     display: none;
 }
 
-.options-show{
+.options-show {
     display: block;
 }
 
-app-select-custom{
+app-select-custom {
     width: 100%;
 }
 
