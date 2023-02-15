@@ -1,3 +1,4 @@
+import { SetChartOptionsService } from './../../services/set-chart-options.service';
 import { MedidorModel } from './../../models/MedidorModel';
 import { InformationModel } from './../../models/InformationModel';
 import { OrganizationModel } from './../../models/OrganizationModel';
@@ -32,92 +33,12 @@ export class DetalleOrganizacionComponent implements OnInit {
   datePicker: string;
   fechaFiltro: Date;
 
-  lineChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    elements: {
-      line: {
-        tension: 0.1
-      },
-      point: {
-        pointStyle: false
-      }
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Hora'
-        },
-        ticks: {
-          autoSkip: true,
-          align: 'start',
-          autoSkipPadding: 15
-        }
-      },
-      y: {
-        beginAtZero: true,
-        position: 'left',
-        title: {
-          display: true,
-          text: 'Consumo kWh'
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          font: {
-            size: 16,
-            family: 'Poppins'
-          }
-        }
-      }
-    }
-  }
-
-  consumoMesChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    elements: {
-      line: {
-        tension: 0.05
-      },
-      point: {
-        pointStyle: 'circle',
-        backgroundColor: '#726BFF',
-        borderColor: 'red',
-        hoverBackgroundColor: 'black',
-
-      },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Dia'
-        }
-      },
-      y: {
-        beginAtZero: true,
-        position: 'left',
-        title: {
-          display: true,
-          text: 'Consumo kWh'
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-
-  }
-
+  lineChartOptions: ChartConfiguration['options'];
+  consumoMesChartOptions: ChartConfiguration['options'];
   consumoActualChart: ChartType = 'line';
   consumoActualData: ChartData<'line'>;
+
+  energiaReactivaData: ChartData<'line'>;
 
   consumoMesChart: ChartType = 'line'
   consumoMesData: ChartData<'line'>;
@@ -150,11 +71,26 @@ export class DetalleOrganizacionComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private loadInformationService: KillerAppService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private setChartsOptionsService: SetChartOptionsService) {
     this.dataTableConsumo = new MatTableDataSource();
     this.dataTableInformation = new MatTableDataSource();
     const now = new Date();
     this.fechaFiltro = new Date(2023, 1, 1, now.getHours() - 5, now.getMinutes(), 0);
+
+    this.lineChartOptions = this.setChartsOptionsService.setLineChartOption({
+      xAxisTitle: 'Hora',
+      yAxisTitle: 'Consumo kWh',
+      layoutPosition: 'bottom'
+    });
+
+    this.consumoMesChartOptions = this.setChartsOptionsService.setLineChartOption({
+      xAxisTitle: 'Dia',
+      yAxisTitle: 'Consumo kWh',
+      layoutPosition: 'bottom',
+      displayLegend: false,
+      lineTension: 0.1
+    });
   }
 
   ngOnInit(): void {
@@ -200,6 +136,7 @@ export class DetalleOrganizacionComponent implements OnInit {
         }
 
         this.setChartData([this.consumoDia, this.pronosticoDia])
+        this.setPotenciaReactivaData([this.consumoDia, this.pronosticoDia]);
         this.setConsumoMesChartData(this.organizationConsumoHistorico);
         this.setPorcentajesData(this.organizationConsumoTimeStamp, data[4]);
         this.spinner.hide();
@@ -226,12 +163,48 @@ export class DetalleOrganizacionComponent implements OnInit {
           data: consumoActualData,
           fill: false,
           borderColor: '#FF0909',
-          label: 'Tiempo real'
+          label: 'Tiempo real',
+          pointStyle: false,
+          backgroundColor:'#FF0909'
         }, {
           data: consumoPromedioData,
           fill: false,
           borderColor: '#0C00FF',
-          label: 'Pronóstico'
+          label: 'Pronóstico',
+          pointStyle: false,
+          backgroundColor:'#0C00FF'
+        }
+      ],
+      labels: labels
+    }
+  }
+
+  private setPotenciaReactivaData(data: OrganizationModel[]) {
+    const consumoActualData: number[] = data[0].information.map(i => i.potenciaReactiva);
+    const consumoPromedioData: number[] = data[1].information.map(i => i.potenciaReactiva);
+    const labels = data[0].information.map(i => {
+      const tempDate = moment(i.fecha).format('HH:mm')
+      return tempDate;
+    });
+
+    this.energiaReactivaData = {
+      datasets: [
+        {
+          data: consumoActualData,
+          fill: false,
+          borderColor: '#00FF87',
+          label: 'Tiempo real',
+          pointStyle: false,
+          pointBackgroundColor: '#00FF87',
+          backgroundColor: '#00FF87'
+        }, {
+          data: consumoPromedioData,
+          fill: false,
+          borderColor: '#726BFF',
+          label: 'Pronóstico',
+          pointStyle: false,
+          pointBackgroundColor: '#726BFF',
+          backgroundColor:'#726BFF'
         }
       ],
       labels: labels
@@ -305,6 +278,4 @@ export class DetalleOrganizacionComponent implements OnInit {
   onVolver() {
     this.router.navigate(['/main/puntos-medida']);
   }
-
-
 }

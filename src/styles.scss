@@ -928,11 +928,11 @@ app-select-custom {
             width: 100%;
             grid-template-columns: 1fr calc(30px + 39.38vw + 15px);
             .grafica-porcentaje-consumo-container {
-                grid-column: 1/2;
-            }
-            .grafica-consumo-dia-container {
                 grid-column: 2/3;
             }
+            // .grafica-consumo-dia-container {
+            //     grid-column: 2/3;
+            // }
             .grafica-consumo-mes-container {
                 grid-column: 1/3;
             }
