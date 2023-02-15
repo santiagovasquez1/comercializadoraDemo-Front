@@ -9,6 +9,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import moment from 'moment';
+import { selectCustom } from 'src/app/models/select-custom';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,6 +32,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   timer$: Observable<any>;
   timerSubscription: Subscription;
+
+  dataAreaSelect: selectCustom = {};
+  dataMedidorSelect: selectCustom = {};
 
   lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -101,6 +105,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.infoService.getOrganizations().subscribe({
       next: response => {
         this.rootOrganizations = response[0];
+
+        let areas: selectCustom = {
+          title: 'Area',
+          defaultValue: '---',
+          stringOptions: this.rootOrganizations.nodes.map(node => node.name),
+          currentValue:this.selectedArea
+        }
+        this.dataAreaSelect = areas;
+
+        if(this.localOrganizations){
+          let medidores: selectCustom = {
+            title: 'Medidores',
+            defaultValue: '---',
+            stringOptions: this.localOrganizations.map(node => node.name),
+            currentValue:this.selectedLocal,
+          }
+          
+          this.dataMedidorSelect = medidores;
+        }
+        else{
+          let medidores: selectCustom = {
+            title: 'Medidores',
+            defaultValue: '---',
+            stringOptions: null,
+            currentValue:this.selectedLocal,
+            disabled: true
+          }
+          
+          this.dataMedidorSelect = medidores;
+        }
+
+
         this.spinner.hide();
         this.loadData();
         this.monitoreoByTimeStamp();
@@ -205,6 +241,64 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ],
       labels: labels
     }
+  }
+
+  onAreaSelected(data: string){
+    this.selectedArea = data;
+
+    if (this.selectedArea !== '---') {
+      this.localOrganizations = this.rootOrganizations.nodes.find(n => n.name == this.selectedArea).nodes;
+      this.selectedLocal = '---';
+
+      let medidores: selectCustom = {
+        title: 'Medidores',
+        defaultValue: '---',
+        stringOptions: this.localOrganizations.map(node => node.name),
+        currentValue:this.selectedLocal
+      }
+  
+      this.dataMedidorSelect = medidores;
+    } else {
+
+      let medidores: selectCustom = {
+        title: 'Medidores',
+        defaultValue: '---',
+        stringOptions: null,
+        currentValue:'---',
+        disabled: true
+      }
+      this.dataMedidorSelect = medidores;
+
+      this.localOrganizations = null
+    }
+    
+    let areas: selectCustom = {
+      title: 'Area',
+      defaultValue: '---',
+      stringOptions: this.rootOrganizations.nodes.map(node => node.name),
+      currentValue:this.selectedArea
+    }
+    this.dataAreaSelect = areas;
+
+    
+
+    this.loadData();
+  }
+
+  onMedidorSelected(data: string){
+    this.selectedLocal = data;
+
+    let medidores: selectCustom = {
+      title: 'Medidores',
+      defaultValue: '---',
+      stringOptions: this.localOrganizations.map(node => node.name),
+      currentValue:this.selectedLocal
+    }
+
+    this.dataMedidorSelect = medidores;
+    this.loadData();
+    
+
   }
 
   private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {

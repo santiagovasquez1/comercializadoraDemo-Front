@@ -587,7 +587,7 @@ select {
     .container-breadcrumbs {
         display: flex;
         align-items: center;
-        align-self: end;
+        align-self: flex-end;
         span {
             margin-right: 5px;
             font-weight: 400;
@@ -619,7 +619,7 @@ select {
         .ultima-vez {
             display: flex;
             align-items: center;
-            align-self: end;
+            align-self: flex-end;
             span {
                 margin-right: 5px;
                 font-weight: 400;
@@ -750,7 +750,7 @@ select {
 
 .reloj {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     padding-right: 30px;
     padding-top: 5px;
     span {
@@ -849,7 +849,7 @@ select {
         transition: 200ms all;
 
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         align-items: center;
         cursor: pointer;
 
@@ -860,6 +860,12 @@ select {
         img{
             
         }
+    }
+
+    .select-disabled{
+        background-color: #9595951a !important;
+        border: 1px solid black !important;
+        cursor: default !important;
     }
 
     .options{
@@ -896,7 +902,13 @@ select {
 }
 
 .options-show{
-    display: block;}
+    display: block;
+}
+
+app-select-custom{
+    width: 100%;
+}
+
 .organization-detalle-container {
     display: grid;
     grid-template-columns: 1fr 1fr;

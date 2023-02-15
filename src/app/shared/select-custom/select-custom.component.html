@@ -1,10 +1,11 @@
 <div class="container-select">
     <label>{{options.title}}</label>
-    <div class="select" (click)="toggleOptions()">
+    <div (click)="toggleOptions()"  class="select" [ngClass]="{'select-disabled': options.disabled}">
         <span>{{options.currentValue == '' ? defaultValue : options.currentValue}}</span>
-        <img src="../../../assets/icons/Abajo.svg" alt="">
+        <img src="../../../assets/icons/Abajo.svg" alt="" *ngIf="!options.disabled">
+        <img src="../../../assets/icons/AbajoDisable.svg" alt="" *ngIf="options.disabled">
     </div>
-    <div class="options" [ngClass]="{'options-hide':hideOptions,'options-show':!hideOptions}">
+    <div class="options" [ngClass]="{'options-hide':hideOptions,'options-show':!hideOptions}" *ngIf="!options.disabled">
         <div class="option" (click)="selectOption($event)">{{options.defaultValue}}</div>
         <div class="option" *ngFor="let option of options.stringOptions" (click)="selectOption($event)">{{ option }}</div>
     </div>

@@ -15,19 +15,28 @@ export class SelectCustomComponent implements OnChanges {
   defaultValue: string;
 
   ngOnChanges(){
-    this.defaultValue = this.options.defaultValue;
+    if(!this.options.disabled){
+      this.defaultValue = this.options.defaultValue;
+    }
+    
   }
 
   toggleOptions(){
-    this.hideOptions = !this.hideOptions;
+    if(!this.options.disabled){
+      this.hideOptions = !this.hideOptions;
+    }
+    
   }
 
   selectOption(event: MouseEvent){
-    
-    const selectedOption = (event.target as HTMLDivElement).textContent;
-    this.options.currentValue = selectedOption;
-    this.selected.emit(selectedOption );
-    this.toggleOptions();
+
+    if(!this.options.disabled){
+      const selectedOption = (event.target as HTMLDivElement).textContent;
+      this.options.currentValue = selectedOption;
+      this.selected.emit(selectedOption );
+      this.toggleOptions();
+    }
+  
 
   }
 
