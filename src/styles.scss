@@ -542,8 +542,7 @@ select {
 }
 
 input,
-select,
-.select {
+select {
     border: 1px solid $azul_principal;
     border-radius: 4px;
     background-color: #FFFFFF;
@@ -589,7 +588,7 @@ select {
     .container-breadcrumbs {
         display: flex;
         align-items: center;
-        align-self: end;
+        align-self: flex-end;
         span {
             margin-right: 5px;
             font-weight: 400;
@@ -621,7 +620,7 @@ select {
         .ultima-vez {
             display: flex;
             align-items: center;
-            align-self: end;
+            align-self: flex-end;
             span {
                 margin-right: 5px;
                 font-weight: 400;
@@ -752,7 +751,7 @@ select {
 
 .reloj {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     padding-right: 30px;
     padding-top: 5px;
     span {
@@ -830,6 +829,85 @@ select {
 
 .enabledArrow {
     cursor: pointer;
+}
+
+
+.container-select{
+    position: relative;
+    z-index: 999;
+
+    .select{
+        border: 1px solid $azul_principal;
+        border-radius: 4px;
+        background-color: #FFFFFF;
+        height: 35px;
+        font-size: 14px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 100%;
+        transition: 200ms all;
+
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        cursor: pointer;
+
+        span{
+            width: 100%;
+        }
+
+        img{
+            
+        }
+    }
+
+    .select-disabled{
+        background-color: #9595951a !important;
+        border: 1px solid black !important;
+        cursor: default !important;
+    }
+
+    .options{
+        background-color: white;
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        margin-top: 5px;
+        padding: 12px;
+        max-height: 270px;
+        overflow-y: scroll;
+        border: 1px solid #E9E9E9;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+
+        .option{
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 18px;
+            color: #000000;
+            margin-bottom: 20px;
+            cursor: pointer;
+            
+        }
+
+        .option:hover{
+            color: $azul_principal;
+        }
+    }
+}
+
+.options-hide{
+    display: none;
+}
+
+.options-show{
+    display: block;
+}
+
+app-select-custom{
+    width: 100%;
 }
 
 .organization-detalle-container {
