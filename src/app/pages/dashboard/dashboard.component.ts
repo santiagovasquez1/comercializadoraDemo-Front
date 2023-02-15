@@ -10,7 +10,6 @@ import { ToastrService } from 'ngx-toastr';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import moment from 'moment';
 import { selectCustom } from 'src/app/models/select-custom';
-import { disableDebugTools } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
