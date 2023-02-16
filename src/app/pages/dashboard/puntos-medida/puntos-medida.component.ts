@@ -44,8 +44,6 @@ export class PuntosMedidaComponent {
   stateGreen: boolean;
 
   desviacionPorcentaje: number = 0.1;
-  varianzaMinima: number = 80.0;
-  varianzaMaxima: number = 90.0;
 
   areasFilter: string[] = [];
   municipioFilter: string[] = [];
@@ -158,6 +156,7 @@ export class PuntosMedidaComponent {
     if (this.isFilterHour) {
 
       this.fechaHora.setHours(hours + 19, minutes);
+      this.fechaHora.setDate(this.fechaHora.getDate()-1)
     }
 
     let request: GetGeneralDataRequest = {
@@ -179,7 +178,7 @@ export class PuntosMedidaComponent {
         const iteratoPromedios = (response[1] as OrganizationModel).nodes;
         const monitoreoTime = response[2] as StatusMonitor;
 
-        console.log(response)
+        console.log(response[0].nodes[0].nodes[0].information[0].fecha)
 
         const format = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
@@ -243,6 +242,8 @@ export class PuntosMedidaComponent {
 
 
         this.fullData = resultArray;
+
+        
         this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
         this.pageCount = 0;
         this.setDataTable(this.fullData);

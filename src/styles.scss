@@ -928,7 +928,6 @@ select {
         span {
             width: 100%;
         }
-        img {}
     }
     .select-disabled {
         background-color: #9595951a !important;
@@ -1033,6 +1032,123 @@ app-select-custom {
     }
 }
 
+.field-custom{
+    height: 35px !important;
+    display: flex;
+    flex-direction: column;
+
+    mat-form-field{
+
+        input{
+
+        }
+
+        input:focus{
+            border: none !important;
+        }
+
+        button{
+
+            mat-icon{
+                color: $azul_principal;
+            }
+        }
+
+        
+    }
+
+    mat-form-field:hover{
+        
+    }
+
+
+    
+}
+
 .mat-drawer-content{
     overflow: hidden !important;
+}
+
+.mat-mdc-form-field-infix{
+    display: flex;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: white !important;
+    height: 35px !important;
+    border: 1px solid $azul_principal;
+}
+
+.mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+    padding: 0 !important;
+    height: 35px !important;
+    min-height: 35px !important;
+
+
+    input{
+        height: 35px !important;
+    }
+
+
+
+
+}
+
+.mat-mdc-form-field-flex {
+    height: 35px !important;
+}
+
+.mdc-text-field {
+    padding: 0px !important;
+}
+
+.mdc-icon-button{
+    padding: 0px !important;
+}
+
+.mat-mdc-form-field-subscript-wrapper{
+    height: 0px !important;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+
+.mat-mdc-text-field-wrapper:hover {
+    // background-color: #E7E6FF !important;
+}
+
+.mat-mdc-text-field-wrapper{
+    padding-left: 10px !important;
+}
+
+// .mdc-text-field {
+//     position: static !important;
+//     will-change: inherit !important;
+// }
+
+.mat-calendar-arrow {
+    fill: $azul_principal !important;
+}
+
+.mat-calendar-arrow {
+    color: $azul_principal !important;
+}
+
+.mdc-button .mdc-button__label {
+    color: $azul_principal !important;
+}
+
+.mat-calendar-next-button{
+    color: $azul_principal !important;
+}
+
+.mat-calendar-previous-button{
+    color: $azul_principal !important;
+}
+
+.mat-calendar-table-header th {
+    color: $azul_principal;
 }

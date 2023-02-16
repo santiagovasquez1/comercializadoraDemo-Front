@@ -91,8 +91,17 @@
                         </div>
                         <div class="chartFilters">
                             <div class="date-filter-container">
-                                <label>Desde</label>
-                                <input type="date" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()">
+                                <label>Fecha</label>
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <input matInput [matDatepicker]="picker" placeholder="MM/DD/AÑO" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()">
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <button mat-icon-button (click)="picker.open()" color="primary">
+                                        <mat-icon>calendar_today</mat-icon>
+                                    </button>
+                                </mat-form-field>
+
+                                <!-- <label>Desde</label>
+                                <input type="date" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()"> -->
                             </div>
                         </div>
                         <div class="grafica-consumo-mes-canvas">

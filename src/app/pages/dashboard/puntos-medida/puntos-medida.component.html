@@ -29,12 +29,20 @@
                         <input type="text" class="" formControlName="ID">
                     </div>
 
-                    <div class="field">
+                    <div class="field-custom">
                         <label>Fecha</label>
-                        <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
-                    </div>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <input matInput [matDatepicker]="picker" placeholder="MM/DD/AÑO" formControlName="Fecha">
+                            <mat-datepicker #picker></mat-datepicker>
+                            <button mat-icon-button (click)="picker.open()" color="primary">
+                                <mat-icon>calendar_today</mat-icon>
+                            </button>
+                        </mat-form-field>
+                          
 
-                    <!-- <app-input-time></app-input-time> -->
+                        <!-- <label>Fecha</label>
+                        <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha"> -->
+                    </div>
 
                     <div class="field">
                         <label>Hora</label>
