@@ -215,6 +215,7 @@ export class DetalleOrganizacionComponent implements OnInit {
     const now = new Date();
     this.fechaFiltro = new Date(this.datePicker);
     this.fechaFiltro.setHours(now.getHours() - 5, now.getMinutes(), 0);
+    this.fechaFiltro.setDate(this.fechaFiltro.getDate()-1)
 
     const tempInformation = this.organizationConsumoHistorico.information.filter(x => {
       const tempFecha = moment(x.fecha);

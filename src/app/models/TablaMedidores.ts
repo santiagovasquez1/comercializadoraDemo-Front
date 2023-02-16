@@ -7,5 +7,7 @@ export interface TablaMedidores {
     nameMunicipio: string,
     nameDpto: string,
     consumo: number,
+    potenciaActiva: number,
+    potenciaReactiva: number,
     statusMonitor: StatusMonitor
 }

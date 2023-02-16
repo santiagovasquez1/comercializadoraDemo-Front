@@ -44,8 +44,6 @@ export class PuntosMedidaComponent {
   stateGreen: boolean;
 
   desviacionPorcentaje: number = 0.1;
-  varianzaMinima: number = 80.0;
-  varianzaMaxima: number = 90.0;
 
   areasFilter: string[] = [];
   municipioFilter: string[] = [];
@@ -55,7 +53,7 @@ export class PuntosMedidaComponent {
   isFilterDate: boolean = false;
   isFilterHour: boolean = false;
 
-  pageSize = 2;
+  pageSize = 5;
   pageCount = 0;
   maxPageNumber = 0;
 
@@ -81,7 +79,7 @@ export class PuntosMedidaComponent {
   @ViewChild('table', { static: true }) table: MatTable<any>;
   @ViewChild('selectHora') mySelect: ElementRef;
 
-  displayedColumns: string[] = ['ID', 'area', 'municipio', 'direccion', 'consumo', 'acciones']
+  displayedColumns: string[] = ['ID', 'area', 'municipio', 'direccion', 'consumo', 'potenciaActiva', 'potenciaReactiva', 'acciones']
 
   constructor(private fb: FormBuilder,
     private killerAppService: KillerAppService,
@@ -136,8 +134,6 @@ export class PuntosMedidaComponent {
 
     this.spinner.show();
 
-    // this.area = this.filterForm.get('Area').value;
-    // this.municipio = this.filterForm.get('Municipio').value;
     this.localId = this.filterForm.get('ID').value;
     this.fecha = new Date(this.filterForm.get('Fecha').value);
     this.dirLocal = this.filterForm.get('Direccion').value;
@@ -160,6 +156,7 @@ export class PuntosMedidaComponent {
     if (this.isFilterHour) {
 
       this.fechaHora.setHours(hours + 19, minutes);
+      this.fechaHora.setDate(this.fechaHora.getDate()-1)
     }
 
     let request: GetGeneralDataRequest = {
@@ -180,6 +177,8 @@ export class PuntosMedidaComponent {
         const iteratorConsumos = (response[0] as OrganizationModel).nodes;
         const iteratoPromedios = (response[1] as OrganizationModel).nodes;
         const monitoreoTime = response[2] as StatusMonitor;
+
+        console.log(response[0].nodes[0].nodes[0].information[0].fecha)
 
         const format = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
@@ -204,6 +203,8 @@ export class PuntosMedidaComponent {
                 nameMunicipio: nodo.municipio,
                 nameDpto: nodo.departamento,
                 consumo: nodo.information[0].potencia,
+                potenciaActiva: nodo.information[0].potencia,
+                potenciaReactiva: nodo.information[0].potenciaReactiva, 
                 statusMonitor: {
                   altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * (monitoreoTime.altoConsumo / 100),
                   consumoNormal: nodo2.information[0].potencia,
@@ -241,6 +242,8 @@ export class PuntosMedidaComponent {
 
 
         this.fullData = resultArray;
+
+        
         this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
         this.pageCount = 0;
         this.setDataTable(this.fullData);
@@ -263,6 +266,7 @@ export class PuntosMedidaComponent {
   onFilter() {
     this.isFilterMap = false;
     this.getloadInfo();
+
   }
 
 
@@ -297,21 +301,10 @@ export class PuntosMedidaComponent {
 
     if(!this.isFilterMap){
 
-      let municipio: selectCustom = {
-        title: 'Municipios',
-        defaultValue: 'Todos',
-        stringOptions: this.municipioFilter,
-        currentValue: this.municipio
-      }
-      this.dataMunicipiosSelect = municipio;
 
-      let areas: selectCustom = {
-        title: 'Area',
-        defaultValue: 'Todas',
-        stringOptions: this.areasFilter,
-        currentValue: this.area
-      }
-      this.dataAreaSelect = areas;
+      this.setMunicipioSelect('Todos',this.municipioFilter,this.municipio, false);
+
+      this.setAreaSelect('Todas',this.areasFilter,this.area, false);
 
     }
 
@@ -319,23 +312,11 @@ export class PuntosMedidaComponent {
 
   changeDpto(newItem: string) {
 
-    let municipio: selectCustom = {
-      title: 'Municipios',
-      defaultValue: 'Todos',
-      stringOptions: this.municipioFilter,
-      currentValue: ''
-    }
-    this.municipio = '';
-    this.dataMunicipiosSelect = municipio;
+    this.setMunicipioSelect('Todos',this.municipioFilter,'', false);
+    this.setAreaSelect('Todas',this.areasFilter,'', false);
 
-    let area: selectCustom = {
-      title: 'Areas',
-      defaultValue: 'Todas',
-      stringOptions: this.areasFilter,
-      currentValue: ''
-    }
+    this.municipio = '';
     this.area = '';
-    this.dataAreaSelect = area;
 
 
     this.departamento = newItem;
@@ -430,6 +411,30 @@ export class PuntosMedidaComponent {
 
   onAreaSelected(data: string){
     this.area = data;
+  }
+
+  setAreaSelect(_defaultValue: string,_stringOptions: any[],_currentValue: string, _disabled: boolean){
+
+    let areas: selectCustom = {
+      title: 'Area',
+      defaultValue: _defaultValue,
+      stringOptions: _stringOptions,
+      currentValue: _currentValue,
+      disabled: _disabled
+    }
+    this.dataAreaSelect = areas;
+  }
+
+  setMunicipioSelect(_defaultValue: string,_stringOptions: any[],_currentValue: string, _disabled: boolean){
+
+    let municipios: selectCustom = {
+      title: 'Municipios',
+      defaultValue: _defaultValue,
+      stringOptions: _stringOptions,
+      currentValue: _currentValue,
+      disabled: _disabled
+    }
+    this.dataMunicipiosSelect = municipios;
   }
 
 }
