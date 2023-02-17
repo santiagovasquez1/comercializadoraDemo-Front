@@ -147,7 +147,7 @@ button {
                 .button-black {
                     margin-bottom: 24px;
                 }
-                .remember-pass{
+                .remember-pass {
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -318,6 +318,8 @@ button {
     padding-bottom: 2.33vh;
     padding-left: 1.244vw;
     padding-right: 0.805vw;
+    overflow-x: auto;
+    overflow-y: auto;
     .title {
         width: 100%;
         height: 45px;
@@ -490,52 +492,47 @@ canvas {
     margin-right: 8px;
 }
 
-.mat-mdc-menu-panel.mat-mdc-menu-panel{
+.mat-mdc-menu-panel.mat-mdc-menu-panel {
     max-width: 300px !important;
 }
-.mat-mdc-menu-content{
+
+.mat-mdc-menu-content {
     width: 300px;
     padding: 0px !important;
 }
 
-.container-mat-menu{
+.container-mat-menu {
     display: grid;
     grid-template-rows: 80% 20%;
     font-family: 'Poppins';
-
-    .buttons{
+    .buttons {
         display: flex;
         flex-direction: column;
         padding: 20px;
-
-        .button{
+        .button {
             margin-bottom: 15px;
             cursor: pointer;
             width: 80%;
             display: flex;
             align-items: center;
             height: 40px;
-
-            mat-icon{
+            mat-icon {
                 color: $azul_principal;
                 margin-right: 5px;
             }
         }
-
-        .button:hover{
+        .button:hover {
             background: #E7E6FF;
             border-radius: 8px;
         }
     }
-
-    .footer{
+    .footer {
         display: flex;
         justify-content: center;
         align-items: center;
         background: rgba(233, 233, 233, 0.45);
         cursor: pointer;
-
-        mat-icon{
+        mat-icon {
             color: $azul_principal;
             margin-right: 5px;
         }
@@ -568,9 +565,7 @@ canvas {
         display: flex;
         justify-content: center;
         align-items: center;
-
-
-        #numero-notificacion{
+        #numero-notificacion {
             left: -16px;
             position: relative;
             top: 20px;
@@ -592,12 +587,10 @@ canvas {
                 height: 40px;
                 width: 40px;
             }
-
-            #flecha-abajo{
+            #flecha-abajo {
                 height: 12px;
                 width: 21px;
                 margin-left: 10px;
-
             }
         }
     }
@@ -706,7 +699,6 @@ select {
     grid-template-columns: minmax(0, 1400px) 35%;
     grid-template-rows: auto auto;
     margin-bottom: 30px;
-
     .filter {
         background: #FFFFFF;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -839,7 +831,7 @@ select {
 .full-container {
     height: calc(100vh - 76px);
     background-color: #F6F6FF;
-    overflow-x: auto; 
+    overflow-x: auto;
     overflow-y: auto;
 }
 
@@ -853,9 +845,7 @@ select {
     border-bottom-right-radius: 12px;
     padding-right: 10px;
     align-items: center;
-
     span {
-
         font-size: 11px;
     }
     .select-pagination {
@@ -981,10 +971,11 @@ app-select-custom {
 }
 
 .organization-detalle-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
-    column-gap: 15px;
+    row-gap: 23px;
     padding-left: 20px;
     padding-right: 23px;
     padding-top: 9px;
@@ -997,6 +988,9 @@ app-select-custom {
     max-height: 532px;
     padding-left: 20px;
     padding-right: 23px;
+    .card {
+        overflow-x: hidden !important;
+    }
     .pronosticos-charts-container {
         display: flex;
         flex-direction: row;
@@ -1012,11 +1006,14 @@ app-select-custom {
             .grafica-porcentaje-consumo-container {
                 grid-column: 2/3;
             }
-            // .grafica-consumo-dia-container {
-            //     grid-column: 2/3;
-            // }
-            .grafica-consumo-mes-container {
+            .graficas-mes-porcentaje-container {
                 grid-column: 1/3;
+                display: grid;
+                grid-template-columns: 47.80vw 1fr;
+                column-gap: 40px;
+            }
+            .grafica-consumo-mes-container {
+                grid-column: 1/2;
             }
             .grafica-consumo-dia-canvas,
             .grafica-consumo-mes-canvas,
@@ -1026,58 +1023,46 @@ app-select-custom {
                 flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
-                margin-top: 10px;
+                margin-top: 25px;
                 width: 100%;
             }
-            .grafica-consumo-dia-canvas,
-            .grafica-porcentaje-canvas {
+            .grafica-consumo-dia-canvas {
                 height: 241px;
             }
-            .grafica-consumo-mes-canvas {
+            .grafica-consumo-mes-canvas,
+            .grafica-porcentaje-canvas {
                 height: 200px;
+            }
+            .grafica-porcentaje-canvas {
+                width: 80%;
             }
         }
     }
 }
 
-.field-custom{
+.field-custom {
     height: 35px !important;
     display: flex;
     flex-direction: column;
-
-    mat-form-field{
-
-        input{
-
-        }
-
-        input:focus{
+    mat-form-field {
+        input {}
+        input:focus {
             border: none !important;
         }
-
-        button{
-
-            mat-icon{
+        button {
+            mat-icon {
                 color: $azul_principal;
             }
         }
-
-        
     }
-
-    mat-form-field:hover{
-        
-    }
-
-
-    
+    mat-form-field:hover {}
 }
 
-.mat-drawer-content{
+.mat-drawer-content {
     overflow: hidden !important;
 }
 
-.mat-mdc-form-field-infix{
+.mat-mdc-form-field-infix {
     display: flex;
 }
 
@@ -1091,15 +1076,9 @@ app-select-custom {
     padding: 0 !important;
     height: 35px !important;
     min-height: 35px !important;
-
-
-    input{
+    input {
         height: 35px !important;
     }
-
-
-
-
 }
 
 .mat-mdc-form-field-flex {
@@ -1110,11 +1089,11 @@ app-select-custom {
     padding: 0px !important;
 }
 
-.mdc-icon-button{
+.mdc-icon-button {
     padding: 0px !important;
 }
 
-.mat-mdc-form-field-subscript-wrapper{
+.mat-mdc-form-field-subscript-wrapper {
     height: 0px !important;
 }
 
@@ -1123,12 +1102,11 @@ app-select-custom {
     height: 35px !important;
 }
 
-
 .mat-mdc-text-field-wrapper:hover {
     // background-color: #E7E6FF !important;
 }
 
-.mat-mdc-text-field-wrapper{
+.mat-mdc-text-field-wrapper {
     padding-left: 10px !important;
 }
 
@@ -1136,7 +1114,6 @@ app-select-custom {
 //     position: static !important;
 //     will-change: inherit !important;
 // }
-
 .mat-calendar-arrow {
     fill: $azul_principal !important;
 }
@@ -1149,11 +1126,11 @@ app-select-custom {
     color: $azul_principal !important;
 }
 
-.mat-calendar-next-button{
+.mat-calendar-next-button {
     color: $azul_principal !important;
 }
 
-.mat-calendar-previous-button{
+.mat-calendar-previous-button {
     color: $azul_principal !important;
 }
 

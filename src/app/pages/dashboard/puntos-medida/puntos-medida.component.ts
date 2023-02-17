@@ -202,13 +202,13 @@ export class PuntosMedidaComponent {
                 dirLocal: nodo.direccion,
                 nameMunicipio: nodo.municipio,
                 nameDpto: nodo.departamento,
-                consumo: nodo.information[0].potencia,
-                potenciaActiva: nodo.information[0].potencia,
+                consumo: nodo.information[0].potenciaActiva,
+                potenciaActiva: nodo.information[0].potenciaActiva,
                 potenciaReactiva: nodo.information[0].potenciaReactiva, 
                 statusMonitor: {
-                  altoConsumo: nodo2.information[0].potencia + nodo2.information[0].potencia * (monitoreoTime.altoConsumo / 100),
-                  consumoNormal: nodo2.information[0].potencia,
-                  bajoConsumo: nodo2.information[0].potencia - nodo2.information[0].potencia * (monitoreoTime.bajoConsumo / 100)
+                  altoConsumo: nodo2.information[0].potenciaActiva + nodo2.information[0].potenciaActiva * (monitoreoTime.altoConsumo / 100),
+                  consumoNormal: nodo2.information[0].potenciaActiva,
+                  bajoConsumo: nodo2.information[0].potenciaActiva - nodo2.information[0].potenciaActiva * (monitoreoTime.bajoConsumo / 100)
                 }
               });
             }
