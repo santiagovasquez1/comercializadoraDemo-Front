@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { MatDrawerMode } from '@angular/material/sidenav';
 import { Observable, Subscription, fromEvent, map } from 'rxjs';
@@ -16,6 +17,7 @@ export class PagesComponent implements OnInit {
 
   constructor() {
     this.drawerMode = 'side';
+    console.log(environment.killerapp_url);
   }
   ngOnInit(): void {
     this.getWindowWidth(window.innerWidth);
