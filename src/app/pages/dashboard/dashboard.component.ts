@@ -201,8 +201,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private setChartData(data: OrganizationModel[]) {
-    const consumoActualData: number[] = data[0].information.map(i => i.potencia);
-    const consumoPromedioData: number[] = data[1].information.map(i => i.potencia);
+    const consumoActualData: number[] = data[0].information.map(i => i.potenciaActiva);
+    const consumoPromedioData: number[] = data[1].information.map(i => i.potenciaActiva);
     const labels = data[0].information.map(i => {
       const tempDate = moment(i.fecha).format('HH:mm')
       return tempDate;

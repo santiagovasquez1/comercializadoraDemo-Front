@@ -36,7 +36,7 @@ export class SetChartOptionsService {
           position: 'left',
           title: {
             display: optionsParamaters.yAxisDisplay ? optionsParamaters.yAxisDisplay : true,
-            text: optionsParamaters.xAxisTitle
+            text: optionsParamaters.yAxisTitle
           }
         }
       },

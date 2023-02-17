@@ -12,21 +12,33 @@
     <div class="organization-detalle-container">
         <div class="card">
             <mat-table #tableConsumo class="mvm-table" [dataSource]="dataTableConsumo">
+                <ng-container matColumnDef="tipo">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.tipo}}</mat-cell>
+                </ng-container>
                 <ng-container matColumnDef="coste">
-                    <mat-header-cell *matHeaderCellDef>Coste del kwH</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Costo kWh</mat-header-cell>
                     <mat-cell *matCellDef="let element">{{element.precio | number:'1.1-2'}}$</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="consumoEnergia">
-                    <mat-header-cell *matHeaderCellDef>Consumo energía</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.energiaAcumuladaDia | number:'1.1-2'}}kWh</mat-cell>
+                <ng-container matColumnDef="energiaActiva">
+                    <mat-header-cell *matHeaderCellDef>Consumo E. activa</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.energiaActiva | number:'1.1-2'}}kWH</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="valorDia">
-                    <mat-header-cell *matHeaderCellDef>Valor del día</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.costoAcumuladoDia | number:'1.1-2'}}$</mat-cell>
+                <ng-container matColumnDef="energiaReactiva">
+                    <mat-header-cell *matHeaderCellDef>Consumo E. reactiva</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.energiaReactiva | number:'1.1-2'}}kVarh</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="valorMes">
-                    <mat-header-cell *matHeaderCellDef>Valor del mes</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.costoAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                <ng-container matColumnDef="costoActiva">
+                    <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.costoActiva | number:'1.1-2'}}$</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="costoReactiva">
+                    <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.costoReactiva | number:'1.1-2'}}$</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="valorTotal">
+                    <mat-header-cell *matHeaderCellDef>Valor total de energía</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.costoTotal | number:'1.1-2'}}$</mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="columnsTableConsumo; sticky: true"></mat-header-row>
@@ -49,7 +61,9 @@
                 </ng-container>
                 <ng-container matColumnDef="icon">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let element"></mat-cell>
+                    <mat-cell *matCellDef="let element">
+                        <i class="material-icons icon">electric_meter</i>
+                    </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="columnsTableInfo; sticky: true"></mat-header-row>
@@ -63,7 +77,7 @@
                 <div class="canvas-container">
                     <div class="grafica-consumo-dia-container">
                         <div class="title">
-                            <h3>Pronósticos del consumo del dia</h3>
+                            <h3>Potencia activa</h3>
                         </div>
                         <div class="grafica-consumo-dia-canvas">
                             <canvas baseChart [data]="consumoActualData" [options]="lineChartOptions" [type]="consumoActualChart"></canvas>
@@ -71,43 +85,43 @@
                     </div>
                     <div class="grafica-consumo-dia-container">
                         <div class="title">
-                            <h3>Energía reactiva</h3>
+                            <h3>Potencia reactiva</h3>
                         </div>
                         <div class="grafica-consumo-dia-canvas">
                             <canvas baseChart [data]="energiaReactivaData" [options]="lineChartOptions" type="line"></canvas>
                         </div>
                     </div>
-                    <div class="grafica-porcentaje-consumo-container">
-                        <div class="title">
-                            <h3>Porcentaje de energia del medidor</h3>
-                        </div>
-                        <div class="grafica-porcentaje-canvas">
-                            <canvas baseChart [data]="porcentajeConsumoData" [options]="porcentajeConsumoOptions" [type]="porcentajeConsumoChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="grafica-consumo-mes-container">
-                        <div class="title">
-                            <h3>Consumo del mes</h3>
-                        </div>
-                        <div class="chartFilters">
-                            <div class="date-filter-container">
-                                <label>Fecha</label>
-                                <mat-form-field class="example-full-width" appearance="fill">
-                                    <input matInput [matDatepicker]="picker" placeholder="MM/DD/AÑO" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()">
-                                    <mat-datepicker #picker></mat-datepicker>
-                                    <button mat-icon-button (click)="picker.open()" color="primary">
-                                        <mat-icon>calendar_today</mat-icon>
-                                    </button>
-                                </mat-form-field>
-
-                                <!-- <label>Desde</label>
-                                <input type="date" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()"> -->
+                    <div class="graficas-mes-porcentaje-container">
+                        <div class="grafica-consumo-mes-container">
+                            <div class="title">
+                                <h3>Consumo del mes</h3>
+                            </div>
+                            <div class="chartFilters">
+                                <div class="date-filter-container">
+                                    <label>Fecha</label>
+                                    <mat-form-field class="example-full-width" appearance="fill">
+                                        <input matInput [matDatepicker]="picker" placeholder="MM/DD/AÑO" [(ngModel)]="datePicker" (ngModelChange)="onDatePickerChange()">
+                                        <mat-datepicker #picker></mat-datepicker>
+                                        <button mat-icon-button (click)="picker.open()" color="primary">
+                                            <mat-icon>calendar_today</mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="grafica-consumo-mes-canvas">
+                                <canvas baseChart [data]="consumoMesData" [options]="consumoMesChartOptions" [type]="consumoMesChart"></canvas>
                             </div>
                         </div>
-                        <div class="grafica-consumo-mes-canvas">
-                            <canvas baseChart [data]="consumoMesData" [options]="consumoMesChartOptions" [type]="consumoMesChart"></canvas>
+                        <div class="grafica-porcentaje-consumo-container">
+                            <div class="title">
+                                <h3>Porcentaje de energia del medidor</h3>
+                            </div>
+                            <div class="grafica-porcentaje-canvas">
+                                <canvas baseChart [data]="porcentajeConsumoData" [options]="porcentajeConsumoOptions" [type]="porcentajeConsumoChart"></canvas>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

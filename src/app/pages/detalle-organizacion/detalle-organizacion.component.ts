@@ -1,3 +1,4 @@
+import { InformationDetalle } from './../../models/informationDetalle';
 import { SetChartOptionsService } from './../../services/set-chart-options.service';
 import { MedidorModel } from './../../models/MedidorModel';
 import { InformationModel } from './../../models/InformationModel';
@@ -26,9 +27,9 @@ export class DetalleOrganizacionComponent implements OnInit {
   organizationConsumoHistorico: OrganizationModel;
   consumoDia: OrganizationModel;
   pronosticoDia: OrganizationModel;
-  columnsTableConsumo: string[] = ['coste', 'consumoEnergia', 'valorDia', 'valorMes'];
+  columnsTableConsumo: string[] = ['tipo', 'coste', 'energiaActiva', 'energiaReactiva', 'costoActiva', 'costoReactiva', 'valorTotal'];
   columnsTableInfo: string[] = ['referencia', 'tipo', 'marca', 'icon'];
-  dataTableConsumo: MatTableDataSource<InformationModel>;
+  dataTableConsumo: MatTableDataSource<InformationDetalle>;
   dataTableInformation: MatTableDataSource<MedidorModel>;
   datePicker: string;
   fechaFiltro: Date;
@@ -61,10 +62,13 @@ export class DetalleOrganizacionComponent implements OnInit {
           font: {
             size: 16,
             family: 'Poppins'
-          }
-        }
+          },
+          textAlign: 'left',
+        },
+
       }
-    }
+    },
+
   }
 
   constructor(private route: ActivatedRoute,
@@ -86,7 +90,7 @@ export class DetalleOrganizacionComponent implements OnInit {
 
     this.consumoMesChartOptions = this.setChartsOptionsService.setLineChartOption({
       xAxisTitle: 'Dia',
-      yAxisTitle: 'Consumo kWh',
+      yAxisTitle: 'kVarh',
       layoutPosition: 'bottom',
       displayLegend: false,
       lineTension: 0.1
@@ -129,7 +133,7 @@ export class DetalleOrganizacionComponent implements OnInit {
         this.pronosticoDia = data[1];
         this.organizationConsumoHistorico = data[2];
         this.organizationConsumoTimeStamp = data[3];
-        this.dataTableConsumo.data = [this.organizationConsumoTimeStamp.information[0]];
+        this.setConsumoData();
 
         if (this.organizationConsumoTimeStamp.medidorModel) {
           this.dataTableInformation.data = [this.organizationConsumoTimeStamp.medidorModel];
@@ -149,9 +153,43 @@ export class DetalleOrganizacionComponent implements OnInit {
     })
   }
 
+  private setConsumoData() {
+    const informationDia = this.organizationConsumoTimeStamp.information.map(i => {
+      const { fecha, precioActiva, energiaActivaAcumuladaDia, energiaReactivaAcumuladaDia, costoActivaAcumuladoDia, costoReactivaAcumuladoDia } = i;
+      const information: InformationDetalle = {
+        tipo: 'Día',
+        fecha,
+        precio: precioActiva,
+        energiaActiva: energiaActivaAcumuladaDia,
+        energiaReactiva: energiaReactivaAcumuladaDia,
+        costoActiva: costoActivaAcumuladoDia,
+        costoReactiva: costoReactivaAcumuladoDia,
+        costoTotal: costoActivaAcumuladoDia + costoReactivaAcumuladoDia
+      };
+      return information;
+    })[0];
+
+    const informationMes = this.organizationConsumoTimeStamp.information.map(i => {
+      const { fecha, precioActiva, energiaActivaAcumuladoMes, costoActivaAcumuladoMes, energiaReactivaAcumuladoMes, costoReactivaAcumuladoMes } = i;
+      const information: InformationDetalle = {
+        tipo: 'Mes',
+        fecha,
+        precio:precioActiva,
+        energiaActiva: energiaActivaAcumuladoMes,
+        energiaReactiva: energiaReactivaAcumuladoMes,
+        costoActiva: costoActivaAcumuladoMes,
+        costoReactiva: costoReactivaAcumuladoMes,
+        costoTotal: costoActivaAcumuladoMes + costoReactivaAcumuladoMes
+      };
+      return information;
+    })[0];
+
+    this.dataTableConsumo.data = [informationDia, informationMes];
+  }
+
   private setChartData(data: OrganizationModel[]) {
-    const consumoActualData: number[] = data[0].information.map(i => i.potencia);
-    const consumoPromedioData: number[] = data[1].information.map(i => i.potencia);
+    const consumoActualData: number[] = data[0].information.map(i => i.potenciaActiva);
+    const consumoPromedioData: number[] = data[1].information.map(i => i.potenciaActiva);
     const labels = data[0].information.map(i => {
       const tempDate = moment(i.fecha).format('HH:mm')
       return tempDate;
@@ -165,14 +203,14 @@ export class DetalleOrganizacionComponent implements OnInit {
           borderColor: '#FF0909',
           label: 'Tiempo real',
           pointStyle: false,
-          backgroundColor:'#FF0909'
+          backgroundColor: '#FF0909'
         }, {
           data: consumoPromedioData,
           fill: false,
           borderColor: '#0C00FF',
           label: 'Pronóstico',
           pointStyle: false,
-          backgroundColor:'#0C00FF'
+          backgroundColor: '#0C00FF'
         }
       ],
       labels: labels
@@ -181,7 +219,6 @@ export class DetalleOrganizacionComponent implements OnInit {
 
   private setPotenciaReactivaData(data: OrganizationModel[]) {
     const consumoActualData: number[] = data[0].information.map(i => i.potenciaReactiva);
-    const consumoPromedioData: number[] = data[1].information.map(i => i.potenciaReactiva);
     const labels = data[0].information.map(i => {
       const tempDate = moment(i.fecha).format('HH:mm')
       return tempDate;
@@ -197,14 +234,6 @@ export class DetalleOrganizacionComponent implements OnInit {
           pointStyle: false,
           pointBackgroundColor: '#00FF87',
           backgroundColor: '#00FF87'
-        }, {
-          data: consumoPromedioData,
-          fill: false,
-          borderColor: '#726BFF',
-          label: 'Pronóstico',
-          pointStyle: false,
-          pointBackgroundColor: '#726BFF',
-          backgroundColor:'#726BFF'
         }
       ],
       labels: labels
@@ -215,7 +244,7 @@ export class DetalleOrganizacionComponent implements OnInit {
     const now = new Date();
     this.fechaFiltro = new Date(this.datePicker);
     this.fechaFiltro.setHours(now.getHours() - 5, now.getMinutes(), 0);
-    this.fechaFiltro.setDate(this.fechaFiltro.getDate()-1)
+    this.fechaFiltro.setDate(this.fechaFiltro.getDate() - 1)
 
     const tempInformation = this.organizationConsumoHistorico.information.filter(x => {
       const tempFecha = moment(x.fecha);
@@ -245,7 +274,7 @@ export class DetalleOrganizacionComponent implements OnInit {
   }
 
   private setConsumoMesChartData(data: OrganizationModel) {
-    const consumoMesData: number[] = data.information.map(i => i.potencia);
+    const consumoMesData: number[] = data.information.map(i => i.potenciaActiva);
     const labels = data.information.map(i => {
       const tempData = moment(i.fecha).format('MM/DD')
       return tempData
@@ -266,13 +295,13 @@ export class DetalleOrganizacionComponent implements OnInit {
   }
 
   private setPorcentajesData(organizacionActual: OrganizationModel, Cluster: OrganizationModel) {
-    const consumoResto = Cluster.information[0].energiaAcumuladaDia - organizacionActual.information[0].energiaAcumuladaDia;
+    const consumoResto = Cluster.information[0].energiaActivaAcumuladaDia - organizacionActual.information[0].energiaActivaAcumuladaDia;
     this.porcentajeConsumoData = {
       datasets: [{
-        data: [organizacionActual.information[0].energiaAcumuladaDia, consumoResto],
+        data: [organizacionActual.information[0].energiaActivaAcumuladaDia, consumoResto],
         backgroundColor: ["#0C00FF", "#FF0909"]
       }],
-      labels: ['Medidor actual', 'Resto de los medidores']
+      labels: [['Medidor', 'actual'], ['Resto de los', 'medidores']]
     }
   }
 
