@@ -11,7 +11,6 @@ export class SetChartOptionsService {
   constructor() { }
 
   public setLineChartOption(optionsParamaters: ChartOptionsParamaters): ChartConfiguration['options'] {
-    debugger;
     this.lineChartOptions = {
       responsive: optionsParamaters.responsive ? optionsParamaters.responsive : true,
       maintainAspectRatio: optionsParamaters.maintainAspectRatio ? optionsParamaters.maintainAspectRatio : false,

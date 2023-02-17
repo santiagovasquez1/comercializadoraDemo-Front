@@ -15,7 +15,7 @@ import { SelectCustomComponent } from './select-custom/select-custom.component';
     ToolbarComponent,
     InputTimeComponent,
     RelojComponent,
-    SelectCustomComponent,
+    SelectCustomComponent
   ],
   imports: [
     CommonModule,

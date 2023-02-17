@@ -29,35 +29,28 @@
                         <input type="text" class="" formControlName="ID">
                     </div>
 
-                    <div class="field">
+                    <div class="field-custom">
                         <label>Fecha</label>
-                        <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha">
-                    </div>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <input matInput [matDatepicker]="picker" placeholder="MM/DD/AÑO" formControlName="Fecha">
+                            <mat-datepicker #picker></mat-datepicker>
+                            <button mat-icon-button (click)="picker.open()" color="primary">
+                                <mat-icon>calendar_today</mat-icon>
+                            </button>
+                        </mat-form-field>
+                          
 
-                    <!-- <app-input-time></app-input-time> -->
+                        <!-- <label>Fecha</label>
+                        <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha"> -->
+                    </div>
 
                     <div class="field">
                         <label>Hora</label>
                         <input type="time" class="" placeholder="Hora" formControlName="Hora">
                     </div>
 
-                    <!-- <div class="field">
-                        <label>Área</label>
-                        <select class="" formControlName="Area">
-                            <option [value]="'todas'">Todas</option>
-                            <option *ngFor="let area of areasFilter" [value]="area">{{area}}</option>
-                        </select>
-                    </div> -->
 
                     <app-select-custom [options]="dataAreaSelect" (selected)="onAreaSelected($event)"></app-select-custom>
-
-                    <!-- <div class="field">
-                        <label>Municipio</label>
-                        <select class="" formControlName="Municipio">
-                            <option [value]="'todos'">Todos</option>
-                            <option *ngFor="let municipio of municipioFilter" [value]="municipio">{{municipio}}</option>
-                        </select>
-                    </div> -->
 
                     <app-select-custom [options]="dataMunicipiosSelect" (selected)="onMunicipioSelected($event)"></app-select-custom>
 
@@ -97,6 +90,14 @@
                             <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo > element.statusMonitor.bajoConsumo && element.consumo < element.statusMonitor.altoConsumo" class="icon-state"> {{element.consumo}}
                         </mat-cell>
                     </ng-container>
+                    <ng-container matColumnDef="potenciaActiva">
+                        <mat-header-cell *matHeaderCellDef>Potencia activa</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.potenciaActiva}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="potenciaReactiva">
+                        <mat-header-cell *matHeaderCellDef>Potencias reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.potenciaReactiva}}</mat-cell>
+                    </ng-container>
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                         <mat-cell *matCellDef="let element">
@@ -112,7 +113,6 @@
                 <div class="container-pagination">
                     <span>Items por página.</span>
                     <select (change)="setPageSize($event)" class="select-pagination">
-                    <option value="2">2</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="25">25</option>
@@ -159,9 +159,9 @@
             </div>
         </div>
 
-        <div class="mapa">
+        <!-- <div class="mapa">
             <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
-        </div>
+        </div> -->
 
     </div>
 </div>
