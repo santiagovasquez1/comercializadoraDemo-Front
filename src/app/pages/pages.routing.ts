@@ -7,7 +7,8 @@ import { LoginComponent } from './login/login.component';
 import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
+    // { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: "login", component: LoginComponent },
     {
         path: 'main',
