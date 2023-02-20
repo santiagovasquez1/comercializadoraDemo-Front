@@ -1,16 +1,19 @@
 <div class="container-toolbar">
+    <button mat-icon-button *ngIf="showOptions" (click)="onOpenClick()">
+            <mat-icon>menu</mat-icon>
+    </button>
     <div class="input-toolbar">
         <input type="text" placeholder="Buscar...">
     </div>
-    
+
     <div class="notificacion">
         <img src="../../../assets/icons/campanaNotificacion.svg" alt="">
         <div>
             <img src="../../../assets/icons/alertaNotificacion.svg" alt="" id="numero-notificacion">
         </div>
-        
+
     </div>
-    
+
     <div class="user-toolbar">
         <div class="userName">Andrés Cano</div>
         <div class="logo">

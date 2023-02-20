@@ -41,6 +41,13 @@ ul {
     overflow-x: hidden;
     overflow-y: hidden;
     box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.08), 0px 12px 20px rgba(0, 0, 0, 0.07);
+    border: none;
+    border-bottom: 4px solid;
+    border-image: linear-gradient(90deg, #00FF87 3.85%, rgba(12, 0, 255, 0.77811) 50.49%, #CD00FF 100%) 1;
+}
+
+.main-container mat-drawer-content {
+    padding-bottom: 20px;
 }
 
 .input-style {
@@ -48,6 +55,18 @@ ul {
     border: 1px solid $azul_principal;
     border-radius: 4px;
     padding: 8px 12px;
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1025px;
+    overflow: auto;
+}
+
+.mvm-table {
+    width: 100%;
+    min-width: 840px !important;
+    margin: 0px auto;
 }
 
 button {
@@ -270,7 +289,7 @@ button {
     width: calc(100vw - 330px - 1px);
     height: calc(100vh - 76px - 1px);
     display: block;
-    padding-bottom: 50px;
+    // padding-bottom: 50px;
     box-sizing: border-box;
     overflow-x: auto;
     overflow-y: auto;
@@ -439,8 +458,6 @@ canvas {
     width: 100%;
     height: 100%;
     background-color: #FFFFFF;
-    border-bottom: 4px solid;
-    border-image: linear-gradient(90deg, #00FF87 3.85%, rgba(12, 0, 255, 0.77811) 50.49%, #CD00FF 100%) 1;
     .logo {
         display: flex;
         width: 100%;
@@ -555,6 +572,7 @@ canvas {
         width: 90%;
         max-width: 800px;
         margin-left: 18.64px;
+        transition: 200ms all;
         input {
             background-image: url(assets/icons/buscar.svg);
             background-position: calc(100% - 10px) center;
@@ -828,23 +846,23 @@ select {
     }
 }
 
-.full-container {
-    height: calc(100vh - 76px);
-    background-color: #F6F6FF;
-    overflow-x: auto;
-    overflow-y: auto;
-}
-
 .container-pagination {
-    display: grid;
-    grid-template-columns: 60px auto 40px 40px 150px 40px 40px;
-    justify-content: end;
+    // display: grid;
+    // grid-template-columns: 60px auto 40px 40px 150px 40px 40px;
+    // align-items: center;
+    // justify-content: end;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 20px;
+    padding-bottom: 20px;
     background-color: white;
     box-shadow: 0px 3px 4px rgb(0 0 0 / 8%), 0px 12px 20px rgb(0 0 0 / 7%);
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     padding-right: 10px;
-    align-items: center;
     span {
         font-size: 11px;
     }
@@ -988,6 +1006,7 @@ app-select-custom {
     max-height: 532px;
     padding-left: 20px;
     padding-right: 23px;
+    margin-bottom: 30px;
     .card {
         overflow-x: hidden !important;
     }
@@ -1136,4 +1155,99 @@ app-select-custom {
 
 .mat-calendar-table-header th {
     color: $azul_principal;
+}
+
+@media (max-width: 767.98px) {
+    .container-toolbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 20px;
+        padding-right: 10px;
+        column-gap: 10px;
+        .input-toolbar {
+            width: 40%;
+            min-width: 96.3px;
+        }
+    }
+    .custom-container {
+        width: 100%;
+    }
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+    }
+    .notificaciones {
+        height: 315px;
+    }
+    .canvas-card {
+        height: 525px;
+    }
+    .meter-card {
+        height: 450px;
+    }
+    .graficas-card-detalle-container {
+        height: fit-content;
+        .pronosticos-charts-container .canvas-container {
+            display: flex;
+            flex-direction: column;
+            .grafica-consumo-dia-canvas,
+            .grafica-consumo-mes-canvas {
+                height: 300px;
+            }
+            .graficas-mes-porcentaje-container {
+                display: flex;
+                flex-direction: column;
+                height: fit-content;
+            }
+        }
+    }
+    .field-custom {
+        width: 100%;
+    }
+    .container-puntos-medida {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        padding-right: 23px;
+        .text-header {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+    }
+    .tabla-filters {
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+        width: 100%;
+        .filter {
+            height: fit-content;
+            .fields {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                row-gap: 20px;
+                .field {
+                    width: 100%;
+                }
+                .field-custom {
+                    margin-bottom: 20px;
+                }
+                button {
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 422px) {
+    .container-toolbar .input-toolbar {
+        display: none;
+    }
 }
