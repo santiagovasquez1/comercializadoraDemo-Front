@@ -12,12 +12,7 @@
 
         <div class="text-header">
             <span class="title">Medidores</span>
-            <span class="departamento">{{departamento}}</span>
-            <div class="ultima-vez">
-                <span>Hora de última actualización de datos : <b>{{horaUltimaDatos}}</b> </span>
-                <img src="../../../../assets/icons/historico.svg" alt="">
-            </div>
-
+            <span class="departamento">{{ubicacionMedidores}}</span>
         </div>
 
         <div class="tabla-filters">
@@ -38,10 +33,6 @@
                                 <mat-icon>calendar_today</mat-icon>
                             </button>
                         </mat-form-field>
-                          
-
-                        <!-- <label>Fecha</label>
-                        <input type="date" class="" placeholder="DD/MM/AÑO" formControlName="Fecha"> -->
                     </div>
 
                     <div class="field">
@@ -49,19 +40,31 @@
                         <input type="time" class="" placeholder="Hora" formControlName="Hora">
                     </div>
 
-
                     <app-select-custom [options]="dataAreaSelect" (selected)="onAreaSelected($event)"></app-select-custom>
 
                     <app-select-custom [options]="dataMunicipiosSelect" (selected)="onMunicipioSelected($event)"></app-select-custom>
 
+                    
+                    <app-select-custom [options]="dataDepartamentosSelect" (selected)="onDepartamentoSelected($event)"></app-select-custom>
+                    
                     <div class="field">
                         <label>Dirección</label>
                         <input type="text" class="" formControlName="Direccion">
                     </div>
 
+                    
+
                     <button class="black-button" (click)="onFilter()">Buscar</button>
 
                 </form>
+            </div>
+
+            <div class="updated-data">
+                <div class="content-updated">
+                    <span class="text-small">Hora de última actualización de datos</span>
+                    <span class="text-large">{{horaUltimaDatos}}</span>
+                    <span class="text-small">{{fechaUltimaDatos}}</span>
+                </div>
             </div>
 
             <div class="container-tabla">
@@ -82,21 +85,21 @@
                         <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
                         <mat-cell *matCellDef="let element">{{element.dirLocal}}</mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="consumo">
-                        <mat-header-cell *matHeaderCellDef>Consumo</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.consumo <= element.statusMonitor.bajoConsumo" class="icon-state">
-                            <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.consumo >= element.statusMonitor.altoConsumo" class="icon-state">
-                            <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.consumo > element.statusMonitor.bajoConsumo && element.consumo < element.statusMonitor.altoConsumo" class="icon-state"> {{element.consumo}}
-                        </mat-cell>
-                    </ng-container>
+
                     <ng-container matColumnDef="potenciaActiva">
                         <mat-header-cell *matHeaderCellDef>Potencia activa</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.potenciaActiva}}</mat-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.potenciaActiva <= element.statusMonitor.bajoConsumo" class="icon-state">
+                            <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaActiva >= element.statusMonitor.altoConsumo" class="icon-state">
+                            <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.potenciaActiva > element.statusMonitor.bajoConsumo && element.potenciaActiva < element.statusMonitor.altoConsumo" class="icon-state"> 
+                            {{element.potenciaActiva}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="potenciaReactiva">
                         <mat-header-cell *matHeaderCellDef>Potencias reactiva</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.potenciaReactiva}}</mat-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaReactiva > element.potenciaActiva * 0.5" class="icon-state">
+                            {{element.potenciaReactiva}}
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="acciones">
                         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
@@ -158,10 +161,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div class="mapa">
-            <app-mapa-colombia (departamento)="changeDpto($event)"></app-mapa-colombia>
-        </div> -->
 
     </div>
 </div>
