@@ -1,4 +1,4 @@
-<div class="full-container">
+<div class="custom-container">
     <div class="container-puntos-medida">
 
         <app-reloj></app-reloj>
@@ -44,15 +44,15 @@
 
                     <app-select-custom [options]="dataMunicipiosSelect" (selected)="onMunicipioSelected($event)"></app-select-custom>
 
-                    
+
                     <app-select-custom [options]="dataDepartamentosSelect" (selected)="onDepartamentoSelected($event)"></app-select-custom>
-                    
+
                     <div class="field">
                         <label>Dirección</label>
                         <input type="text" class="" formControlName="Direccion">
                     </div>
 
-                    
+
 
                     <button class="black-button" (click)="onFilter()">Buscar</button>
 
@@ -68,60 +68,61 @@
             </div>
 
             <div class="container-tabla">
-                <mat-table #table [dataSource]="dataSource" class="mvm-table">
-                    <ng-container matColumnDef="ID">
-                        <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="area">
-                        <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-170">{{element.nameArea}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="municipio">
-                        <mat-header-cell *matHeaderCellDef class="celda-90M">Municipio</mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="celda-90M">{{element.nameMunicipio}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="direccion">
-                        <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.dirLocal}}</mat-cell>
-                    </ng-container>
+                <div class="table-container">
+                    <mat-table #table [dataSource]="dataSource" class="mvm-table">
+                        <ng-container matColumnDef="ID" sticky>
+                            <mat-header-cell *matHeaderCellDef class="celda-170">ID</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="celda-170">{{element.localId}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="area">
+                            <mat-header-cell *matHeaderCellDef class="celda-170">Area</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="celda-170">{{element.nameArea}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="municipio">
+                            <mat-header-cell *matHeaderCellDef class="celda-90M">Municipio</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="celda-90M">{{element.nameMunicipio}}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="direccion">
+                            <mat-header-cell *matHeaderCellDef>Dirección</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{element.dirLocal}}</mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="potenciaActiva">
-                        <mat-header-cell *matHeaderCellDef>Potencia activa</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.potenciaActiva <= element.statusMonitor.bajoConsumo" class="icon-state">
-                            <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaActiva >= element.statusMonitor.altoConsumo" class="icon-state">
-                            <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.potenciaActiva > element.statusMonitor.bajoConsumo && element.potenciaActiva < element.statusMonitor.altoConsumo" class="icon-state"> 
-                            {{element.potenciaActiva}}</mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="potenciaReactiva">
-                        <mat-header-cell *matHeaderCellDef>Potencias reactiva</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaReactiva > element.potenciaActiva * 0.5" class="icon-state">
-                            {{element.potenciaReactiva}}
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="acciones">
-                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="" (click)="OnVerDetalle(element,1)">
-                            <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="" (click)="OnVerDetalle(element,2)">
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="potenciaActiva">
+                            <mat-header-cell *matHeaderCellDef>Potencia activa</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.potenciaActiva <= element.statusMonitor.bajoConsumo" class="icon-state">
+                                <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaActiva >= element.statusMonitor.altoConsumo" class="icon-state">
+                                <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.potenciaActiva > element.statusMonitor.bajoConsumo && element.potenciaActiva < element.statusMonitor.altoConsumo" class="icon-state"> {{element.potenciaActiva}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="potenciaReactiva">
+                            <mat-header-cell *matHeaderCellDef>Potencias reactiva</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaReactiva > element.potenciaActiva * 0.5" class="icon-state"> {{element.potenciaReactiva}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img class="icon-medidor" src="../../../../assets/icons/medidor de energía.svg" alt="" (click)="OnVerDetalle(element,1)">
+                                <img class="icon-eye" src="../../../../assets/icons/eye.svg" alt="" (click)="OnVerDetalle(element,2)">
+                            </mat-cell>
+                        </ng-container>
 
-                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-                    <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
-                </mat-table>
-
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                        <mat-row class="fadeIn" *matRowDef="let row; columns:displayedColumns"></mat-row>
+                    </mat-table>
+                </div>
                 <div class="container-pagination">
-                    <span>Items por página.</span>
-                    <select (change)="setPageSize($event)" class="select-pagination">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="100">100</option>
-                    </select>
-
+                    <div class="items-peer-pages">
+                        <span>Items por página.</span>
+                        <select (change)="setPageSize($event)" class="select-pagination">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
 
                     <div (click)="firstPage()" class="arrow">
                         <img src="../../../../assets/icons/Izquierda.svg" alt="" *ngIf="!(this.pageCount <= 0)" [ngClass]="{'disabledArrow':(this.pageCount <= 0), 'enabledArrow':!(this.pageCount <= 0)}">

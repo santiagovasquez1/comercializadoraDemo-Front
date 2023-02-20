@@ -11,39 +11,41 @@
     </div>
     <div class="organization-detalle-container">
         <div class="card">
-            <mat-table #tableConsumo class="mvm-table" [dataSource]="dataTableConsumo">
-                <ng-container matColumnDef="tipo">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.tipo}}</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="coste">
-                    <mat-header-cell *matHeaderCellDef>Costo kWh</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.precio | number:'1.1-2'}}$</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="energiaActiva">
-                    <mat-header-cell *matHeaderCellDef>Consumo E. activa</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.energiaActiva | number:'1.1-2'}}kWH</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="energiaReactiva">
-                    <mat-header-cell *matHeaderCellDef>Consumo E. reactiva</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.energiaReactiva | number:'1.1-2'}}kVarh</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="costoActiva">
-                    <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.costoActiva | number:'1.1-2'}}$</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="costoReactiva">
-                    <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.costoReactiva | number:'1.1-2'}}$</mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="valorTotal">
-                    <mat-header-cell *matHeaderCellDef>Valor total de energía</mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.costoTotal | number:'1.1-2'}}$</mat-cell>
-                </ng-container>
+            <div class="table-container">
+                <mat-table #tableConsumo class="mvm-table" [dataSource]="dataTableConsumo">
+                    <ng-container matColumnDef="tipo" sticky>
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.tipo}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="coste">
+                        <mat-header-cell *matHeaderCellDef>Costo kWh</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.precio | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="energiaActiva">
+                        <mat-header-cell *matHeaderCellDef>Consumo E. activa</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaActiva | number:'1.1-2'}}kWH</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="energiaReactiva">
+                        <mat-header-cell *matHeaderCellDef>Consumo E. reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaReactiva | number:'1.1-2'}}kVarh</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoActiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoActiva | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoReactiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoReactiva | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="valorTotal">
+                        <mat-header-cell *matHeaderCellDef>Valor total de energía</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoTotal | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
 
-                <mat-header-row *matHeaderRowDef="columnsTableConsumo; sticky: true"></mat-header-row>
-                <mat-row class="fadeIn" *matRowDef="let row; columns:columnsTableConsumo"></mat-row>
-            </mat-table>
+                    <mat-header-row *matHeaderRowDef="columnsTableConsumo; sticky: true"></mat-header-row>
+                    <mat-row class="fadeIn" *matRowDef="let row; columns:columnsTableConsumo"></mat-row>
+                </mat-table>
+            </div>
         </div>
         <div class="card" *ngIf="request.TypeOfOrganization == 2">
             <mat-table #tableInformation class="mvm-table" [dataSource]="dataTableInformation">
