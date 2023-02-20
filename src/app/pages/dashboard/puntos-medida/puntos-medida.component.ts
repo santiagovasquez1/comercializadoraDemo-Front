@@ -28,6 +28,7 @@ export class PuntosMedidaComponent {
   fechaHora: Date;
 
   horaUltimaDatos: string;
+  fechaUltimaDatos: string;
   // currentTime: string;
 
   selectedOption: string;
@@ -35,7 +36,7 @@ export class PuntosMedidaComponent {
   filterForm: FormGroup;
   dataSource: MatTableDataSource<any>
 
-  departamento: string = 'Colombia';
+  departamento: string = 'Todos';
 
   organizaciones: OrganizationDto[] = [];
 
@@ -47,8 +48,8 @@ export class PuntosMedidaComponent {
 
   areasFilter: string[] = [];
   municipioFilter: string[] = [];
+  departamentoFilter: string[] = [];
 
-  isFilterMap: boolean = false;
 
   isFilterDate: boolean = false;
   isFilterHour: boolean = false;
@@ -69,9 +70,9 @@ export class PuntosMedidaComponent {
 
   dataMunicipiosSelect: selectCustom = {};
   dataAreaSelect: selectCustom = {};
+  dataDepartamentosSelect: selectCustom = {};
 
-    
-
+  ubicacionMedidores: string = '';
 
   time = '';
 
@@ -79,7 +80,7 @@ export class PuntosMedidaComponent {
   @ViewChild('table', { static: true }) table: MatTable<any>;
   @ViewChild('selectHora') mySelect: ElementRef;
 
-  displayedColumns: string[] = ['ID', 'area', 'municipio', 'direccion', 'consumo', 'potenciaActiva', 'potenciaReactiva', 'acciones']
+  displayedColumns: string[] = ['ID', 'area', 'municipio', 'direccion', 'potenciaActiva', 'potenciaReactiva', 'acciones']
 
   constructor(private fb: FormBuilder,
     private killerAppService: KillerAppService,
@@ -89,17 +90,15 @@ export class PuntosMedidaComponent {
     private router: Router) {
     this.dataSource = new MatTableDataSource();
     const now = new Date();
-    this.fechaHora = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
+    // this.fechaHora = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
+    this.fechaHora = new Date();
+    this.fechaHora.setHours(this.fechaHora .getHours() - 5)
   }
 
-
   ngOnInit() {
-
     this.loadOrganizations();
     this.initFilterForm();
   }
-
-
 
   private loadOrganizations() {
     this.spinner.show();
@@ -118,7 +117,6 @@ export class PuntosMedidaComponent {
     })
   }
 
-
   initFilterForm() {
     this.filterForm = this.fb.group({
       ID: [''],
@@ -129,7 +127,6 @@ export class PuntosMedidaComponent {
       Direccion: ['']
     });
   }
-
   getloadInfo() {
 
     this.spinner.show();
@@ -142,19 +139,12 @@ export class PuntosMedidaComponent {
     const hours = parseInt(this.hora.split(":")[0]);
     const minutes = parseInt(this.hora.split(":")[1]);
 
-    if (!this.isFilterMap) {
-      this.isFilterDate = this.fecha.toString() == 'Invalid Date' ? false : true;
-      this.isFilterHour = this.hora.toString() == '' ? false : true;
-    }
-    else {
-      this.isFilterDate = false;
-      this.isFilterHour = false;
-    }
+    this.isFilterDate = this.fecha.toString() == 'Invalid Date' ? false : true;
+    this.isFilterHour = this.hora.toString() == '' ? false : true;
 
     this.fechaHora = this.isFilterDate == true ? this.fecha : this.fechaHora;
 
     if (this.isFilterHour) {
-
       this.fechaHora.setHours(hours + 19, minutes);
       this.fechaHora.setDate(this.fechaHora.getDate()-1)
     }
@@ -180,11 +170,13 @@ export class PuntosMedidaComponent {
 
         console.log(response[0].nodes[0].nodes[0].information[0].fecha)
 
-        const format = 'h:mm a';
+        const formatHora = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
 
-        this.horaUltimaDatos = moment(dateString).format(format);
+        this.horaUltimaDatos = moment(dateString).format(formatHora);
 
+        const formatDate = 'D/M/YYYY'
+        this.fechaUltimaDatos = moment(dateString).format(formatDate);
 
         let arrayMap: TablaMedidores[] = [];
 
@@ -216,39 +208,20 @@ export class PuntosMedidaComponent {
         });
 
         let resultArray = arrayMap;
+        this.ubicacionMedidores = this.departamento == 'Todos' ? 'Colombia' : this.departamento;
 
-        if (this.isFilterMap) {
-          resultArray = this.filterTable('nameDpto', this.departamento, resultArray, true);
-
-          this.filterForm.reset();
-          this.initFilterForm()
-
-        }
-        else {
-
-          let result = resultArray.filter(item => item.nameMunicipio === this.municipio);
-          this.departamento = result[0]?.nameDpto
-          this.departamento = this.departamento !== undefined || null || '' ? this.departamento = result[0].nameDpto : 'Colombia';
-
-          resultArray = this.filterTable('nameArea', this.area, resultArray, false);
-          resultArray = this.filterTable('nameMunicipio', this.municipio, resultArray, false);
-          resultArray = this.filterTable('dirLocal', this.dirLocal, resultArray, false);
-          resultArray = this.filterTable('localId', this.localId, resultArray, false);
-
-        }
+        resultArray = this.filterTable('nameDpto', this.departamento, resultArray, true);
+        resultArray = this.filterTable('nameArea', this.area, resultArray, false);
+        resultArray = this.filterTable('nameMunicipio', this.municipio, resultArray, false);
+        resultArray = this.filterTable('dirLocal', this.dirLocal, resultArray, false);
+        resultArray = this.filterTable('localId', this.localId, resultArray, false);
 
         this.setDataTable(resultArray);
-        // this.dataSource.data = resultArray;
-
-
         this.fullData = resultArray;
-
         
         this.maxPageNumber = Math.ceil(this.fullData.length / this.pageSize);
         this.pageCount = 0;
         this.setDataTable(this.fullData);
-
-        // this.dataSource.paginator = this.paginator;
         this.table.renderRows();
 
         this.getInfoFiltros();
@@ -264,11 +237,8 @@ export class PuntosMedidaComponent {
   }
 
   onFilter() {
-    this.isFilterMap = false;
     this.getloadInfo();
-
   }
-
 
   filterTable(columFilter: string, valueFilter: any, array: any[], useLowerCase: boolean) {
     let arrayFiltered = [];
@@ -278,7 +248,6 @@ export class PuntosMedidaComponent {
     }
     else {
       arrayFiltered = valueFilter !== '' && valueFilter !== 'Todos' && valueFilter !== 'Todas' ? array.filter(item => item[columFilter].toLowerCase() == valueFilter.toLowerCase()) : array;
-
     }
 
     return arrayFiltered;
@@ -298,34 +267,15 @@ export class PuntosMedidaComponent {
       }
     });
 
+    this.fullData.map(obj => {
+      if (!this.departamentoFilter.includes(obj.nameDpto)) {
+        this.departamentoFilter.push(obj.nameDpto);
+      }
+    });
 
-    if(!this.isFilterMap){
-
-
-      this.setMunicipioSelect('Todos',this.municipioFilter,this.municipio, false);
-
-      this.setAreaSelect('Todas',this.areasFilter,this.area, false);
-
-    }
-
-  }
-
-  changeDpto(newItem: string) {
-
-    this.setMunicipioSelect('Todos',this.municipioFilter,'', false);
-    this.setAreaSelect('Todas',this.areasFilter,'', false);
-
-    this.municipio = '';
-    this.area = '';
-
-
-    this.departamento = newItem;
-    this.isFilterMap = true;
-
-    this.pageCount = 0;
-    this.setDataTable(this.fullData);
-
-    this.getloadInfo();
+    this.setMunicipioSelect('Todos',this.municipioFilter,this.municipio, false);
+    this.setDepartamentoSelect('Todos',this.departamentoFilter,this.departamento, false);
+    this.setAreaSelect('Todas',this.areasFilter,this.area, false);
   }
 
   private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {
@@ -409,6 +359,10 @@ export class PuntosMedidaComponent {
     this.municipio = data;
   }
 
+  onDepartamentoSelected(data: string){
+    this.departamento = data;
+  }
+
   onAreaSelected(data: string){
     this.area = data;
   }
@@ -435,6 +389,18 @@ export class PuntosMedidaComponent {
       disabled: _disabled
     }
     this.dataMunicipiosSelect = municipios;
+  }
+
+  setDepartamentoSelect(_defaultValue: string,_stringOptions: any[],_currentValue: string, _disabled: boolean){
+
+    let departamento: selectCustom = {
+      title: 'Departamentos',
+      defaultValue: _defaultValue,
+      stringOptions: _stringOptions,
+      currentValue: _currentValue,
+      disabled: _disabled
+    }
+    this.dataDepartamentosSelect = departamento;
   }
 
 }
