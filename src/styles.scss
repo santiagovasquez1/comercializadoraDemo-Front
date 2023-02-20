@@ -659,7 +659,7 @@ select {
 .container-puntos-medida {
     display: grid;
     grid-template-columns: minmax(0, 1400px) 35%;
-    grid-template-rows: 30px 5% 150px auto;
+    grid-template-rows: 137px 5% 150px auto;
     padding-left: 20px;
     app-reloj {
         grid-column: 1/3;
