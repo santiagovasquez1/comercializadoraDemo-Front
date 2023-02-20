@@ -92,13 +92,14 @@
                             <mat-cell *matCellDef="let element">
                                 <img src="../../../../assets/icons/stateBlue.svg" alt="" *ngIf="element.potenciaActiva <= element.statusMonitor.bajoConsumo" class="icon-state">
                                 <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaActiva >= element.statusMonitor.altoConsumo" class="icon-state">
-                                <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.potenciaActiva > element.statusMonitor.bajoConsumo && element.potenciaActiva < element.statusMonitor.altoConsumo" class="icon-state"> {{element.potenciaActiva}}
+                                <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.potenciaActiva > element.statusMonitor.bajoConsumo && element.potenciaActiva < element.statusMonitor.altoConsumo" class="icon-state"> {{element.potenciaActiva | number:'.2-2'}} kW
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="potenciaReactiva">
                             <mat-header-cell *matHeaderCellDef>Potencias reactiva</mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaReactiva > element.potenciaActiva * 0.5" class="icon-state"> {{element.potenciaReactiva}}
+                                <img src="../../../../assets/icons/stateGreen.svg" alt="" *ngIf="element.potenciaReactiva <= element.potenciaActiva * 0.5" class="icon-state">
+                                <img src="../../../../assets/icons/stateRed.svg" alt="" *ngIf="element.potenciaReactiva > element.potenciaActiva * 0.5" class="icon-state"> {{element.potenciaReactiva | number:'1.1-2'}} kVAR
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="acciones">
