@@ -29,7 +29,6 @@ export class PuntosMedidaComponent {
 
   horaUltimaDatos: string;
   fechaUltimaDatos: string;
-  // currentTime: string;
 
   selectedOption: string;
   options = ['Option 1', 'Option 2', 'Option 3'];
@@ -90,9 +89,7 @@ export class PuntosMedidaComponent {
     private router: Router) {
     this.dataSource = new MatTableDataSource();
     const now = new Date();
-    // this.fechaHora = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
-    this.fechaHora = new Date();
-    this.fechaHora.setHours(this.fechaHora .getHours() - 5)
+    this.fechaHora = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
   }
 
   ngOnInit() {
@@ -145,9 +142,12 @@ export class PuntosMedidaComponent {
     this.fechaHora = this.isFilterDate == true ? this.fecha : this.fechaHora;
 
     if (this.isFilterHour) {
-      this.fechaHora.setHours(hours + 19, minutes);
-      this.fechaHora.setDate(this.fechaHora.getDate()-1)
+      this.fechaHora.setHours(hours - 5, minutes);
     }
+    else if(this.isFilterDate){
+      this.fechaHora.setHours(18,45);
+    }
+   
 
     let request: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
@@ -168,7 +168,6 @@ export class PuntosMedidaComponent {
         const iteratoPromedios = (response[1] as OrganizationModel).nodes;
         const monitoreoTime = response[2] as StatusMonitor;
 
-        console.log(response[0].nodes[0].nodes[0].information[0].fecha)
 
         const formatHora = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
