@@ -24,11 +24,11 @@
                     </ng-container>
                     <ng-container matColumnDef="costoActiva">
                         <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.information[0].energiaReactivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].costoActivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="costoReactiva">
                         <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.information[0].costoActivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].energiaReactivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="valorTotal">
                         <mat-header-cell *matHeaderCellDef>Valor total a pagar</mat-header-cell>
@@ -40,7 +40,7 @@
                     </ng-container>
                     <ng-container matColumnDef="estado">
                         <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                        <mat-cell *matCellDef="let element"></mat-cell>
+                        <mat-cell *matCellDef="let element">{{estadoEmpresa}}</mat-cell>
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="columnsTableConsumo; sticky: true"></mat-header-row>
@@ -48,7 +48,7 @@
                 </mat-table>
             </div>
             <div class="container-buttons">
-                <button class="black-button btn-pay">Pagar</button>
+                <button class="black-button btn-pay" (click)="OnPagar('','Empresa')">Pagar</button>
                 <button class="white-button" (click)="OnVerAreas()">Mostrar áreas</button>
             </div>
         </div>
@@ -86,13 +86,13 @@
                     </ng-container>
                     <ng-container matColumnDef="estado">
                         <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                        <mat-cell *matCellDef="let element"></mat-cell>
+                        <mat-cell *matCellDef="let element">{{element.estado}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="actions">
                         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <img class="icon-pay" src="../../../assets/icons/Dinero.svg" alt="" (click)="OnPagarArea(element)">
-                            <img class="icon-ojo" src="../../../../assets/icons/Ojo.svg" alt="" (click)="OnVerLocal(element)">
+                            <img class="icon-pay" src="../../../assets/icons/Dinero.svg" alt="" (click)="OnPagar(element,'Area')" matTooltip="Pagar">
+                            <img class="icon-ojo" src="../../../../assets/icons/Ojo.svg" alt="" (click)="OnVerLocal(element)" matTooltip="Ver locales">
                         </mat-cell>
                     </ng-container>
 
@@ -135,12 +135,12 @@
                     </ng-container>
                     <ng-container matColumnDef="estado">
                         <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                        <mat-cell *matCellDef="let element"></mat-cell>
+                        <mat-cell *matCellDef="let element">{{element.estado}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="actions">
                         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <img class="" src="../../../assets/icons/Dinero.svg" alt="" (click)="OnPagarLoca(element)">
+                            <img class="" src="../../../assets/icons/Dinero.svg" alt="" (click)="OnPagar(element,'Local')" matTooltip="Pagar">
                         </mat-cell>
                     </ng-container>
 

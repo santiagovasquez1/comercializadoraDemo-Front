@@ -15,6 +15,7 @@ import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/m
 import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-organizacion.component';
 import { PagosComponent } from './pagos/pagos.component';
 import { DatePipe } from '@angular/common';
+import { PagarCuentaComponent } from './pagos/pagar-cuenta/pagar-cuenta.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -24,6 +25,7 @@ import { DatePipe } from '@angular/common';
     MapaColombiaComponent,
     DetalleOrganizacionComponent,
     PagosComponent,
+    PagarCuentaComponent,
     
   ],
   imports: [
