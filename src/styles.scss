@@ -129,6 +129,17 @@ button {
     }
 }
 
+.blue-button {
+    background: $azul_secundario;
+    color: white;
+    cursor: pointer;
+    border: none !important;
+    &:hover {
+        background-color: $azul_principal;
+        border-color: $azul_secundario;
+    }
+}
+
 .login-container {
     width: 100%;
     height: 100%;
@@ -1242,6 +1253,43 @@ app-select-custom {
                 margin-right: 10px;
             }
         }
+    }
+}
+
+.container-pagar{
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 20% 20% 40% 20%;
+    padding: 12px;
+
+    .icon{
+
+        img{
+            cursor: pointer;
+        }
+        
+    }
+
+    .title{
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 36px;
+        color: $azul_principal;
+    }
+
+    .text{
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        color: #000000;
+    }
+
+    .button{
+        display: flex;
+        justify-content: end;
     }
 }
 

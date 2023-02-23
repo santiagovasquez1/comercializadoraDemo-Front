@@ -12,7 +12,8 @@ import { InformationDetalle } from 'src/app/models/informationDetalle';
 import { DatePipe } from '@angular/common';
 import { InformationModel } from 'src/app/models/InformationModel';
 import { PagosModel } from 'src/app/models/pagosModel';
-
+import { MatDialog } from '@angular/material/dialog';
+import { PagarCuentaComponent } from './pagar-cuenta/pagar-cuenta.component';
 
 
 @Component({
@@ -38,6 +39,8 @@ export class PagosComponent {
   isShowLocales: boolean = false;
   fechaPago: Date;
 
+  estadoEmpresa: string = 'Debe';
+
   areaSelected: string = '';
 
   constructor(private route: ActivatedRoute,
@@ -45,7 +48,8 @@ export class PagosComponent {
               private spinner: NgxSpinnerService,
               private loadInformationService: KillerAppService,
               private toastr: ToastrService,
-              public datePipe: DatePipe){
+              public datePipe: DatePipe,
+              public dialog: MatDialog){
 
                 this.dataTableEmpresa = new MatTableDataSource();
                 this.dataTableAreas = new MatTableDataSource();
@@ -77,7 +81,7 @@ export class PagosComponent {
         let dataAreasPagos:PagosModel[] = [];
         this.dataTableEmpresa.data[0].nodes.map(obj => {
           
-          dataAreasPagos.push({nameArea:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha})
+          dataAreasPagos.push({nameArea:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha,estado:'Debe'})
         })
 
         this.dataTableAreas.data = dataAreasPagos;
@@ -109,19 +113,46 @@ export class PagosComponent {
     let dataTablaLocales:PagosModel[] = [];
 
     areas[0].nodes.map(obj => {
-      dataTablaLocales.push({nameLocal:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha})
+      dataTablaLocales.push({nameLocal:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha,estado:'Debe'})
     })
 
     this.dataTableLocales.data = dataTablaLocales;
     this.isShowLocales = true;
   }
 
-  OnPagarLoca(element: any){
+  OnPagarLocal(element: any){
 
   }
 
   OnVerAreas(){
     this.isShowAreas = true;
   }
+
+  OnPagar(element: any,tipo: string){
+
+    let sendData: any[] = [];
+    switch (tipo) {
+      case 'Empresa':
+        sendData.push({nameButton:'Pagar Total', title:'Efectuar pago de empresa',dataRow: {valorTotal:this.dataTableEmpresa.data[0].information[0].costoActivaAcumuladoMes + this.dataTableEmpresa.data[0].information[0].energiaReactivaAcumuladoMes}})
+        break;
+      case 'Area':
+        sendData.push({nameButton:'Pagar Area', title:'Efectuar pago de área',dataRow: element})
+        break;
+      case 'Local':
+        sendData.push({nameButton:'Pagar Local', title:'Efectuar pago de Local',dataRow: element})
+        break;
+    }
+    const dialogRef = this.dialog.open(PagarCuentaComponent, {
+      panelClass: 'style-dialog',
+      width: '376px',
+      height: '258px',
+      data: sendData
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  
 
 }

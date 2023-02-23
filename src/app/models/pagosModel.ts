@@ -8,6 +8,7 @@ export interface PagosModel {
 
     fecha: Date;
     
+    estado: string;
 
     energiaActivaAcumuladoMes: number;
     costoActivaAcumuladoMes: number;    
