@@ -1,0 +1,153 @@
+<div class="custom-container">
+    <app-reloj></app-reloj>
+    <div class="container-breadcrumbs">
+        <div class="volver" (click)="onVolver()">
+            <i class="material-icons-outlined">arrow_back_ios</i>
+            <span>Volver</span>
+        </div>
+    </div>
+    <div class="text-header">
+        <span class="title">Pagos</span>
+        <span class="sub-title mt-10">Resumen general de la empresa</span>
+    </div>
+    <div class="organization-pagos-container">
+        <div class="card">
+            <div class="table-container">
+                <mat-table #tableConsumo class="mvm-table" [dataSource]="dataTableEmpresa">
+                    <ng-container matColumnDef="consumoEnergiaActiva" sticky>
+                        <mat-header-cell *matHeaderCellDef>Consumo E. Actva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].energiaActivaAcumuladoMes | number:'1.1-2'}}kW</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumoEnergiaReactiva">
+                        <mat-header-cell *matHeaderCellDef>Consumos E. Reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].energiaReactivaAcumuladoMes | number:'1.1-2'}}kVAR</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoActiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].energiaReactivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoReactiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].costoActivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="valorTotal">
+                        <mat-header-cell *matHeaderCellDef>Valor total a pagar</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.information[0].costoActivaAcumuladoMes + element.information[0].energiaReactivaAcumuladoMes  | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaPago">
+                        <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ datePipe.transform(fechaPago, 'MM/dd/yyyy') }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="columnsTableConsumo; sticky: true"></mat-header-row>
+                    <mat-row class="fadeIn" *matRowDef="let row; columns:columnsTableConsumo"></mat-row>
+                </mat-table>
+            </div>
+            <div class="container-buttons">
+                <button class="black-button btn-pay">Pagar</button>
+                <button class="white-button" (click)="OnVerAreas()">Mostrar áreas</button>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="isShowAreas">
+            <div class="table-container">
+                <mat-table #tableConsumo class="mvm-table" [dataSource]="dataTableAreas">
+                    <ng-container matColumnDef="areas" sticky>
+                        <mat-header-cell *matHeaderCellDef>Areas</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.nameArea}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumoEnergiaActiva">
+                        <mat-header-cell *matHeaderCellDef>Consumo E. Actva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaActivaAcumuladoMes | number:'1.1-2'}}kW</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumoEnergiaReactiva">
+                        <mat-header-cell *matHeaderCellDef>Consumos E. Reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaReactivaAcumuladoMes | number:'1.1-2'}}kVAR</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoActiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoActivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoReactiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoReactivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="valorTotal">
+                        <mat-header-cell *matHeaderCellDef>Valor total a pagar</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.valorTotal | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaPago">
+                        <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ datePipe.transform(fechaPago, 'MM/dd/yyyy') }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img class="icon-pay" src="../../../assets/icons/Dinero.svg" alt="" (click)="OnPagarArea(element)">
+                            <img class="icon-ojo" src="../../../../assets/icons/Ojo.svg" alt="" (click)="OnVerLocal(element)">
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="columnsTableAreas; sticky: true"></mat-header-row>
+                    <mat-row class="fadeIn" *matRowDef="let row; columns:columnsTableAreas"></mat-row>
+                </mat-table>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="isShowLocales">
+            <div class="table-container">
+                <mat-table #tableConsumo class="mvm-table" [dataSource]="dataTableLocales">
+                    <ng-container matColumnDef="area" sticky>
+                        <mat-header-cell *matHeaderCellDef>{{areaSelected}}</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.nameLocal}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumoEnergiaActiva">
+                        <mat-header-cell *matHeaderCellDef>Consumo E. Actva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaActivaAcumuladoMes | number:'1.1-2'}}kW</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="consumoEnergiaReactiva">
+                        <mat-header-cell *matHeaderCellDef>Consumos E. Reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaReactivaAcumuladoMes | number:'1.1-2'}}kVAR</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoActiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoActivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="costoReactiva">
+                        <mat-header-cell *matHeaderCellDef>Valor E.reactiva</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.costoReactivaAcumuladoMes | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="valorTotal">
+                        <mat-header-cell *matHeaderCellDef>Valor total a pagar</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.valorTotal | number:'1.1-2'}}$</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="fechaPago">
+                        <mat-header-cell *matHeaderCellDef>Fecha de pago</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ datePipe.transform(fechaPago, 'MM/dd/yyyy') }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img class="" src="../../../assets/icons/Dinero.svg" alt="" (click)="OnPagarLoca(element)">
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="columnsTableLocales; sticky: true"></mat-header-row>
+                    <mat-row class="fadeIn" *matRowDef="let row; columns:columnsTableLocales"></mat-row>
+                </mat-table>
+            </div>
+        </div>
+    </div>
+</div>

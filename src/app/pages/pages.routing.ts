@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { PuntosMedidaComponent } from './dashboard/puntos-medida/puntos-medida.component';
+import { PagosComponent } from './pagos/pagos.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
@@ -14,6 +15,13 @@ const routes: Routes = [
         path: 'main',
         component:PagesComponent,
         children:[{
+            path:'pagos',
+            component:PagosComponent,
+            data:{
+                parent:'main',
+                title:'Pagos'
+            }
+        },{
             path:'dashboard',
             component:DashboardComponent,
             data:{
@@ -28,7 +36,8 @@ const routes: Routes = [
                 parent:'main',
                 title:'Puntos de medida'
             }
-        },{
+        },
+        {
             path:'puntos-medida/detalle-organizacion/:GeneralData',
             component:DetalleOrganizacionComponent,
             data:{
@@ -36,7 +45,8 @@ const routes: Routes = [
                 title:'Detalle Organizacion'
             }
         }]
-    }
+    },
+    
 ]
 
 @NgModule({

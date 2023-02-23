@@ -14,4 +14,5 @@ export interface InformationModel {
     costoActivaAcumuladoMes: number;    
     energiaReactivaAcumuladoMes: number;
     costoReactivaAcumuladoMes: number;
+
 }

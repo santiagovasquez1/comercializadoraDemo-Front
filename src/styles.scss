@@ -46,6 +46,16 @@ ul {
     border-image: linear-gradient(90deg, #00FF87 3.85%, rgba(12, 0, 255, 0.77811) 50.49%, #CD00FF 100%) 1;
 }
 
+.sub-title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: $azul_secundario;
+}
+
+.mt-10{
+    margin-top: 10px !important;
+}
 .main-container mat-drawer-content {
     padding-bottom: 20px;
 }
@@ -86,9 +96,33 @@ button {
     transition: 200ms all;
 }
 
+.white-button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    gap: 10px;
+    padding: 5px 22px 5px 22px;
+    font-size: 14px;
+    line-height: 21px;
+    color: $azul_secundario;
+    background-color: #FFFFFF;
+    height: fit-content;
+    transition: 200ms all;
+    border: none !important;
+    cursor: pointer;
+    &:hover {
+        background-color: $azul_secundario;
+        border-color: $azul_secundario;
+        color: white;
+    }
+}
+
 .black-button {
     background: #000000;
     color: white;
+    cursor: pointer;
     &:hover {
         background-color: $azul_secundario;
         border-color: $azul_secundario;
@@ -1012,7 +1046,7 @@ app-select-custom {
     width: 100%;
 }
 
-.organization-detalle-container {
+.organization-detalle-container,.organization-pagos-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -1179,6 +1213,36 @@ app-select-custom {
 
 .mat-calendar-table-header th {
     color: $azul_principal;
+}
+
+.organization-pagos-container{
+
+    .card{
+
+        display: flex;
+        flex-direction: column;
+
+        .container-buttons{
+            display: flex;
+            flex-direction: row;
+            align-self: end;
+
+            .btn-pay{
+                margin-right:15px ;
+            }
+        }
+
+        mat-cell{
+
+            img{
+                cursor: pointer;
+            }
+
+            .icon-pay{
+                margin-right: 10px;
+            }
+        }
+    }
 }
 
 @media (max-width: 767.98px) {
