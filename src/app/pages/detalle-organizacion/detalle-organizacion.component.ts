@@ -35,6 +35,7 @@ export class DetalleOrganizacionComponent implements OnInit {
   fechaFiltro: Date;
 
   lineChartOptions: ChartConfiguration['options'];
+  reactivaChartOptions: ChartConfiguration['options'];
   consumoMesChartOptions: ChartConfiguration['options'];
   consumoActualChart: ChartType = 'line';
   consumoActualData: ChartData<'line'>;
@@ -57,7 +58,7 @@ export class DetalleOrganizacionComponent implements OnInit {
     },
     plugins: {
       legend: {
-        position: 'right',
+        position: 'bottom',
         labels: {
           font: {
             size: 16,
@@ -84,13 +85,19 @@ export class DetalleOrganizacionComponent implements OnInit {
 
     this.lineChartOptions = this.setChartsOptionsService.setLineChartOption({
       xAxisTitle: 'Hora',
-      yAxisTitle: 'Consumo kWh',
+      yAxisTitle: 'Consumo kW',
+      layoutPosition: 'bottom'
+    });
+
+    this.reactivaChartOptions = this.setChartsOptionsService.setLineChartOption({
+      xAxisTitle: 'Hora',
+      yAxisTitle: 'Consumo kVAR',
       layoutPosition: 'bottom'
     });
 
     this.consumoMesChartOptions = this.setChartsOptionsService.setLineChartOption({
       xAxisTitle: 'Dia',
-      yAxisTitle: 'kVarh',
+      yAxisTitle: 'Consumo kW',
       layoutPosition: 'bottom',
       displayLegend: false,
       lineTension: 0.1
@@ -174,7 +181,7 @@ export class DetalleOrganizacionComponent implements OnInit {
       const information: InformationDetalle = {
         tipo: 'Mes',
         fecha,
-        precio:precioActiva,
+        precio: precioActiva,
         energiaActiva: energiaActivaAcumuladoMes,
         energiaReactiva: energiaReactivaAcumuladoMes,
         costoActiva: costoActivaAcumuladoMes,
@@ -295,13 +302,21 @@ export class DetalleOrganizacionComponent implements OnInit {
   }
 
   private setPorcentajesData(organizacionActual: OrganizationModel, Cluster: OrganizationModel) {
-    const consumoResto = Cluster.information[0].energiaActivaAcumuladaDia - organizacionActual.information[0].energiaActivaAcumuladaDia;
+    const consumoTotal = Cluster.information[0].energiaActivaAcumuladaDia;
+    const consumoResto = consumoTotal - organizacionActual.information[0].energiaActivaAcumuladaDia;
+    let labels: any;
+    if (this.request.TypeOfOrganization == ETypesOrganizations.Local) {
+      labels = [['Medidor actual'], ['Resto de medidores']]
+    } else if (this.request.TypeOfOrganization == ETypesOrganizations.Area) {
+      labels = [['Área actual'], ['Resto de áreas']]
+    }
+
     this.porcentajeConsumoData = {
       datasets: [{
-        data: [organizacionActual.information[0].energiaActivaAcumuladaDia, consumoResto],
-        backgroundColor: ["#0C00FF", "#FF0909"]
+        data: [(organizacionActual.information[0].energiaActivaAcumuladaDia / consumoTotal) * 100, (consumoResto / consumoTotal) * 100],
+        backgroundColor: ["#0C00FF", "#FF0909"]            
       }],
-      labels: [['Medidor', 'actual'], ['Resto de los', 'medidores']]
+      labels
     }
   }
 

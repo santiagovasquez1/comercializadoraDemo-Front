@@ -23,11 +23,11 @@
                     </ng-container>
                     <ng-container matColumnDef="energiaActiva">
                         <mat-header-cell *matHeaderCellDef>Consumo E. activa</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.energiaActiva | number:'1.1-2'}}kWH</mat-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaActiva | number:'1.1-2'}}kWh</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="energiaReactiva">
                         <mat-header-cell *matHeaderCellDef>Consumo E. reactiva</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.energiaReactiva | number:'1.1-2'}}kVarh</mat-cell>
+                        <mat-cell *matCellDef="let element">{{element.energiaReactiva | number:'1.1-2'}}kVARh</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="costoActiva">
                         <mat-header-cell *matHeaderCellDef>Valor E.activa</mat-header-cell>
@@ -90,7 +90,7 @@
                             <h3>Potencia reactiva</h3>
                         </div>
                         <div class="grafica-consumo-dia-canvas">
-                            <canvas baseChart [data]="energiaReactivaData" [options]="lineChartOptions" type="line"></canvas>
+                            <canvas baseChart [data]="energiaReactivaData" [options]="reactivaChartOptions" type="line"></canvas>
                         </div>
                     </div>
                     <div class="graficas-mes-porcentaje-container">
@@ -116,7 +116,7 @@
                         </div>
                         <div class="grafica-porcentaje-consumo-container">
                             <div class="title">
-                                <h3>Porcentaje de energia del medidor</h3>
+                                <h3>Porcentaje de consumo</h3>
                             </div>
                             <div class="grafica-porcentaje-canvas">
                                 <canvas baseChart [data]="porcentajeConsumoData" [options]="porcentajeConsumoOptions" [type]="porcentajeConsumoChart"></canvas>
