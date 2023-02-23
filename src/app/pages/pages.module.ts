@@ -13,7 +13,8 @@ import { NgChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaColombiaComponent } from './dashboard/puntos-medida/mapa-colombia/mapa-colombia.component';
 import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-organizacion.component';
-
+import { PagosComponent } from './pagos/pagos.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -22,6 +23,7 @@ import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-org
     PuntosMedidaComponent,
     MapaColombiaComponent,
     DetalleOrganizacionComponent,
+    PagosComponent,
     
   ],
   imports: [
@@ -42,10 +44,13 @@ import { DetalleOrganizacionComponent } from './detalle-organizacion/detalle-org
     DetalleOrganizacionComponent
   ],
   providers: [
+    DatePipe,
     {
+      
       provide: HTTP_INTERCEPTORS,
       useClass: ValidationInterceptor,
-      multi: true
+      multi: true,
+      
     }
   ]
 })
