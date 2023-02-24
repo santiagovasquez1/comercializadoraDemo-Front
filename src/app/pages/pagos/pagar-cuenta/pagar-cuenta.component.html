@@ -6,7 +6,7 @@
         <span>{{data[0].title}}</span>
     </div>
     <div class="text">
-        <span>El valor a total a pagar es: <b>{{data[0].dataRow.valorTotal | number:'1.1-2'}}$</b> pesos colombianos</span>
+        <span>El valor a total a pagar es de: <b>{{data[0].dataRow.valorTotal | number:'1.1-2'}}$</b> pesos colombianos</span>
     </div>
     <div class="button">
         <button class="blue-button" (click)="closeDialog()">{{data[0].nameButton}}</button>
