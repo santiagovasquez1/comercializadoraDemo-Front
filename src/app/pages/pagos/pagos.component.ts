@@ -81,7 +81,7 @@ export class PagosComponent {
         let dataAreasPagos:PagosModel[] = [];
         this.dataTableEmpresa.data[0].nodes.map(obj => {
           
-          dataAreasPagos.push({nameArea:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha,estado:'Debe'})
+          dataAreasPagos.push({nameArea:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha,estado:this.estadoEmpresa === 'Pagado' ? 'Pagado' : 'Debe'})
         })
 
         this.dataTableAreas.data = dataAreasPagos;
@@ -100,28 +100,25 @@ export class PagosComponent {
     this.router.navigate(['/main/puntos-medida']);
   }
 
-  OnPagarArea(element: any){
-
-  }
-
   OnVerLocal(element: any){
     this.areaSelected = element.nameArea;
 
     let areas = this.dataTableEmpresa.data[0].nodes;
     areas = areas.filter(obj => obj.name === element.nameArea)
 
+    let estadoArea = this.dataTableAreas.data.filter(obj => obj.nameArea === element.nameArea)[0].estado;
+    console.log("estadoArea: ",estadoArea);
+
+    // let estadoLocal = this.dataTableLocales.data.filter(obj => obj.nameArea === element.nameArea)[0].estado;
+    // console.log("estadoArea: ",estadoLocal);
     let dataTablaLocales:PagosModel[] = [];
 
     areas[0].nodes.map(obj => {
-      dataTablaLocales.push({nameLocal:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha,estado:'Debe'})
+      dataTablaLocales.push({nameArea:areas[0].name,nameLocal:obj.name,energiaActivaAcumuladoMes:obj.information[0].energiaActivaAcumuladoMes,energiaReactivaAcumuladoMes:obj.information[0].energiaReactivaAcumuladoMes,costoActivaAcumuladoMes:obj.information[0].costoActivaAcumuladoMes, costoReactivaAcumuladoMes:obj.information[0].costoReactivaAcumuladoMes,valorTotal:obj.information[0].costoActivaAcumuladoMes+obj.information[0].costoReactivaAcumuladoMes,fecha:obj.information[0].fecha,estado: estadoArea == 'Pagado' ? 'Pagado' : 'Debe'})
     })
 
     this.dataTableLocales.data = dataTablaLocales;
     this.isShowLocales = true;
-  }
-
-  OnPagarLocal(element: any){
-
   }
 
   OnVerAreas(){
@@ -130,28 +127,70 @@ export class PagosComponent {
 
   OnPagar(element: any,tipo: string){
 
-    let sendData: any[] = [];
-    switch (tipo) {
-      case 'Empresa':
-        sendData.push({nameButton:'Pagar Total', title:'Efectuar pago de empresa',dataRow: {valorTotal:this.dataTableEmpresa.data[0].information[0].costoActivaAcumuladoMes + this.dataTableEmpresa.data[0].information[0].energiaReactivaAcumuladoMes}})
-        break;
-      case 'Area':
-        sendData.push({nameButton:'Pagar Area', title:'Efectuar pago de área',dataRow: element})
-        break;
-      case 'Local':
-        sendData.push({nameButton:'Pagar Local', title:'Efectuar pago de Local',dataRow: element})
-        break;
-    }
-    const dialogRef = this.dialog.open(PagarCuentaComponent, {
-      panelClass: 'style-dialog',
-      width: '376px',
-      height: '258px',
-      data: sendData
-    });
+    if(element.estado === 'Debe'){
+      let sendData: any[] = [];
+      switch (tipo) {
+        case 'Empresa':
+          sendData.push({nameButton:'Pagar Total', title:'Efectuar pago de empresa',dataRow: {valorTotal:this.dataTableEmpresa.data[0].information[0].costoActivaAcumuladoMes + this.dataTableEmpresa.data[0].information[0].energiaReactivaAcumuladoMes}})
+          break;
+        case 'Area':
+          sendData.push({nameButton:'Pagar Area', title:'Efectuar pago de área',dataRow: element})
+          break;
+        case 'Local':
+          sendData.push({nameButton:'Pagar Local', title:'Efectuar pago de Local',dataRow: element})
+          break;
+      }
+      const dialogRef = this.dialog.open(PagarCuentaComponent, {
+        panelClass: 'style-dialog',
+        width: '376px',
+        height: '258px',
+        data: sendData
+      });
+    
+      dialogRef.afterClosed().subscribe(result => {
   
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+        if(result){
+          switch (tipo) {
+            case 'Empresa':
+              this.estadoEmpresa = 'Pagado';
+              if(this.dataTableAreas.data.length > 0){
+                console.log("this.dataTableAreas.data: ",this.dataTableAreas.data)
+                this.dataTableAreas.data.map(obj => obj.estado =  'Pagado')
+              }
+              break;
+            case 'Area':
+              this.dataTableAreas.data.map(obj => obj.estado = obj.nameArea === element.nameArea ? 'Pagado' : obj.estado)
+              if(this.dataTableLocales.data.length > 0){
+                this.dataTableLocales.data.map(obj => obj.estado = obj.nameArea === element.nameArea ?  'Pagado' : obj.estado)
+              }
+              
+              break;
+            case 'Local':
+              this.dataTableLocales.data.map(obj => obj.estado = obj.nameLocal === element.nameLocal ? 'Pagado' : obj.estado)
+              
+              console.log("this.dataTableLocales.data: ",this.dataTableLocales.data)
+
+              let todosLocalesPay = 0;
+              for (let i = 0; i < this.dataTableLocales.data.length; i++) {
+                if(this.dataTableLocales.data[i].estado === 'Debe'){
+                  todosLocalesPay = 1;
+                }
+              }
+
+              if(todosLocalesPay === 0){
+                this.dataTableAreas.data.map(obj => obj.estado = obj.nameArea === element.nameArea ? 'Pagado' : obj.estado)
+              }
+
+              break;
+          }
+        }
+  
+  
+        
+      });
+    }
+
+    
   }
   
 
