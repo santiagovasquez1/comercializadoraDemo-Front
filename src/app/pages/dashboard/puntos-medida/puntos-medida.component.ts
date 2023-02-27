@@ -10,7 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ETypesOrganizations, GetGeneralDataRequest } from 'src/app/models/GetGeneralDataRequest';
 import { ToastrService } from 'ngx-toastr';
 import { TablaMedidores } from 'src/app/models/TablaMedidores';
-import { forkJoin, map, Observable } from 'rxjs';
+import { forkJoin, map, Observable, Subscription, timer } from 'rxjs';
 import moment from 'moment';
 import { StatusMonitor } from 'src/app/models/StatusMonitor';
 import { TableService } from 'src/app/services/shared/table-service.service';
@@ -75,6 +75,10 @@ export class PuntosMedidaComponent {
 
   time = '';
 
+  timer$: Observable<any>;
+  timerSubscription: Subscription;
+
+
   @ViewChild('paginator', { static: true }) paginator: MatPaginator;
   @ViewChild('table', { static: true }) table: MatTable<any>;
   @ViewChild('selectHora') mySelect: ElementRef;
@@ -90,11 +94,23 @@ export class PuntosMedidaComponent {
     this.dataSource = new MatTableDataSource();
     const now = new Date();
     this.fechaHora = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
+    this.timer$ = timer(0, 900000)
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
   }
 
   ngOnInit() {
     this.loadOrganizations();
     this.initFilterForm();
+
+    this.timerSubscription = this.timer$.subscribe(() => {
+      this.loadOrganizations()
+      console.log("ejecutando el timer")
+    });
   }
 
   private loadOrganizations() {
@@ -104,6 +120,8 @@ export class PuntosMedidaComponent {
         this.rootOrganizations = response[0];
         this.getloadInfo();
         this.spinner.hide();
+
+        
 
       },
       error: err => {
@@ -147,8 +165,13 @@ export class PuntosMedidaComponent {
     else if(this.isFilterDate){
       this.fechaHora.setHours(18,45);
     }
-   
 
+    if(!this.isFilterHour){
+      const now = new Date();
+      this.fechaHora = new Date(2023, 1, 24, now.getHours() - 5, now.getMinutes(), 0);
+    }
+   
+    
     let request: GetGeneralDataRequest = {
       empresaName: this.rootOrganizations.name,
       areaName: null,
@@ -168,7 +191,7 @@ export class PuntosMedidaComponent {
         const iteratoPromedios = (response[1] as OrganizationModel).nodes;
         const monitoreoTime = response[2] as StatusMonitor;
 
-
+        console.log("responseresponse: ",response)
         const formatHora = 'h:mm a';
         const dateString = iteratorConsumos[0].nodes[0].information[0].fecha.toLocaleString();
 
