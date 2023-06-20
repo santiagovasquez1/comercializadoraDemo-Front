@@ -281,9 +281,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       currentValue: _currentValue,
       disabled: _disabled
     }
-
     this.dataAreaSelect = areas;
-
   }
 
   private setTypeOrganizationForQuery(request: GetGeneralDataRequest): ETypesOrganizations {
